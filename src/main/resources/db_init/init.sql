@@ -7,7 +7,7 @@ create table users
     id            serial  primary key,
     name          varchar NOT null,
     surname       varchar NOT null,
-    patronymic    varchar NOT null,
+    patronymic    varchar,
     login         varchar NOT null,
     password      varchar NOT null,
     birth_date    TIMESTAMP NOT null
@@ -17,7 +17,7 @@ CREATE TABLE school
 (	
   	id serial PRIMARY KEY,
   	name         varchar NOT null,
-    addres       varchar NOT null,
+    address       varchar NOT null,
     phone    	 varchar NOT null,
     email        varchar NOT null
 );
@@ -39,7 +39,7 @@ CREATE TABLE timetable
     end_time  TIMESTAMP NOT null,
     school_id int NOT null,
   
-  FOREIGN KEY (school_id) REFERENCES school (ID)
+  FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
 CREATE TABLE users_codes
