@@ -74,6 +74,15 @@ CREATE TABLE classes
 	FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
+CREATE TABLE classes_announcements
+(
+    class_id int NOT null,
+    announcement_id int NOT null,
+
+    FOREIGN KEY (announcement_id) REFERENCES announcement (id),
+    FOREIGN KEY (class_id) REFERENCES classes (id)
+);
+
 CREATE TABLE classes_students
 (
 	class_id int NOT null,

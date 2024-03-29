@@ -28,4 +28,7 @@ public class Class {
     @ManyToMany(mappedBy = "classes")
     private List<User> students;
 
+    @ManyToMany(mappedBy = "classes")
+    private List<Announcement> announcements;
+
 }
