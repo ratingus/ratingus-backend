@@ -21,7 +21,7 @@ services:
   ratingus-backend:
 #    build:
 #      context: .
-    image: ghcr.io/burunyuu23/ratingus-backend/ratingus-backend:latest
+    image: ghcr.io/burunyuu23/ratingus-backend:latest
     container_name: ratingus-backend
     ports:
       - "5000:5000"
