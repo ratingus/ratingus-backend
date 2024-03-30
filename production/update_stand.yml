@@ -6,15 +6,6 @@
   become: yes
 
   tasks:
-    - name: Install docker-compose python package
-      ansible.builtin.pip:
-        name: docker-compose
-
-    - name: "stop services"
-      shell: docker-compose -f {{ project_src }}/compose.yml stop
-
-    - name: "pull images"
-      shell: docker-compose -f {{ project_src }}/compose.yml pull
-
-    - name: "start services"
-      shell: docker-compose -f {{ project_src }}/compose.yml up -d
+    - name: Update Docker Compose containers
+      community.docker.docker_compose_v2_pull:
+        project_src: "{{ project_src }}"
