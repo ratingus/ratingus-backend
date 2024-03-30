@@ -13,21 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Ensure ~/.ssh directory exists
-        run: mkdir -p ~/.ssh
-
-      - name: Start SSH agent
-        run: ssh-agent -s > ~/.ssh/ssh-agent.env
-
-      - name: Load SSH agent environment variables
-        run: source ~/.ssh/ssh-agent.env
-
-      - name: Add SSH private key to agent
-        run: |
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-add ~/.ssh/id_rsa
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -47,8 +32,9 @@ jobs:
           playbook: update_stand.yml
           directory: production/
           username: ${{ secrets.SERVER_USERNAME }}
-          passphrase: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
+            passphrase=${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           inventory: |
             [all]
