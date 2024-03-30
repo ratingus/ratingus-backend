@@ -37,8 +37,8 @@ jobs:
             passphrase=${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           inventory: |
-            [all]
-            ${{ secrets.SERVER_IP }}
+            [ratingus]
+            ratingus ansible_host=ratingus.fun ip=${{ secrets.SERVER_IP }} ansible_port=22 ansible_ssh_user=${{ secrets.SERVER_USERNAME }}
           options: |
             -e project_src=${{ secrets.PROJECT_SRC_PATH }}
             -e server_ip=${{ secrets.SERVER_IP }}
