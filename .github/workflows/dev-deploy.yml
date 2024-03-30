@@ -1,0 +1,36 @@
+name: Update Docker Containers and Deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/ratingus-backend .
+          docker push ghcr.io/${{ github.repository_owner }}/ratingus-backend
+
+      - name: Update Docker Compose containers on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
+          script: |
+            ansible-playbook -i "${{ secrets.SERVER_IP }}," -e ansible_python_interpreter=/usr/bin/python3 -e "project_src=${{ secrets.PROJECT_SRC_PATH }}" -e "server_ip=${{ secrets.SERVER_IP }}" update_stand.yml
