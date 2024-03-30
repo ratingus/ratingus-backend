@@ -1,0 +1,12 @@
+---
+- name: Update Docker Compose containers
+  hosts: "{{ server_ip }}"
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Update Docker Compose containers
+      docker_compose:
+        project_src: "{{ project_src }}"
+        state: present
+        pull: yes
