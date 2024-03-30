@@ -11,7 +11,5 @@
         name: docker-compose
 
     - name: Update Docker Compose containers
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2_pull:
         project_src: "{{ project_src }}"
-        state: present
-        pull: yes
