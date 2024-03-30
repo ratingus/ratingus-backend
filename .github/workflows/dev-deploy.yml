@@ -28,7 +28,8 @@ jobs:
       - name: Install docker-compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose
+          sudo apt-get install -y docker-compose python pip
+          pip install docker-compose
 
 
       - name: Update Docker Compose containers on server
