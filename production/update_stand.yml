@@ -6,6 +6,10 @@
   become: yes
 
   tasks:
+    - name: Install docker-compose python package
+      ansible.builtin.pip:
+        name: docker-compose
+
     - name: Update Docker Compose containers
       community.docker.docker_compose:
         project_src: "{{ project_src }}"

@@ -25,13 +25,6 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/ratingus-backend .
           docker push ghcr.io/${{ github.repository_owner }}/ratingus-backend
 
-      - name: Install docker-compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose python3 pip
-          pip install docker-compose
-
-
       - name: Update Docker Compose containers on server
         uses: dawidd6/action-ansible-playbook@v2
         with:
