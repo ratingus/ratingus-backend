@@ -1,4 +1,5 @@
 ---
+
 - name: Update Docker Compose containers
   hosts: "{{ server_ip }}"
   gather_facts: no
