@@ -30,18 +30,18 @@ jobs:
 
 
       - name: Update Docker Compose containers on server
-        uses: appleboy/ssh-action@master
+        uses: dawidd6/action-ansible-playbook@v2
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          passphrase: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_SSH_PORT }}
-          script: |
-            apt-get update && \
-            apt-get install -y python3 python3-pip && \
-            pip3 install ansible && \
-            ansible-playbook -i "${{ secrets.SERVER_IP }}," -e ansible_python_interpreter=/usr/bin/python3 -e "project_src=${{ secrets.PROJECT_SRC_PATH }}" -e "server_ip=${{ secrets.SERVER_IP }}" /home/runner/work/ratingus-backend/ratingus-backend/production/update_stand.yml
-
-      - name: List files
-        run: ls -R
+          playbook: update_stand.yml
+          directory: production/
+          inventory: |
+            [all]
+            ${{ secrets.SERVER_IP }}
+          extra_vars: |
+            project_src=${{ secrets.PROJECT_SRC_PATH }}
+            server_ip=${{ secrets.SERVER_IP }}
+          become: yes
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
+          ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python3
