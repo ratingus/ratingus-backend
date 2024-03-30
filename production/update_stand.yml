@@ -6,6 +6,8 @@
   become: yes
 
   tasks:
-    - name: Update Docker Compose containers
-      community.docker.docker_compose_v2_pull:
+    - name: Restart services
+      community.docker.docker_compose_v2:
         project_src: "{{ project_src }}"
+        state: restarted
+      register: output
