@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
-            apk update && \
-            apk add --no-cache python3 py3-pip && \
+            apt-get update && \
+            apt-get install -y python3 python3-pip && \
             pip3 install ansible && \
             ansible-playbook -i "${{ secrets.SERVER_IP }}," -e ansible_python_interpreter=/usr/bin/python3 -e "project_src=${{ secrets.PROJECT_SRC_PATH }}" -e "server_ip=${{ secrets.SERVER_IP }}" update_stand.yml
