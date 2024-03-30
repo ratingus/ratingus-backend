@@ -10,8 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+        run: |
+          echo "$SSH_PUBLIC_KEY" | sudo tee /etc/ssh/authorized_keys
+          sudo tee /etc/ssh/sshd_config <<EOF
+            PasswordAuthentication no
+            PubkeyAuthentication yes
+            AuthorizedKeysFile /etc/ssh/authorized_keys
+            PermitRootLogin no
+            Subsystem sftp /usr/lib/openssh/sftp-server
+          EOF
+          sudo systemctl restart sshd
+          echo 'SSH_KNOWN_HOSTS<<EOF' >> $GITHUB_ENV
+          echo $(ssh-keyscan localhost) >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
