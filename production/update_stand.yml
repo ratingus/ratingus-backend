@@ -7,7 +7,7 @@
 
   tasks:
     - name: Update Docker Compose containers
-      docker_compose:
+      community.docker.docker_compose:
         project_src: "{{ project_src }}"
         state: present
         pull: yes
