@@ -25,6 +25,10 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/ratingus-backend .
           docker push ghcr.io/${{ github.repository_owner }}/ratingus-backend
 
+      - name: Install docker-compose
+        run: |
+          sudo pip install docker-compose
+
       - name: Update Docker Compose containers on server
         uses: dawidd6/action-ansible-playbook@v2
         with:
@@ -36,4 +40,3 @@ jobs:
             ratingus ansible_host=${{ secrets.SERVER_IP }} ansible_port=22 ansible_ssh_user=${{ secrets.SERVER_USERNAME }}
           options: |
             -e project_src=${{ secrets.PROJECT_SRC_PATH }}
-            -e server_ip=${{ secrets.SERVER_IP }}
