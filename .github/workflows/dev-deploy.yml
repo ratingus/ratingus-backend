@@ -12,19 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        run: |
-          echo "$SSH_PUBLIC_KEY" | sudo tee /etc/ssh/authorized_keys
-          sudo tee /etc/ssh/sshd_config <<EOF
-            PasswordAuthentication no
-            PubkeyAuthentication yes
-            AuthorizedKeysFile /etc/ssh/authorized_keys
-            PermitRootLogin no
-            Subsystem sftp /usr/lib/openssh/sftp-server
-          EOF
-          sudo systemctl restart sshd
-          echo 'SSH_KNOWN_HOSTS<<EOF' >> $GITHUB_ENV
-          echo $(ssh-keyscan localhost) >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -43,13 +30,11 @@ jobs:
         with:
           playbook: update_stand.yml
           directory: production/
+          key: ${{env.SSH_PRIVATE_KEY}}
+          passphrase: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
           inventory: |
             [all]
             ${{ secrets.SERVER_IP }}
           options: |
             -e project_src=${{ secrets.PROJECT_SRC_PATH }}
             -e server_ip=${{ secrets.SERVER_IP }}
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
-          ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python3
