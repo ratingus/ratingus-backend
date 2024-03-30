@@ -37,13 +37,11 @@ jobs:
           passphrase: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
-          env:
-            GITHUB_WORKSPACE: ${{ github.workspace }}
           script: |
             apt-get update && \
             apt-get install -y python3 python3-pip && \
             pip3 install ansible && \
-            ansible-playbook -i "${{ secrets.SERVER_IP }}," -e ansible_python_interpreter=/usr/bin/python3 -e "project_src=${{ secrets.PROJECT_SRC_PATH }}" -e "server_ip=${{ secrets.SERVER_IP }}" $GITHUB_WORKSPACE/production/update_stand.yml
+            ansible-playbook -i "${{ secrets.SERVER_IP }}," -e ansible_python_interpreter=/usr/bin/python3 -e "project_src=${{ secrets.PROJECT_SRC_PATH }}" -e "server_ip=${{ secrets.SERVER_IP }}" /home/runner/work/ratingus-backend/ratingus-backend/production/update_stand.yml
 
       - name: List files
         run: ls -R
