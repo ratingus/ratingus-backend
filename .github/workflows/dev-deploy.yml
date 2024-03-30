@@ -14,7 +14,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Start SSH agent
-        run: eval "$(ssh-agent -s)
+        run: ssh-agent -s > ~/.ssh/ssh-agent.env
+
+      - name: Load SSH agent environment variables
+        run: source ~/.ssh/ssh-agent.env
 
       - name: Add SSH private key to agent
         run: |
