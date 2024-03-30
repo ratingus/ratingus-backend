@@ -25,8 +25,8 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/ratingus-backend .
           docker push ghcr.io/${{ github.repository_owner }}/ratingus-backend
 
-      - name: List files
-        run: ls -R
+      - name: Print working directory
+        run: echo $GITHUB_WORKSPACE
 
 
       - name: Update Docker Compose containers on server
