@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Ensure ~/.ssh directory exists
+        run: mkdir -p ~/.ssh
+
       - name: Start SSH agent
         run: ssh-agent -s > ~/.ssh/ssh-agent.env
 
@@ -21,7 +24,6 @@ jobs:
 
       - name: Add SSH private key to agent
         run: |
-          mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
