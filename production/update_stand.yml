@@ -11,6 +11,13 @@
         project_src: "{{ project_src }}"
       register: output
 
+
+    - name: Stop all services
+      community.docker.docker_compose_v2:
+        project_src: "{{ project_src }}"
+        state: stopped
+      register: output
+
     - name: Restart services
       community.docker.docker_compose_v2:
         project_src: "{{ project_src }}"
