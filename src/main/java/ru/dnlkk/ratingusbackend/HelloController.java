@@ -9,6 +9,6 @@ public class HelloController {
 
     @GetMapping
     public ResponseEntity<Dto> get() {
-        return ResponseEntity.ok(new Dto("УРААААААА!!!"));
+        return ResponseEntity.ok(new Dto("работает???!!!"));
     }
 }
