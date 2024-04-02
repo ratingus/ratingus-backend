@@ -58,7 +58,9 @@ CREATE TABLE users_codes
     patronymic    varchar,
     user_id  int NOT null,
     school_id int NOT null,
-  
+    creator_id int NOT null,
+
+    FOREIGN KEY (creator_id) REFERENCES users (id),
   	FOREIGN KEY (user_id) REFERENCES users (id),
   	FOREIGN KEY (school_id) REFERENCES school (id)
 
