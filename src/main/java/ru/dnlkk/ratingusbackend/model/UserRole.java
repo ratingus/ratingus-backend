@@ -29,4 +29,13 @@ public class UserRole {
 
     @Column(name = "role")
     private Role role;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "patronymic")
+    private String patronymic;
 }

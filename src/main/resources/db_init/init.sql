@@ -19,7 +19,10 @@ CREATE TABLE school
   	name         varchar NOT null,
     address       varchar NOT null,
     phone    	 varchar NOT null,
-    email        varchar NOT null
+    email        varchar NOT null,
+    timetable_id int NOT null,
+
+    FOREIGN KEY (timetable_id) REFERENCES timetable (id)
 );
 
 CREATE TABLE users_roles
@@ -27,6 +30,9 @@ CREATE TABLE users_roles
   	user_id int,
   	school_id int,
   	role roles,
+    name          varchar NOT null,
+    surname       varchar NOT null,
+    patronymic    varchar,
     foreign key (user_id) references users (id),
   	foreign key (school_id) references school (id)
 );
@@ -47,6 +53,9 @@ CREATE TABLE users_codes
   	id serial PRIMARY KEY,
   	code VARCHAR NOT null,
     activated BOOLEAN,
+    name          varchar NOT null,
+    surname       varchar NOT null,
+    patronymic    varchar,
     user_id  int NOT null,
     school_id int NOT null,
   

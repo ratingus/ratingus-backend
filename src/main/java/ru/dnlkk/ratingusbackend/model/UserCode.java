@@ -24,6 +24,18 @@ public class UserCode {
     @Column(name = "activated")
     private boolean activated;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "patronymic")
+    private String patronymic;
+
+    @OneToOne(mappedBy = "userCode")
+    private Class c_lass;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

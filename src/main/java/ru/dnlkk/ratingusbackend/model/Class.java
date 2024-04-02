@@ -21,6 +21,10 @@ public class Class {
     @Column(name = "name")
     private String name;
 
+    @OneToOne
+    @JoinColumn(name = "code_id", referencedColumnName = "id")
+    private UserCode userCode;
+
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
