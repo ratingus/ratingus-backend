@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +15,23 @@ import java.util.List;
 @RequestMapping("/magazine")
 public interface MagazineApi { //todo: сделать проставление оценки, посещаемости, темы
     //todo: понять, где будут создаваться уроки
+    @Operation(
+            summary = "",
+            description = ""
+    )
     @GetMapping("/users")
     ResponseEntity<List<MagazineDto>> getMagazineWithUsers(
-            @RequestParam(required = true) String stringClassName,
-            @RequestParam(required = true) String stringLessonName
+            @RequestParam(required = true) String className,
+            @RequestParam(required = true) String lessonName
     );
 
+    @Operation(
+            summary = "",
+            description = ""
+    )
     @GetMapping("/lessons")
     ResponseEntity<List<LessonDto>> getMagazineWithLessons(
-            @RequestParam(required = true) String stringClassName,
-            @RequestParam(required = true) String stringLessonName
+            @RequestParam(required = true) String className,
+            @RequestParam(required = true) String lessonName
     );
 }

@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,10 @@ import java.util.List;
 @Tag(name = "Контроллер расписания", description = "Просмотр расписания")
 @RequestMapping("/schedule")
 public interface ScheduleApi {
+    @Operation(
+            summary = "",
+            description = ""
+    )
     @GetMapping
-    ResponseEntity<List<LessonScheduleDto>> getSchedule(@RequestParam(required = true) String stringClassName);
+    ResponseEntity<List<LessonScheduleDto>> getSchedule(@RequestParam(required = true) String className);
 }
