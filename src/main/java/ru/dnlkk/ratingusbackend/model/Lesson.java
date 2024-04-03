@@ -34,8 +34,8 @@ public class Lesson {
     private Timestamp date;
 
     @ManyToOne
-    @JoinColumn(name = "study_id", referencedColumnName = "id")
-    private Study study;
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
+    private Subject subject;
 
     @OneToMany(mappedBy = "lesson")
     private List<StudentLesson> studentLessons;

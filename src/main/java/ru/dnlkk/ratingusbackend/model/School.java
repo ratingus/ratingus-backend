@@ -46,5 +46,5 @@ public class School {
     private List<UserCode> userCodes;
 
     @OneToMany(mappedBy = "school")
-    private List<Study> studies;
+    private List<Subject> subjects;
 }

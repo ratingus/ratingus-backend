@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "studies")
-public class Study {
+public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +23,10 @@ public class Study {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "studies")
+    @ManyToMany(mappedBy = "subjects")
     private List<User> teachers;
 
-    @OneToMany(mappedBy = "study")
+    @OneToMany(mappedBy = "subject")
     private List<Lesson> lessons;
 
     @ManyToOne

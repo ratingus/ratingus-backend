@@ -59,8 +59,8 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "study_teachers",
+            name = "subjects_teachers",
             joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "study_id"))
-    private List<Study> studies;
+            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    private List<Subject> subjects;
 }

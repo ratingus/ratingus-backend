@@ -112,7 +112,7 @@ CREATE TABLE classes_students
 	FOREIGN KEY (class_id) REFERENCES classes (id)
 );
 
-CREATE TABLE studies
+CREATE TABLE subject
 (
 	id serial PRIMARY KEY,
 	name VARCHAR NOT NULL,
@@ -121,13 +121,13 @@ CREATE TABLE studies
 	FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
-CREATE TABLE studies_teachers
+CREATE TABLE subjects_teachers
 (
-	study_id INT NOT NULL,
+    subject_id INT NOT NULL,
 	teacher_id INT NOT NULL,
 	
 	FOREIGN KEY (teacher_id) REFERENCES users (id),
-	FOREIGN KEY (study_id) REFERENCES studies (id)
+	FOREIGN KEY (subject_id) REFERENCES subjects (id)
 );
 
 CREATE TABLE lessons
@@ -137,9 +137,9 @@ CREATE TABLE lessons
     theme VARCHAR NOT NULL,
 	date_of_lesson TIMESTAMP NOT NULL,
 	lesson_number INT NOT NULL,
-    study_id  INT NOT NULL,
+    subject_id  INT NOT NULL,
   
-  	FOREIGN KEY (study_id) REFERENCES studies (id)
+  	FOREIGN KEY (subject_id) REFERENCES subjects (id)
 );
 
 CREATE TABLE students_lessons
