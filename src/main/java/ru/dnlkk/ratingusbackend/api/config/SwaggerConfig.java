@@ -3,6 +3,7 @@ package ru.dnlkk.ratingusbackend.api.config;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -14,8 +15,11 @@ import org.springframework.context.annotation.Configuration;
                         name = "Сапегин Павел",
                         email = "pavelsapegin18@gmail.com"
                 )
-        )
+        ),
+        servers = {
+                @Server(url = "http://localhost:8080", description = "сервер для разработки"),
+                @Server(url = "https://ratingus.fun/spring-api", description = "продуктовый сервер")
+        }
 )
 public class SwaggerConfig {
-    //просмотреть документацию: http://localhost:8080/swagger-ui/index.html#/
 }
