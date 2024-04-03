@@ -16,12 +16,14 @@ import java.util.List;
 public interface AdminPanelApi {
     @Operation(
             summary = "Получение списка пользователей",
-            description = "Возвращает список пользователей учебной организации. Доступны query-параметры для поиска по логину или названию класса"
+            description = "Возвращает список пользователей учебной организации (с пагинацией через query-параметры). Доступны query-параметры для поиска по логину или названию класса"
     )
     @GetMapping("/users")
     ResponseEntity<List<UserDto>> getAllUsers(
             @RequestParam(required = false) String surnameOrLogin,
-            @RequestParam(required = false) String className
+            @RequestParam(required = false) String className,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "25") Integer limit
     );
 
 
@@ -55,4 +57,9 @@ public interface AdminPanelApi {
     )
     @GetMapping("/others")
     ResponseEntity<List<TimetableDto>> getDurationOfLessons();
+
+
+    //todo: ЧТБЫ ПОСТАВИТЬ ОЦЕНКУ, нужны айди класса и айди ученика и ауди предмета (вдруг кто-то одновременно в двух классах будет потом)
+
+    //todo: доделать для менеджера платформы
 }

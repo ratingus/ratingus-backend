@@ -14,10 +14,13 @@ public interface AnnouncementApi {
 //todo подключить библиотеки для сваггера
     @Operation(
             summary = "Получение списка объявлений",
-            description = "Возвращает список объявлений учебной организации"
+            description = "Возвращает список объявлений учебной организации (с пагинацией через query-параметры)"
     )
     @GetMapping
-    ResponseEntity<List<AnnouncementDto>> getAllAnnouncements();
+    ResponseEntity<List<AnnouncementDto>> getAllAnnouncements(
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "25") Integer limit
+    );
 
     @Operation(
             summary = "Создание объявления",
