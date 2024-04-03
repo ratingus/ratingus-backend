@@ -14,8 +14,8 @@ import java.util.List;
 @RequestMapping("/schedule")
 public interface ScheduleApi {
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение расписания",
+            description = "Возвращает расписание по заданному в query-параметре названию класса"
     )
     @GetMapping
     ResponseEntity<List<LessonScheduleDto>> getSchedule(@RequestParam(required = true) String className);

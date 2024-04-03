@@ -18,22 +18,22 @@ public interface DiaryApi {
     //todo: мб переделать LessonDto (другую схему сделать)
     //todo: пагинация
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение уроков за неделю",
+            description = "Возвращает список всех уроков за неделю по указанной дате"
     )
     @GetMapping("/week")
     ResponseEntity<List<LessonDto>> getWeekLessons(@RequestBody DateDto dateDto);
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение уроков за день",
+            description = "Возвращает список всех уроков за день по указанной дате"
     )
     @GetMapping("/day")
     ResponseEntity<List<LessonDto>> getDayLessons(@RequestBody DateDto dateDto);
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение урока",
+            description = "Возвращает информацию об уроке по его id"
     )
     @GetMapping("/lesson/{lessonId}")
     ResponseEntity<List<LessonDto>> getLesson(@PathVariable int lessonId);

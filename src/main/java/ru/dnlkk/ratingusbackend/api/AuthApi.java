@@ -13,22 +13,22 @@ import ru.dnlkk.ratingusbackend.api.model.UserDto;
 @RequestMapping("/auth")
 public interface AuthApi {
     @Operation(
-            summary = "",
-            description = ""
+            summary = "todo",
+            description = "todo"
     )
     @GetMapping("/logout")
     ResponseEntity<Void> logout();
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "todo",
+            description = "todo"
     )
     @GetMapping("/login") //todo: нужно ли передавать что-то
     ResponseEntity<JWTResponseDto> login();
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "todo",
+            description = "todo"
     )
     @GetMapping("/register")
     ResponseEntity<JWTResponseDto> register(@RequestBody UserDto userDto);

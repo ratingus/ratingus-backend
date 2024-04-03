@@ -13,25 +13,26 @@ import java.util.List;
 
 @Tag(name = "Контроллер журнала", description = "Просмотр и редактирование журнала")
 @RequestMapping("/magazine")
-public interface MagazineApi { //todo: сделать проставление оценки, посещаемости, темы
+public interface MagazineApi {
+    //todo: сделать проставление оценки, посещаемости, темы
     //todo: понять, где будут создаваться уроки
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение пользователей",
+            description = "Возвращает список пользователей для указанных в query-параметрах класса и предмета"
     )
     @GetMapping("/users")
     ResponseEntity<List<MagazineDto>> getMagazineWithUsers(
             @RequestParam(required = true) String className,
-            @RequestParam(required = true) String lessonName
+            @RequestParam(required = true) String subjectName
     );
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение уроков",
+            description = "Возвращает список уроков для указанных в query-параметрах класса и предмета"
     )
     @GetMapping("/lessons")
     ResponseEntity<List<LessonDto>> getMagazineWithLessons(
             @RequestParam(required = true) String className,
-            @RequestParam(required = true) String lessonName
+            @RequestParam(required = true) String subjectName
     );
 }

@@ -24,12 +24,14 @@ public interface AdminPanelApi {
             @RequestParam(required = false) String className
     );
 
+
     @Operation(
             summary = "Создание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
     )
     @PostMapping("/users")
     ResponseEntity<UserCodeDto> createUserCode(@RequestBody UserCodeDto userCodeDto);
+
 
     @Operation(
             summary = "Получение списка классов",
@@ -38,12 +40,14 @@ public interface AdminPanelApi {
     @GetMapping("/classes") //
     ResponseEntity<List<ClassDto>> getAllClasses(@RequestParam(required = false) String className);
 
+
     @Operation(
             summary = "Создание нового класса",
             description = "Создаёт новый класс по названию и возвращает его"
     )
     @PostMapping("/classes")
     ResponseEntity<ClassDto> createClass(@RequestBody ClassDto classDto);
+
 
     @Operation(
             summary = "Получение расписания длительности уроков",

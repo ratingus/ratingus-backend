@@ -13,25 +13,22 @@ import java.util.List;
 public interface AnnouncementApi {
 //todo подключить библиотеки для сваггера
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение списка объявлений",
+            description = "Возвращает список объявлений учебной организации"
     )
     @GetMapping
     ResponseEntity<List<AnnouncementDto>> getAllAnnouncements();
 
-//    @GetMapping("/{announcementId}") //todo: такого вроде нет функционала
-//    ResponseEntity<AnnouncementDto> getAnnouncement(@PathVariable("announcementId") int announcementId);
-
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Создание объявления",
+            description = "Создаёт и возвращает объявление"
     )
     @PostMapping()
     ResponseEntity<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto announcementDto);
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Удаление объявления",
+            description = "Удаляет объявление и ничего не возвращает"
     )
     @DeleteMapping("/{announcementId}")
     ResponseEntity<Void> deleteAnnouncement(@PathVariable("announcementId") int announcementId);

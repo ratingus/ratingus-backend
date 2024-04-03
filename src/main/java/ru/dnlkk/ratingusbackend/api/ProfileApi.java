@@ -14,15 +14,15 @@ import ru.dnlkk.ratingusbackend.api.model.UserDto;
 @RequestMapping("/profile")
 public interface ProfileApi {
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Получение пользователя",
+            description = "Возвращает информацию о пользователе"
     )
     @GetMapping
     ResponseEntity<UserDto> getUser();
 
     @Operation(
-            summary = "",
-            description = ""
+            summary = "Обновление пользователя",
+            description = "Обновляет пользователя и возвращает его"
     )
     @PutMapping
     ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto);
