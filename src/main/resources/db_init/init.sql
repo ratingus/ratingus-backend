@@ -48,6 +48,17 @@ CREATE TABLE timetable
   FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
+CREATE TABLE classes
+(
+    id serial PRIMARY KEY,
+    name VARCHAR NOT null,
+    school_id int NOT null,
+    user_code_id int,
+
+    FOREIGN KEY (user_code_id) REFERENCES users_codes (id),
+    FOREIGN KEY (school_id) REFERENCES school (id)
+);
+
 CREATE TABLE users_codes
 (
   	id serial PRIMARY KEY,
@@ -59,7 +70,9 @@ CREATE TABLE users_codes
     user_id  int NOT null,
     school_id int NOT null,
     creator_id int NOT null,
+    class_id int,
 
+    FOREIGN KEY (class_id) REFERENCES classes (id),
     FOREIGN KEY (creator_id) REFERENCES users (id),
   	FOREIGN KEY (user_id) REFERENCES users (id),
   	FOREIGN KEY (school_id) REFERENCES school (id)
@@ -71,19 +84,11 @@ CREATE TABLE announcement
   	id serial PRIMARY KEY,
   	content VARCHAR NOT null,
     name VARCHAR NOT null,
-    user_id  int NOT null,
+    creator_id  int NOT null,
   
-  	FOREIGN KEY (user_id) REFERENCES users (id)
+  	FOREIGN KEY (creator_id) REFERENCES users (id)
 );
 
-CREATE TABLE classes
-(
-	id serial PRIMARY KEY,
-	name VARCHAR NOT null, 
-	school_id int NOT null,
-	
-	FOREIGN KEY (school_id) REFERENCES school (id)
-);
 
 CREATE TABLE classes_announcements
 (
