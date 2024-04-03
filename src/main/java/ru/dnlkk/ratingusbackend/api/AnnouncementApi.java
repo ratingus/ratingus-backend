@@ -22,12 +22,14 @@ public interface AnnouncementApi {
             @RequestParam(defaultValue = "25") Integer limit
     );
 
+
     @Operation(
             summary = "Создание объявления",
             description = "Создаёт и возвращает объявление"
     )
     @PostMapping()
     ResponseEntity<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto announcementDto);
+
 
     @Operation(
             summary = "Удаление объявления",

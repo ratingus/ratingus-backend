@@ -24,12 +24,14 @@ public interface DiaryApi {
     @GetMapping("/week")
     ResponseEntity<List<LessonDto>> getWeekLessons(@RequestBody DateDto dateDto);
 
+
     @Operation(
             summary = "Получение уроков за день",
             description = "Возвращает список всех уроков за день по указанной дате"
     )
     @GetMapping("/day")
     ResponseEntity<List<LessonDto>> getDayLessons(@RequestBody DateDto dateDto);
+
 
     @Operation(
             summary = "Получение урока",

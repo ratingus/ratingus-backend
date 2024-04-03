@@ -26,6 +26,7 @@ public interface MagazineApi {
             @RequestParam(required = true) String subjectName
     );
 
+
     @Operation(
             summary = "Получение уроков",
             description = "Возвращает список уроков для указанных в query-параметрах класса и предмета"

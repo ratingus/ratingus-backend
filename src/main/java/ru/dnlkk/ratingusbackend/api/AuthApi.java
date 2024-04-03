@@ -19,12 +19,14 @@ public interface AuthApi {
     @GetMapping("/logout")
     ResponseEntity<Void> logout();
 
+
     @Operation(
             summary = "todo",
             description = "todo"
     )
     @GetMapping("/login") //todo: нужно ли передавать что-то
     ResponseEntity<JWTResponseDto> login();
+
 
     @Operation(
             summary = "todo",

@@ -20,6 +20,7 @@ public interface ProfileApi {
     @GetMapping
     ResponseEntity<UserDto> getUser();
 
+
     @Operation(
             summary = "Обновление пользователя",
             description = "Обновляет пользователя и возвращает его"

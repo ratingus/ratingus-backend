@@ -31,16 +31,20 @@ public interface AdminPanelApi {
             summary = "Создание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
     )
-    @PostMapping("/users")
+    @PostMapping("/users") //todo: сделать отдельную вкладку для кодов приглашений? Либо хоть пагинацию
     ResponseEntity<UserCodeDto> createUserCode(@RequestBody UserCodeDto userCodeDto);
 
 
     @Operation(
             summary = "Получение списка классов",
-            description = "Возвращает список всех классов учебной организации. Доступен query-параметр для поиска по названию класса"
+            description = "Возвращает список всех классов учебной организации (с пагинацией через query-параметры). Доступен query-параметр для поиска по названию класса"
     )
     @GetMapping("/classes") //
-    ResponseEntity<List<ClassDto>> getAllClasses(@RequestParam(required = false) String className);
+    ResponseEntity<List<ClassDto>> getAllClasses(
+            @RequestParam(required = false) String className,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "25") Integer limit
+    );
 
 
     @Operation(
