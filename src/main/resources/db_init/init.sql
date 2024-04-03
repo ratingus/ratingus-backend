@@ -4,35 +4,37 @@ CREATE TYPE attendances AS ENUM ('WAS', 'GOOD', 'BAD');
 
 create table users
 (
-    id            serial  primary key,
-    name          varchar NOT null,
-    surname       varchar NOT null,
-    patronymic    varchar,
-    login         varchar NOT null,
-    password      varchar NOT null,
-    birth_date    TIMESTAMP NOT null
+    id serial     PRIMARY KEY,
+    name          VARCHAR NOT NULL,
+    surname       VARCHAR NOT NULL,
+    patronymic    VARCHAR,
+    login         VARCHAR NOT NULL,
+    password      VARCHAR NOT NULL,
+    birth_date    TIMESTAMP NOT NULL
 );
 
 CREATE TABLE school
 (	
   	id serial PRIMARY KEY,
-  	name         varchar NOT null,
-    address       varchar NOT null,
-    phone    	 varchar NOT null,
-    email        varchar NOT null,
-    timetable_id int NOT null,
+  	name         VARCHAR NOT NULL,
+    address       VARCHAR NOT NULL,
+    phone    	 VARCHAR NOT NULL,
+    email        VARCHAR NOT NULL,
+    timetable_id INT NOT NULL,
 
     FOREIGN KEY (timetable_id) REFERENCES timetable (id)
 );
 
 CREATE TABLE users_roles
-(	
-  	user_id int,
-  	school_id int,
+(
+    id serial PRIMARY KEY,
+  	user_id INT,
+  	school_id INT,
   	role roles,
-    name          varchar NOT null,
-    surname       varchar NOT null,
-    patronymic    varchar,
+    name          VARCHAR NOT NULL,
+    surname       VARCHAR NOT NULL,
+    patronymic    VARCHAR,
+
     foreign key (user_id) references users (id),
   	foreign key (school_id) references school (id)
 );
@@ -40,10 +42,10 @@ CREATE TABLE users_roles
 CREATE TABLE timetable
 (
   	id serial PRIMARY KEY,
-  	lesson_number int NOT null,
-    start_time TIMESTAMP NOT null,
-    end_time  TIMESTAMP NOT null,
-    school_id int NOT null,
+  	lesson_number INT NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time  TIMESTAMP NOT NULL,
+    school_id INT NOT NULL,
   
   FOREIGN KEY (school_id) REFERENCES school (id)
 );
@@ -51,9 +53,9 @@ CREATE TABLE timetable
 CREATE TABLE classes
 (
     id serial PRIMARY KEY,
-    name VARCHAR NOT null,
-    school_id int NOT null,
-    user_code_id int,
+    name VARCHAR NOT NULL,
+    school_id INT NOT NULL,
+    user_code_id INT,
 
     FOREIGN KEY (user_code_id) REFERENCES users_codes (id),
     FOREIGN KEY (school_id) REFERENCES school (id)
@@ -62,16 +64,18 @@ CREATE TABLE classes
 CREATE TABLE users_codes
 (
   	id serial PRIMARY KEY,
-  	code VARCHAR NOT null,
+  	code VARCHAR NOT NULL,
     activated BOOLEAN,
-    name          varchar NOT null,
-    surname       varchar NOT null,
-    patronymic    varchar,
-    user_id  int NOT null,
-    school_id int NOT null,
-    creator_id int NOT null,
-    class_id int,
+    name          VARCHAR NOT NULL,
+    surname       VARCHAR NOT NULL,
+    patronymic    VARCHAR,
+    user_id  INT NOT NULL,
+    school_id INT NOT NULL,
+    creator_id INT NOT NULL,
+    class_id INT,
+    user_role_id INT,
 
+    FOREIGN KEY (user_role_id) REFERENCES users_roles (id),
     FOREIGN KEY (class_id) REFERENCES classes (id),
     FOREIGN KEY (creator_id) REFERENCES users (id),
   	FOREIGN KEY (user_id) REFERENCES users (id),
@@ -82,9 +86,9 @@ CREATE TABLE users_codes
 CREATE TABLE announcement
 (
   	id serial PRIMARY KEY,
-  	content VARCHAR NOT null,
-    name VARCHAR NOT null,
-    creator_id  int NOT null,
+  	content VARCHAR NOT NULL,
+    name VARCHAR NOT NULL,
+    creator_id  INT NOT NULL,
   
   	FOREIGN KEY (creator_id) REFERENCES users (id)
 );
@@ -92,8 +96,8 @@ CREATE TABLE announcement
 
 CREATE TABLE classes_announcements
 (
-    class_id int NOT null,
-    announcement_id int NOT null,
+    class_id INT NOT NULL,
+    announcement_id INT NOT NULL,
 
     FOREIGN KEY (announcement_id) REFERENCES announcement (id),
     FOREIGN KEY (class_id) REFERENCES classes (id)
@@ -101,8 +105,8 @@ CREATE TABLE classes_announcements
 
 CREATE TABLE classes_students
 (
-	class_id int NOT null,
-	student_id int NOT null,
+	class_id INT NOT NULL,
+	student_id INT NOT NULL,
 	
 	FOREIGN KEY (student_id) REFERENCES users (id),
 	FOREIGN KEY (class_id) REFERENCES classes (id)
@@ -111,16 +115,16 @@ CREATE TABLE classes_students
 CREATE TABLE studies
 (
 	id serial PRIMARY KEY,
-	name VARCHAR NOT null, 
-	school_id int NOT null,
+	name VARCHAR NOT NULL,
+	school_id INT NOT NULL,
 	
 	FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
 CREATE TABLE studies_teachers
 (
-	study_id int NOT null,
-	teacher_id int NOT null,
+	study_id INT NOT NULL,
+	teacher_id INT NOT NULL,
 	
 	FOREIGN KEY (teacher_id) REFERENCES users (id),
 	FOREIGN KEY (study_id) REFERENCES studies (id)
@@ -129,22 +133,23 @@ CREATE TABLE studies_teachers
 CREATE TABLE lessons
 (
   	id serial PRIMARY KEY,
-  	homework VARCHAR NOT null,
-    theme VARCHAR NOT null,
-	date_of_lesson TIMESTAMP NOT null,
-	lesson_number int NOT null,
-    study_id  int NOT null,
+  	homework VARCHAR NOT NULL,
+    theme VARCHAR NOT NULL,
+	date_of_lesson TIMESTAMP NOT NULL,
+	lesson_number INT NOT NULL,
+    study_id  INT NOT NULL,
   
   	FOREIGN KEY (study_id) REFERENCES studies (id)
 );
 
 CREATE TABLE students_lessons
 (
+    id serial PRIMARY KEY,
 	mark VARCHAR,
 	note VARCHAR,
 	attendance attendances,
-	student_id int NOT null,
-	lesson_id int NOT null,
+	student_id INT NOT NULL,
+	lesson_id INT NOT NULL,
 	
 	FOREIGN KEY (student_id) REFERENCES users (id),
 	FOREIGN KEY (lesson_id) REFERENCES lessons (id)

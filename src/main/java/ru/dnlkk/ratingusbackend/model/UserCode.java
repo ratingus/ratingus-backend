@@ -47,4 +47,8 @@ public class UserCode {
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+
+    @ManyToOne
+    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
+    private UserRole userRole;
 }

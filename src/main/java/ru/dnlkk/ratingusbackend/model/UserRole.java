@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -38,4 +40,7 @@ public class UserRole {
 
     @Column(name = "patronymic")
     private String patronymic;
+
+    @OneToMany(mappedBy = "userRole")
+    private List<UserCode> userCodes;
 }
