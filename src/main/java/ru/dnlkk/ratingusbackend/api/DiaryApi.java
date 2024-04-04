@@ -15,8 +15,6 @@ import java.util.List;
 @Tag(name = "Контроллер дневника", description = "Просмотр оценок, домашнего задания")
 @RequestMapping("/diary")
 public interface DiaryApi {
-    //todo: мб переделать LessonDto (другую схему сделать)
-    //todo: пагинация
     @Operation(
             summary = "Получение уроков за неделю",
             description = "Возвращает список всех уроков за неделю по указанной дате"
@@ -32,6 +30,7 @@ public interface DiaryApi {
     @GetMapping("/day")
     ResponseEntity<List<LessonDto>> getDayLessons(@RequestBody DateDto dateDto);
 
+    //todo: нет работы с заметками
 
     @Operation(
             summary = "Получение урока",

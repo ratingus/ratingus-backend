@@ -29,7 +29,7 @@ public interface AdminPanelApi {
 
     @Operation(
             summary = "Получение списка кодов приглашения",
-            description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)."
+            description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)"
     )
     @GetMapping("/user-codes")
     ResponseEntity<List<UserCodeDto>> getAllUserCodes(

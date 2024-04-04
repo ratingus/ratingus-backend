@@ -8,30 +8,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
 import ru.dnlkk.ratingusbackend.api.model.UserDto;
+import ru.dnlkk.ratingusbackend.api.model.UserLoginDto;
+import ru.dnlkk.ratingusbackend.api.model.UserRegistrationDto;
 
 @Tag(name = "Контроллер авторизации", description = "Авторизация, регистрация")
 @RequestMapping("/auth")
 public interface AuthApi {
     @Operation(
-            summary = "todo",
-            description = "todo"
+            summary = "Удаление токена",
+            description = "Удаляет JWT-токен из системы и ничего не возвращает"
     )
     @GetMapping("/logout")
     ResponseEntity<Void> logout();
 
 
     @Operation(
-            summary = "todo",
-            description = "todo"
+            summary = "Вход",
+            description = "Возвращает JWT-токен для переданных логина и пароля"
     )
-    @GetMapping("/login") //todo: нужно ли передавать что-то
-    ResponseEntity<JWTResponseDto> login();
+    @GetMapping("/login")
+    ResponseEntity<JWTResponseDto> login(@RequestBody UserLoginDto userLoginDto);
 
 
     @Operation(
-            summary = "todo",
-            description = "todo"
+            summary = "Регистрация",
+            description = "Создаёт пользователя и возвращает JWT-токен"
     )
     @GetMapping("/register")
-    ResponseEntity<JWTResponseDto> register(@RequestBody UserDto userDto);
+    ResponseEntity<JWTResponseDto> register(@RequestBody UserRegistrationDto userRegistrationDto);
 }

@@ -3,9 +3,9 @@ package ru.dnlkk.ratingusbackend.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import ru.dnlkk.ratingusbackend.api.model.AttendanceDto;
+import ru.dnlkk.ratingusbackend.api.model.GradeDto;
 import ru.dnlkk.ratingusbackend.api.model.LessonDto;
 import ru.dnlkk.ratingusbackend.api.model.MagazineDto;
 
@@ -14,8 +14,6 @@ import java.util.List;
 @Tag(name = "Контроллер журнала", description = "Просмотр и редактирование журнала")
 @RequestMapping("/magazine")
 public interface MagazineApi {
-    //todo: сделать проставление оценки, посещаемости, темы
-    //todo: понять, где будут создаваться уроки
     @Operation(
             summary = "Получение пользователей",
             description = "Возвращает список пользователей для указанных в query-параметрах класса и предмета"
@@ -28,6 +26,31 @@ public interface MagazineApi {
 
 
     @Operation(
+            summary = "Создание оценки",
+            description = "Создаёт оценку для пользователя и возвращает её"
+    )
+    @PostMapping("/users-grade")
+    ResponseEntity<GradeDto> createUserGrade(@RequestBody GradeDto gradeDto);
+
+
+    @Operation(
+            summary = "Обновление оценки",
+            description = "Обновляет оценку для пользователя и возвращает её"
+    )
+    @PutMapping("/users-grade")
+    ResponseEntity<GradeDto> updateUserGrade(@RequestBody GradeDto gradeDto);
+
+
+    @Operation(
+            summary = "Обновление посещаемости",
+            description = "Обновляет посещаемость для пользователя и возвращает её"
+    )
+    @PutMapping("/users-attendance")
+    ResponseEntity<GradeDto> updateUserAttendance(@RequestBody AttendanceDto attendanceDto);
+
+
+
+    @Operation(
             summary = "Получение уроков",
             description = "Возвращает список уроков для указанных в query-параметрах класса и предмета"
     )
@@ -36,4 +59,20 @@ public interface MagazineApi {
             @RequestParam(required = true) String className,
             @RequestParam(required = true) String subjectName
     );
+
+
+    @Operation(
+            summary = "Создание урока",
+            description = "Создаёт и возвращает урок"
+    )
+    @PostMapping("/lessons")
+    ResponseEntity<List<LessonDto>> createLesson(@RequestBody LessonDto lessonDto);
+
+
+    @Operation(
+            summary = "Обновление урока",
+            description = "Обновляет и возвращает урок"
+    )
+    @PutMapping("/lessons")
+    ResponseEntity<List<LessonDto>> updateLesson(@RequestBody LessonDto lessonDto);
 }
