@@ -3,12 +3,10 @@ package ru.dnlkk.ratingusbackend.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.model.DateDto;
 import ru.dnlkk.ratingusbackend.api.model.LessonDto;
+import ru.dnlkk.ratingusbackend.api.model.NoteDto;
 
 import java.util.List;
 
@@ -38,4 +36,28 @@ public interface DiaryApi {
     )
     @GetMapping("/lesson/{lessonId}")
     ResponseEntity<List<LessonDto>> getLesson(@PathVariable int lessonId);
+
+
+    @Operation(
+            summary = "Создание заметки",
+            description = "Создаёт и возвращает заметку"
+    )
+    @PostMapping("/lesson/{lessonId}") //todo: подумать, может, lessonId не делать в NoteDto
+    ResponseEntity<NoteDto> createNote(@RequestBody NoteDto noteDto);
+
+
+    @Operation(
+            summary = "Обновление заметки",
+            description = "Обновляет и возвращает заметку"
+    )
+    @PutMapping("/lesson/{lessonId}") //todo: подумать, может, lessonId не делать в NoteDto
+    ResponseEntity<NoteDto> updateNote(@RequestBody NoteDto noteDto);
+
+
+    @Operation(
+            summary = "Удаление заметки",
+            description = "Удаляет заметку и ничего не возвращает"
+    )
+    @PutMapping("/lesson/{lessonId}") //todo: подумать, может, lessonId не делать в NoteDto
+    ResponseEntity<Void> deleteNote();
 }

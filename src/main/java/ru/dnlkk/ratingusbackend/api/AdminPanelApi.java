@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.model.ClassDto;
-import ru.dnlkk.ratingusbackend.api.model.TimetableDto;
-import ru.dnlkk.ratingusbackend.api.model.UserCodeDto;
-import ru.dnlkk.ratingusbackend.api.model.UserDto;
+import ru.dnlkk.ratingusbackend.api.model.*;
 
 import java.util.List;
 
@@ -74,7 +71,29 @@ public interface AdminPanelApi {
     ResponseEntity<List<TimetableDto>> getDurationOfLessons();
 
 
-    //todo: ЧТБЫ ПОСТАВИТЬ ОЦЕНКУ, нужны айди класса и айди ученика и айди предмета (вдруг кто-то одновременно в двух классах будет потом)
+    @Operation(
+            summary = "Получение всех заявок",
+            description = "Возвращает список всех заявок на создание школы (с пагинацией через query-параметры)"
+    )
+    @GetMapping("/applications")
+    ResponseEntity<List<ApplicationDto>> getAllApplications(
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "25") Integer limit
+    );
 
-    //todo: доделать для менеджера платформы
+
+    @Operation(
+            summary = "Создание заявки",
+            description = "Создаёт заявку на создание школы и возвращает её"
+    )
+    @PostMapping("/applications")
+    ResponseEntity<ApplicationDto> createApplication(@RequestBody ApplicationDto applicationDto);
+
+
+    @Operation(
+            summary = "Удаление заявки",
+            description = "Удаляет заявку на создание школы и ничего не возвращает"
+    )
+    @DeleteMapping("/applications")
+    ResponseEntity<Void> deleteApplication();
 }
