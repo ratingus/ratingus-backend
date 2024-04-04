@@ -28,10 +28,21 @@ public interface AdminPanelApi {
 
 
     @Operation(
+            summary = "Получение списка кодов приглашения",
+            description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)."
+    )
+    @GetMapping("/user-codes")
+    ResponseEntity<List<UserCodeDto>> getAllUserCodes(
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "25") Integer limit
+    );
+
+
+    @Operation(
             summary = "Создание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
     )
-    @PostMapping("/users") //todo: сделать отдельную вкладку для кодов приглашений? Либо хоть пагинацию
+    @PostMapping("/users")
     ResponseEntity<UserCodeDto> createUserCode(@RequestBody UserCodeDto userCodeDto);
 
 
@@ -63,7 +74,7 @@ public interface AdminPanelApi {
     ResponseEntity<List<TimetableDto>> getDurationOfLessons();
 
 
-    //todo: ЧТБЫ ПОСТАВИТЬ ОЦЕНКУ, нужны айди класса и айди ученика и ауди предмета (вдруг кто-то одновременно в двух классах будет потом)
+    //todo: ЧТБЫ ПОСТАВИТЬ ОЦЕНКУ, нужны айди класса и айди ученика и айди предмета (вдруг кто-то одновременно в двух классах будет потом)
 
     //todo: доделать для менеджера платформы
 }

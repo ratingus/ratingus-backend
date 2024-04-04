@@ -11,7 +11,6 @@ import java.util.List;
 @Tag(name = "Контроллер объявлений", description = "Просмотр, создание и удаление объявлений")
 @RequestMapping("/announcements")
 public interface AnnouncementApi {
-//todo подключить библиотеки для сваггера
     @Operation(
             summary = "Получение списка объявлений",
             description = "Возвращает список объявлений учебной организации (с пагинацией через query-параметры)"
