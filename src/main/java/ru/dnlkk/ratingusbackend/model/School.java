@@ -1,0 +1,50 @@
+package ru.dnlkk.ratingusbackend.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "school")
+public class School {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "addres")
+    private String address;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "email")
+    private String email;
+
+    @OneToOne
+    @JoinColumn(name = "timetable_id", referencedColumnName = "id")
+    private Timetable timetable;
+
+    @OneToMany(mappedBy = "school")
+    private List<UserRole> userRoles;
+
+    @OneToMany(mappedBy = "school")
+    private List<Class> classes;
+
+    @OneToMany(mappedBy = "school")
+    private List<UserCode> userCodes;
+
+    @OneToMany(mappedBy = "school")
+    private List<Study> studies;
+}
