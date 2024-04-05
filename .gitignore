@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+.env*
+!.env.origin
+postgres/data/*
+!postgres/data
+

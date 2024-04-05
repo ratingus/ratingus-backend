@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ratingus-backend
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: ${DATABASE_DRIVER}
+
+server:
+  port: 5000
