@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Setter
 @Getter
@@ -29,7 +30,8 @@ public class Timetable {
     @Column(name = "end_time")
     private Timestamp endTime;
 
-    @OneToOne(mappedBy = "timetable")
+    @ManyToOne
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
 
 }

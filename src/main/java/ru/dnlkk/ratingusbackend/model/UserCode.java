@@ -24,11 +24,32 @@ public class UserCode {
     @Column(name = "activated")
     private boolean activated;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "patronymic")
+    private String patronymic;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class userClass;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
+    private User creator;
+
+    @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+
+    @ManyToOne
+    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
+    private UserRole userRole;
 }
