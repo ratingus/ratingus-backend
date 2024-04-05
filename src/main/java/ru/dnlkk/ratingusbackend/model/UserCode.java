@@ -33,7 +33,8 @@ public class UserCode {
     @Column(name = "patronymic")
     private String patronymic;
 
-    @OneToOne(mappedBy = "userCode")
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
     private Class userClass;
 
     @ManyToOne

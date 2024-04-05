@@ -21,9 +21,8 @@ public class Class {
     @Column(name = "name")
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "user_code_id", referencedColumnName = "id")
-    private UserCode userCode;
+    @OneToMany(mappedBy = "userClass")
+    private List<UserCode> userCodes;
 
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")

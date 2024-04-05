@@ -32,9 +32,8 @@ public class School {
     @Column(name = "email")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "timetable_id", referencedColumnName = "id")
-    private Timetable timetable;
+    @OneToMany(mappedBy = "school")
+    private List<Timetable> timetables;
 
     @OneToMany(mappedBy = "school")
     private List<UserRole> userRoles;
