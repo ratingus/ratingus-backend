@@ -15,4 +15,5 @@ public class JWTRegistrationDto {
     private String login;
     private String password;
     private Timestamp birthDate;
+    private boolean agreement;
 }
