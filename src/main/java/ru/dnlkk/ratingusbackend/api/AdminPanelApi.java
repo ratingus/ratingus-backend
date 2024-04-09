@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.model.*;
+import ru.dnlkk.ratingusbackend.api.dtos.*;
 
 import java.util.List;
 

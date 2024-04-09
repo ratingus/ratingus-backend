@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.model.AttendanceDto;
-import ru.dnlkk.ratingusbackend.api.model.GradeDto;
-import ru.dnlkk.ratingusbackend.api.model.LessonDto;
-import ru.dnlkk.ratingusbackend.api.model.MagazineDto;
+import ru.dnlkk.ratingusbackend.api.dtos.AttendanceDto;
+import ru.dnlkk.ratingusbackend.api.dtos.GradeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.LessonDto;
+import ru.dnlkk.ratingusbackend.api.dtos.MagazineDto;
 
 import java.util.List;
 
