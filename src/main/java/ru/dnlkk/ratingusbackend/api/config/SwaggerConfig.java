@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
                         email = "pavelsapegin18@gmail.com"
                 )
         ),
-        servers = {
-                @Server(url = "http://localhost:8080", description = "сервер для разработки"),
+        servers = { //http://localhost:5000/swagger-ui/index.html
+                @Server(url = "http://localhost:5000", description = "сервер для разработки"),
                 @Server(url = "https://ratingus.fun/spring-api", description = "продуктовый сервер")
         }
 )
