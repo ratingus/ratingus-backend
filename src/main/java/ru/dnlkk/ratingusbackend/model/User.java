@@ -38,7 +38,7 @@ public class User {
     @Column(name = "birth_date")
     private Timestamp birthDate;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "creator")
     private List<Announcement> announcements;
 
     @OneToMany(mappedBy = "student")
