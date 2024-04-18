@@ -28,7 +28,6 @@ public class Announcement {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-  
     private User creator;
 
     @ManyToMany
