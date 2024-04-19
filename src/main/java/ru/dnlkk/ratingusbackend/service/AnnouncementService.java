@@ -14,7 +14,7 @@ import java.util.List;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
 
-    public List<Announcement> getAllAnnouncementsPagination(int offset, int limit) {
+    public List<Announcement> getAllAnnouncementsPagination(int offset, int limit, int classId) {
         return announcementRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 

@@ -41,7 +41,12 @@ public interface AnnouncementApi {
             @Schema(description = "Количество объявлений на странице для пагинации", minimum = "1", maximum = "50", defaultValue = defaultLimit)
             @RequestParam(name = "limit", defaultValue = defaultLimit)
             @Min(1) @Max(50)
-            Integer limit
+            Integer limit,
+
+            @Schema(description = "Id класса", minimum = "0")
+            @RequestParam(name = "classId")
+            @Min(0)
+            Integer classId
     );
 
 
