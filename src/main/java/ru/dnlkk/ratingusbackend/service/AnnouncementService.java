@@ -14,11 +14,16 @@ import java.util.List;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
 
-    public List<Announcement> getAllAnnouncementsPagination(int offset, int limit, int classId) {
+    public List<Announcement> getAllAnnouncementsPagination(int offset, int limit, Integer classId) {
+        if (classId != null) {
+            return announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+        } //todo: проверить, работает ли
+
+//        Page<Announcement> pageAnnouncements = announcementRepository.findAll(PageRequest.of(limit, offset));
         return announcementRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 
-    public Announcement getAnnouncementById(int id) {
+    public Announcement getAnnouncementById(int id) { //можно вернуть null
         return announcementRepository.findById(id).orElseThrow(() -> new NotFoundException("Announcement with the specified id was not found"));
     }
 
