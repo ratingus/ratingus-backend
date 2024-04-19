@@ -19,22 +19,29 @@ public class AnnouncementController implements AnnouncementApi {
 
     @Override
     public ResponseEntity<AnnouncementDto> getAnnouncementById(int id) {
-        AnnouncementDto announcementDto = AnnouncementMapper.INSTANCE.toDto(announcementService.getAnnouncementById(id));
+        Announcement announcementFromService = announcementService.getAnnouncementById(id);
+        AnnouncementDto announcementDto = AnnouncementMapper.INSTANCE.toDto(announcementFromService);
         return ResponseEntity.ok(announcementDto);
     }
 
     @Override
     public ResponseEntity<List<AnnouncementDto>> getAllAnnouncements(Integer offset, Integer limit) {
-        return null;
+        List<Announcement> announcementsFromService = announcementService.getAllAnnouncementsPagination(offset, limit);
+        List<AnnouncementDto> announcementDtos = AnnouncementMapper.INSTANCE.toDtoList(announcementsFromService);
+        return ResponseEntity.ok(announcementDtos);
     }
 
     @Override
     public ResponseEntity<AnnouncementDto> createAnnouncement(AnnouncementDto announcementDto) {
-        return null;
+        Announcement announcement = AnnouncementMapper.INSTANCE.toModel(announcementDto);
+        Announcement announcementFromService = announcementService.createAnnouncement(announcement);
+        AnnouncementDto announcementDtoFromService = AnnouncementMapper.INSTANCE.toDto(announcementFromService);
+        return ResponseEntity.ok(announcementDtoFromService);
     }
 
     @Override
-    public ResponseEntity<Void> deleteAnnouncement(int announcementId) {
-        return null;
+    public ResponseEntity<Void> deleteAnnouncement(int id) {
+        announcementService.deleteAnnouncementById(id);
+        return ResponseEntity.ok().build();
     }
 }

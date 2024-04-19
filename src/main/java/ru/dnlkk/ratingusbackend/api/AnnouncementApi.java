@@ -60,9 +60,9 @@ public interface AnnouncementApi {
             summary = "Удаление объявления",
             description = "Удаляет объявление и ничего не возвращает"
     )
-    @DeleteMapping("/{announcementId}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteAnnouncement(
             @Schema(description = "Id удаляемого объявления")
-            @PathVariable("announcementId") int announcementId
+            @PathVariable("id") int id
     );
 }
