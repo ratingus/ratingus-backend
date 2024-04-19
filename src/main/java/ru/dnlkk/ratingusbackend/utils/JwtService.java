@@ -29,7 +29,7 @@ public class JwtService {
         if (userDetails instanceof User customUserDetails) {
             claims.put("id", customUserDetails.getId());
             claims.put("login", customUserDetails.getLogin());
-            claims.put("", customUserDetails.getClasses().getLast().getSchool());
+            claims.put("school", customUserDetails.getClasses().getLast().getSchool().getId());
         }
         return generateToken(claims, userDetails);
     }

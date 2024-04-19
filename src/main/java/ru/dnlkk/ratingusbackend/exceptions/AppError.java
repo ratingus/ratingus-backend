@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.exeptions;
+package ru.dnlkk.ratingusbackend.exceptions;
 
 import lombok.Data;
 

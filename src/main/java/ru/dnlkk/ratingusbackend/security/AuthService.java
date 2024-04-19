@@ -6,9 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
-import ru.dnlkk.ratingusbackend.api.model.UserLoginDto;
-import ru.dnlkk.ratingusbackend.api.model.UserRegistrationDto;
+import ru.dnlkk.ratingusbackend.api.model.*;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.service.UserService;
 import ru.dnlkk.ratingusbackend.utils.JwtService;
 
@@ -20,38 +19,29 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-//    public JWTResponseDto signUp(UserRegistrationDto userRegistrationDto) {
-//
-//        var user = User.builder()
-//                .username(userRegistrationDto.getNa())
-//                .email(userRegistrationDto.getEmail())
-//                .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
-//                .role(Role.ROLE_USER)
-//                .build();
-//
-//        userService.create(user);
-//
-//        var jwt = jwtService.generateToken(user);
-//        return new JWTResponseDto(jwt);
-//    }
-//
-//    /**
-//     * Аутентификация пользователя
-//     *
-//     * @param request данные пользователя
-//     * @return токен
-//     */
-//    public JWTResponseDto signIn(UserLoginDto userLoginDto) {
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                userLoginDto.getUsername(),
-//                userLoginDto.getPassword()
-//        ));
-//
-//        var user = userService
-//                .userDetailsService()
-//                .loadUserByUsername(request.getUsername());
-//
-//        var jwt = jwtService.generateToken(user);
-//        return new JWTResponseDto(jwt);
-//    }
+    public JWTResponseDto signUp(JWTRegistrationDto jwtRegistrationDto) {
+
+        var user = User.builder()
+                .username(jwtRegistrationDto.getLogin())
+                .password(passwordEncoder.encode(jwtRegistrationDto.getPassword()))
+                .build();
+
+        userService.create((ru.dnlkk.ratingusbackend.model.User) user);
+
+        var jwt = jwtService.generateToken(user);
+        return new JWTResponseDto(jwt);
+    }
+    public JWTResponseDto signIn(JWTRequest jwtRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                jwtRequest.getLogin(),
+                jwtRequest.getPassword()
+        ));
+
+        var user = userService
+                .userDetailsService()
+                .loadUserByUsername(jwtRequest.getLogin());
+
+        var jwt = jwtService.generateToken(user);
+        return new JWTResponseDto(jwt);
+    }
 }

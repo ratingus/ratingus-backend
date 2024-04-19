@@ -18,7 +18,6 @@ public class UserService {
     }
     public User create(User user) {
         if (repository.existsByUsername(user.getName())) {
-            // Заменить на свои исключения
             throw new RuntimeException("Пользователь с таким именем уже существует");
         }
 
@@ -28,6 +27,11 @@ public class UserService {
 
         return save(user);
     }
+
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
+
     public User getByUsername(String username) {
         return repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
