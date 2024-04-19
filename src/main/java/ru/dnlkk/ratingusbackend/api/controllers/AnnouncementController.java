@@ -1,7 +1,7 @@
 package ru.dnlkk.ratingusbackend.api.controllers;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AnnouncementApi;
@@ -20,8 +20,6 @@ public class AnnouncementController implements AnnouncementApi {
     @Override
     public ResponseEntity<AnnouncementDto> getAnnouncementById(int id) {
         AnnouncementDto announcementDto = AnnouncementMapper.INSTANCE.toDto(announcementService.getAnnouncementById(id));
-//        Announcement announcement = announcementService.getAnnouncementById(id);
-//        return ResponseEntity.ok(new AnnouncementDto(announcement.getId(), announcement.getContent(), announcement.getContent(), announcement.getCreator(), announcement.getClasses()));
         return ResponseEntity.ok(announcementDto);
     }
 

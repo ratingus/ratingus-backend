@@ -8,9 +8,8 @@ import ru.dnlkk.ratingusbackend.model.User;
 import java.util.List;
 
 @AllArgsConstructor
-//@NoArgsConstructor
-//@RequiredArgsConstructor
-//@Builder
+@NoArgsConstructor
+@Builder
 @Data
 public class AnnouncementDto {
     private int id;
