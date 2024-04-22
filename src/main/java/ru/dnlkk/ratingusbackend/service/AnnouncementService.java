@@ -8,6 +8,7 @@ import ru.dnlkk.ratingusbackend.model.Announcement;
 import ru.dnlkk.ratingusbackend.repository.AnnouncementRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,18 +17,14 @@ public class AnnouncementService {
 
     public List<Announcement> getAllAnnouncementsPagination(int offset, int limit, Integer classId) {
         if (classId != null) {
-            System.out.println("classId = " + classId);
-//            System.out.println(announcementRepository.findByClasses_Id(classId));
-//            return announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
-            return announcementRepository.findByClasses_Id(classId);
-        } //todo: проверить, работает ли
-
-//        Page<Announcement> pageAnnouncements = announcementRepository.findAll(PageRequest.of(limit, offset));
+            return announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+        }
         return announcementRepository.findAll(PageRequest.of(offset, limit)).stream().toList();
     }
 
-    public Announcement getAnnouncementById(int id) { //можно вернуть null
-        return announcementRepository.findById(id).orElseThrow(() -> new NotFoundException("Announcement with the specified id was not found"));
+    public Announcement getAnnouncementById(int id) { //если возвращается null...
+        Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
+        return optionalAnnouncement.orElse(null);
     }
 
     public Announcement createAnnouncement(Announcement announcement) {
