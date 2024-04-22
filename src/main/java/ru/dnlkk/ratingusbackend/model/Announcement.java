@@ -34,5 +34,4 @@ public class Announcement {
             joinColumns = @JoinColumn(name = "announcement_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
-
 }

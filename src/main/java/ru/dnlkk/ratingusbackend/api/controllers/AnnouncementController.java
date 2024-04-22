@@ -19,8 +19,12 @@ public class AnnouncementController implements AnnouncementApi {
     @Override
     public ResponseEntity<AnnouncementDto> getAnnouncementById(int id) {
         Announcement announcementFromService = announcementService.getAnnouncementById(id);
-        AnnouncementDto announcementDto = AnnouncementMapper.INSTANCE.toDto(announcementFromService);
-        return ResponseEntity.ok(announcementDto);
+        if (announcementFromService == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            AnnouncementDto announcementDto = AnnouncementMapper.INSTANCE.toDto(announcementFromService);
+            return ResponseEntity.ok(announcementDto);
+        }
     }
 
     @Override
