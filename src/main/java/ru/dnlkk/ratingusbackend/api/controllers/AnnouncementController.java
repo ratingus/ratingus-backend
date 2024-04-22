@@ -25,12 +25,8 @@ public class AnnouncementController implements AnnouncementApi {
 
     @Override
     public ResponseEntity<List<AnnouncementDto>> getAllAnnouncements(Integer offset, Integer limit, Integer classId) {
-        System.out.println("all NOT get");
         List<Announcement> announcementsFromService = announcementService.getAllAnnouncementsPagination(offset, limit, classId);
-        System.out.println("all get");
         List<AnnouncementDto> announcementDtos = AnnouncementMapper.INSTANCE.toDtoList(announcementsFromService);
-        System.out.println("was mapped");
-        System.out.println(announcementDtos);
         return ResponseEntity.ok(announcementDtos);
     }
 
