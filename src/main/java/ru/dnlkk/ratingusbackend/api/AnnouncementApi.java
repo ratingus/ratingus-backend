@@ -44,7 +44,7 @@ public interface AnnouncementApi {
             Integer limit,
 
             @Schema(description = "Id класса", minimum = "0")
-            @RequestParam(name = "classId")
+            @RequestParam(name = "classId", required = false)
             @Min(0)
             Integer classId
     );

@@ -16,7 +16,10 @@ public class AnnouncementService {
 
     public List<Announcement> getAllAnnouncementsPagination(int offset, int limit, Integer classId) {
         if (classId != null) {
-            return announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+            System.out.println("classId = " + classId);
+//            System.out.println(announcementRepository.findByClasses_Id(classId));
+//            return announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+            return announcementRepository.findByClasses_Id(classId);
         } //todo: проверить, работает ли
 
 //        Page<Announcement> pageAnnouncements = announcementRepository.findAll(PageRequest.of(limit, offset));
