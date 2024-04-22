@@ -20,14 +20,12 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public JWTResponseDto signUp(JWTRegistrationDto jwtRegistrationDto) {
-
         var user = User.builder()
                 .username(jwtRegistrationDto.getLogin())
                 .password(passwordEncoder.encode(jwtRegistrationDto.getPassword()))
                 .build();
 
         userService.create((ru.dnlkk.ratingusbackend.model.User) user);
-
         var jwt = jwtService.generateToken(user);
         return new JWTResponseDto(jwt);
     }
@@ -36,7 +34,6 @@ public class AuthService {
                 jwtRequest.getLogin(),
                 jwtRequest.getPassword()
         ));
-
         var user = userService
                 .userDetailsService()
                 .loadUserByUsername(jwtRequest.getLogin());
