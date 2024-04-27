@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.dtos.enums;
+package ru.dnlkk.ratingusbackend.model.enums;
 
 public enum Role {
 

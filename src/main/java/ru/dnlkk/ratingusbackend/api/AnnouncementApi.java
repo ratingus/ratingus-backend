@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.model.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
 
 import java.util.List;
 

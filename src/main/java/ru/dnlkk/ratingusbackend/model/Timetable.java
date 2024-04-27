@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.dtos;
+package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,30 +6,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "studies")
-public class Subject {
+@Table(name = "timetable")
+public class Timetable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "lesson_number")
+    private int lessonNumber;
 
-    @ManyToMany(mappedBy = "subjects")
-    private List<User> teachers;
+    @Column(name = "start_time")
+    private Timestamp startTime;
 
-    @OneToMany(mappedBy = "subject")
-    private List<Lesson> lessons;
+    @Column(name = "end_time")
+    private Timestamp endTime;
 
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+
 }

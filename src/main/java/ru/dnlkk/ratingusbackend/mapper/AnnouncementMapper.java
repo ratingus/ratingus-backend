@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import ru.dnlkk.ratingusbackend.api.model.AnnouncementDto;
-import ru.dnlkk.ratingusbackend.dtos.Announcement;
-import ru.dnlkk.ratingusbackend.dtos.Class;
-import ru.dnlkk.ratingusbackend.dtos.User;
+import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.model.Announcement;
+import ru.dnlkk.ratingusbackend.model.Class;
+import ru.dnlkk.ratingusbackend.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

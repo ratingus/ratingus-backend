@@ -6,10 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
-import ru.dnlkk.ratingusbackend.api.model.UserDto;
-import ru.dnlkk.ratingusbackend.api.model.UserLoginDto;
-import ru.dnlkk.ratingusbackend.api.model.UserRegistrationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.JWTResponseDto;
+import ru.dnlkk.ratingusbackend.api.dtos.UserLoginDto;
+import ru.dnlkk.ratingusbackend.api.dtos.UserRegistrationDto;
 
 @Tag(name = "Контроллер авторизации", description = "Авторизация, регистрация")
 @RequestMapping("/auth")

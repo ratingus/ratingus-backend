@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.dtos;
+package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
