@@ -1,11 +1,11 @@
-package ru.dnlkk.ratingusbackend.model;
+package ru.dnlkk.ratingusbackend.dtos;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.dnlkk.ratingusbackend.model.enums.Attendance;
+import ru.dnlkk.ratingusbackend.dtos.enums.Attendance;
 
 @Setter
 @Getter

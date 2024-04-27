@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.model;
+package ru.dnlkk.ratingusbackend.dtos;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Setter
 @Getter

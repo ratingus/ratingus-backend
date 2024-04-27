@@ -3,8 +3,7 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
-import ru.dnlkk.ratingusbackend.model.Announcement;
+import ru.dnlkk.ratingusbackend.dtos.Announcement;
 import ru.dnlkk.ratingusbackend.repository.AnnouncementRepository;
 
 import java.util.List;
