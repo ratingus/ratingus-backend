@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.dnlkk.ratingusbackend.api.dtos.JWTRegistrationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.JWTResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.UserLoginDto;
 import ru.dnlkk.ratingusbackend.api.dtos.UserRegistrationDto;
@@ -26,7 +27,7 @@ public interface AuthApi {
             description = "Возвращает JWT-токен для переданных логина и пароля"
     )
     @GetMapping("/login")
-    ResponseEntity<JWTResponseDto> login(@RequestBody UserLoginDto userLoginDto);
+    ResponseEntity<JWTResponseDto> login(@RequestBody JWTResponseDto jwtResponseDto);
 
 
     @Operation(
@@ -34,5 +35,5 @@ public interface AuthApi {
             description = "Создаёт пользователя и возвращает JWT-токен"
     )
     @GetMapping("/register")
-    ResponseEntity<JWTResponseDto> register(@RequestBody UserRegistrationDto userRegistrationDto);
+    ResponseEntity<JWTResponseDto> register(@RequestBody JWTRegistrationDto jwtRegistrationDto);
 }
