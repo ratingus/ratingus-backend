@@ -9,6 +9,7 @@ import ru.dnlkk.ratingusbackend.repository.DiaryRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,15 +18,18 @@ public class DiaryService {
     private DiaryRepository diaryRepository;
 
     public WeekLessonDto getDiaryByWeek(int weekId){
-        return diaryRepository.findDiaryByWeek(weekId);
+        Optional<WeekLessonDto> optionalDiary = diaryRepository.findDiaryByWeek(weekId);
+        return optionalDiary.orElse(null);
     }
 
-    private DayLessonDto getLessonByDay(int weekNumber, int dayNumber){
-        return diaryRepository.findDiaryByDay(weekNumber, dayNumber);
+    private DayLessonDto getDiaryByDay(int weekNumber, int dayNumber){
+        Optional<DayLessonDto> optionalDiary = diaryRepository.findDiaryByDay(weekNumber, dayNumber);
+        return optionalDiary.orElse(null);
     }
 
     public StudentLesson getDiaryByLessonId(int lessonId) {
-        return diaryRepository.findDiaryByLesson(lessonId);
+        Optional<StudentLesson> optionalDiary = diaryRepository.findDiaryByLesson(lessonId);
+        return optionalDiary.orElse(null);
     }
 
     public StudentLesson addNote(int diaryId, String note) {
@@ -34,7 +38,7 @@ public class DiaryService {
                     diary.setNote(note);
                     return diary;
                 })
-                .orElseThrow(() -> new NoSuchElementException("Дневник отсутствует"));
+                .orElse(null);
     }
 
     public StudentLesson createDiary(StudentLesson studentLesson) {
