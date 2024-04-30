@@ -7,7 +7,11 @@ import ru.dnlkk.ratingusbackend.api.dtos.WeekLessonDto;
 import ru.dnlkk.ratingusbackend.model.StudentLesson;
 import ru.dnlkk.ratingusbackend.repository.DiaryRepository;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -17,18 +21,21 @@ public class DiaryService {
 
     private DiaryRepository diaryRepository;
 
-    public WeekLessonDto getDiaryByWeek(int weekId){
-        Optional<WeekLessonDto> optionalDiary = diaryRepository.findDiaryByWeek(weekId);
-        return optionalDiary.orElse(null);
-    }
+//    public WeekLessonDto getDiaryByWeek(int weekId){
+//        Optional<WeekLessonDto> optionalDiary = diaryRepository.findDiaryByWeek(weekId);
+//        return optionalDiary.orElse(null);
+//    }
 
-    private DayLessonDto getDiaryByDay(int weekNumber, int dayNumber){
-        Optional<DayLessonDto> optionalDiary = diaryRepository.findDiaryByDay(weekNumber, dayNumber);
-        return optionalDiary.orElse(null);
+    private List<StudentLesson> getDiaryByDay(int userId, Timestamp dayNumber){
+        LocalDate.of(24, 3,4);
+       ;
+        List<StudentLesson> diary = diaryRepository.findDiaryByDay(userId,  Timestamp.from(LocalDate.of(24,
+                3,4).atStartOfDay().toInstant(ZoneOffset.ofHours(3))),  Timestamp.from(LocalDate.of(24, 3,4).atStartOfDay().toInstant(ZoneOffset.ofHours(6))));
+        return diary;
     }
 
     public StudentLesson getDiaryByLessonId(int lessonId) {
-        Optional<StudentLesson> optionalDiary = diaryRepository.findDiaryByLesson(lessonId);
+        Optional<StudentLesson> optionalDiary = diaryRepository.findDiaryByLessonId(lessonId);
         return optionalDiary.orElse(null);
     }
 
