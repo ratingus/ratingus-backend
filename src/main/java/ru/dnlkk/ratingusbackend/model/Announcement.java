@@ -1,17 +1,15 @@
 package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "announcement")
 public class Announcement {
@@ -36,5 +34,4 @@ public class Announcement {
             joinColumns = @JoinColumn(name = "announcement_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
-
 }
