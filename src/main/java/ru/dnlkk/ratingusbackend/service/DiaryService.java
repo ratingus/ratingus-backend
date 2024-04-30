@@ -2,6 +2,8 @@ package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.dnlkk.ratingusbackend.api.dtos.DayLessonDto;
+import ru.dnlkk.ratingusbackend.api.dtos.WeekLessonDto;
 import ru.dnlkk.ratingusbackend.model.StudentLesson;
 import ru.dnlkk.ratingusbackend.repository.DiaryRepository;
 
@@ -14,12 +16,12 @@ public class DiaryService {
 
     private DiaryRepository diaryRepository;
 
-    public StudentLesson getDiaryByWeekId(int weekId) {
+    public WeekLessonDto getDiaryByWeek(int weekId){
         return diaryRepository.findDiaryByWeek(weekId);
     }
 
-    public StudentLesson getDiaryByDayId(int dayId) {
-        return diaryRepository.findDiaryByDay(dayId);
+    private DayLessonDto getLessonByDay(int weekNumber, int dayNumber){
+        return diaryRepository.findDiaryByDay(weekNumber, dayNumber);
     }
 
     public StudentLesson getDiaryByLessonId(int lessonId) {
