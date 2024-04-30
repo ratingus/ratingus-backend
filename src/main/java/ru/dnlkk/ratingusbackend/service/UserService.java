@@ -14,18 +14,20 @@ public class UserService {
     private final UserRepository repository;
 
     public User save(User user) {
-        return repository.save(user);
+        return null;
+//        return repository.save(user);
     }
     public User create(User user) {
-        if (repository.existsByUsername(user.getName())) {
-            throw new RuntimeException("Пользователь с таким именем уже существует");
-        }
+//        if (repository.existsByUsername(user.getName())) {
+//            throw new RuntimeException("Пользователь с таким именем уже существует");
+//        }
+//
+//        if (repository.existsByLogin(user.getLogin())) {
+//            throw new RuntimeException("Пользователь с таким login уже существует");
+//        }
 
-        if (repository.existsByLogin(user.getLogin())) {
-            throw new RuntimeException("Пользователь с таким login уже существует");
-        }
-
-        return save(user);
+        return null;
+//        return save(user);
     }
 
     public UserDetailsService userDetailsService() {
@@ -33,8 +35,9 @@ public class UserService {
     }
 
     public User getByUsername(String username) {
-        return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        return null;
+//        return repository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
     }
 
