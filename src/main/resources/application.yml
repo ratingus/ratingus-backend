@@ -6,6 +6,10 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: ${DATABASE_DRIVER}
+  security:
+    user:
+      name: admin
+      password: admin
 
 server:
   port: 5000
