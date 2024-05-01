@@ -21,6 +21,7 @@ spring:
 server:
   port: 5000
 
+
 token:
   signing:
     key: ${TOKEN_KEY}
