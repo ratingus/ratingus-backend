@@ -25,7 +25,7 @@ public class Announcement {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
 
     @ManyToMany
