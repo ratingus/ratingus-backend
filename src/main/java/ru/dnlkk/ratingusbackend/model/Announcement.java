@@ -2,6 +2,7 @@ package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "announcement")
-public class Announcement {
+public class Announcement implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

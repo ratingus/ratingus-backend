@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.enums.Attendance;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 @Setter
 @Getter
@@ -13,7 +14,7 @@ import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 @AllArgsConstructor
 @Entity
 @Table(name = "students_lessons")
-public class StudentLesson {
+public class StudentLesson implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

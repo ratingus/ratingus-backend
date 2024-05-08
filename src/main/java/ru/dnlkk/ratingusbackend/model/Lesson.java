@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "lessons")
-public class Lesson {
+public class Lesson implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
