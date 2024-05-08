@@ -8,7 +8,6 @@ import ru.dnlkk.ratingusbackend.api.dtos.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/admin-panel")
 @Tag(name = "Контроллер админ-панели", description = "Управление пользователями учебной организации")
 public interface AdminPanelApi {
@@ -17,7 +16,7 @@ public interface AdminPanelApi {
             description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
     )
     @GetMapping("/users")
-    ResponseEntity<List<UserDto>> getAllUsers( //todo: задать id школы? Токен?
+    ResponseEntity<List<UserDto>> getAllUsers(
 //            @RequestParam(required = false) String surnameOrLogin
     );
 
