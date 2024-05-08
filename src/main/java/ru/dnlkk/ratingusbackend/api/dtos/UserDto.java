@@ -20,12 +20,11 @@ public class UserDto {
     private String surname;
     private String patronymic;
     private String login;
-    private String password;
     private Timestamp birthDate;
-    private List<Announcement> announcements;
-    private List<StudentLesson> studentsLessons;
-    private List<UserCode> usersCodes;
-    private List<Class> classes;
-    private List<UserRole> usersRoles;
-    private List<Subject> subjects;
+    private List<Announcement> announcementsId;
+    private List<StudentLesson> studentsLessonsId;
+    private List<UserCode> usersCodesId; //todo: нужно?
+    private List<Class> classesId;
+    private List<UserRole> usersRolesId;
+    private List<Subject> subjectsId;
 }

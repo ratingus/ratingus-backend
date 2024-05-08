@@ -13,26 +13,20 @@ import java.util.List;
 public interface AdminPanelApi {
     @Operation(
             summary = "Получение списка пользователей",
-            description = "Возвращает список пользователей учебной организации (с пагинацией через query-параметры). Доступны query-параметры для поиска по логину или названию класса"
+            description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
     )
     @GetMapping("/users")
     ResponseEntity<List<UserDto>> getAllUsers(
-            @RequestParam(required = false) String surnameOrLogin,
-            @RequestParam(required = false) String className,
-            @RequestParam(defaultValue = "0") Integer offset,
-            @RequestParam(defaultValue = "25") Integer limit
+//            @RequestParam(required = false) String surnameOrLogin
     );
 
 
     @Operation(
             summary = "Получение списка кодов приглашения",
-            description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)"
+            description = "Возвращает список не активированных кодов приглашения учебной организации"
     )
     @GetMapping("/user-codes")
-    ResponseEntity<List<UserCodeDto>> getAllUserCodes(
-            @RequestParam(defaultValue = "0") Integer offset,
-            @RequestParam(defaultValue = "25") Integer limit
-    );
+    ResponseEntity<List<UserCodeDto>> getAllUserCodes();
 
 
     @Operation(
@@ -45,13 +39,11 @@ public interface AdminPanelApi {
 
     @Operation(
             summary = "Получение списка классов",
-            description = "Возвращает список всех классов учебной организации (с пагинацией через query-параметры). Доступен query-параметр для поиска по названию класса"
+            description = "Возвращает список всех классов учебной организации" //. Доступен query-параметр для поиска по названию класса
     )
     @GetMapping("/classes") //
     ResponseEntity<List<ClassDto>> getAllClasses(
-            @RequestParam(required = false) String className,
-            @RequestParam(defaultValue = "0") Integer offset,
-            @RequestParam(defaultValue = "25") Integer limit
+//            @RequestParam(required = false) String className
     );
 
 
@@ -68,18 +60,15 @@ public interface AdminPanelApi {
             description = "Возвращает список уроков с указанными сроками начала и конца"
     )
     @GetMapping("/others")
-    ResponseEntity<List<TimetableDto>> getDurationOfLessons();
+    ResponseEntity<List<TimetableDto>> getTimetable();
 
 
     @Operation(
             summary = "Получение всех заявок",
-            description = "Возвращает список всех заявок на создание школы (с пагинацией через query-параметры)"
+            description = "Возвращает список всех заявок на создание школы"
     )
     @GetMapping("/applications")
-    ResponseEntity<List<ApplicationDto>> getAllApplications(
-            @RequestParam(defaultValue = "0") Integer offset,
-            @RequestParam(defaultValue = "25") Integer limit
-    );
+    ResponseEntity<List<ApplicationDto>> getAllApplications();
 
 
     @Operation(
