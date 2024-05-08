@@ -19,8 +19,6 @@ public interface UserMapper { //todo: проверить, как упрости�
 //    User toModel(UserDto userDto);
 //    List<User> toModelList(List<UserDto> userDtoList);
 
-
-//    @Mapping(target = ".", source = "password", ignore = true) //todo: проверить, работает ли (точка говорит "ничего")
     @Mapping(target = "announcementsId", source = "announcements", qualifiedByName = "getIdList")
     @Mapping(target = "studentsLessonsId", source = "studentsLessons", qualifiedByName = "getIdList")
     @Mapping(target = "usersCodesId", source = "usersCodes", qualifiedByName = "getIdList")

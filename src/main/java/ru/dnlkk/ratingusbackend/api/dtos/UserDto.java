@@ -20,7 +20,6 @@ public class UserDto {
     private String surname;
     private String patronymic;
     private String login;
-    private String password;
     private Timestamp birthDate;
     private List<Integer> announcementsId;
     private List<Integer> studentsLessonsId;
