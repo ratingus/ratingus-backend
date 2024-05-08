@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
@@ -15,11 +16,12 @@ import ru.dnlkk.ratingusbackend.repository.UserRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AdminPanelService {
-    private ClassRepository classRepository;
-    private UserRepository userRepository;
-    private UserCodeRepository userCodeRepository;
-    private TimetableRepository timetableRepository;
+    private final ClassRepository classRepository;
+    private final UserRepository userRepository;
+    private final UserCodeRepository userCodeRepository;
+    private final TimetableRepository timetableRepository;
     public List<User> getAllUsers() {
         return userRepository.findAll().stream().toList();
     }

@@ -1,18 +1,26 @@
 package ru.dnlkk.ratingusbackend.api.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
+import ru.dnlkk.ratingusbackend.mapper.UserMapper;
+import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 
 import java.util.List;
 
+@RestController
+@RequiredArgsConstructor
 public class AdminPanelController implements AdminPanelApi {
-    private AdminPanelService adminPanelService;
+    private final AdminPanelService adminPanelService;
 
     @Override
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        return null;
+        List<User> users = adminPanelService.getAllUsers();
+        List<UserDto> userDtos = UserMapper.INSTANCE.toDtoList(users);
+        return ResponseEntity.ok(userDtos);
     }
 
     @Override
