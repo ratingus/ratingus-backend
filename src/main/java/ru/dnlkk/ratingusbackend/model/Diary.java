@@ -13,7 +13,7 @@ import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 @AllArgsConstructor
 @Entity
 @Table(name = "students_lessons")
-public class StudentLesson {
+public class Diary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
