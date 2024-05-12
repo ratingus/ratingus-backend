@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.dnlkk</groupId>
     <artifactId>ratingus-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>ratingus-backend</name>
     <description>ratingus-backend</description>
     <properties>
@@ -98,7 +98,20 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>ru.dnlkk.ratingusbackend.RatingusBackendApplication</mainClass>
+                    <skip>false</skip>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>with-deps</classifier>
+                            <mainClass>ru.dnlkk.ratingusbackend.RatingusBackendApplication</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
