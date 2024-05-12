@@ -28,10 +28,6 @@ public class UserService {
     }
 
     public User getByUsername(String username) {
-//        return null;
         return repository.findByName(username);
-
     }
-
-
 }
