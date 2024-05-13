@@ -40,7 +40,4 @@ public class UserRole {
 
     @Column(name = "patronymic")
     private String patronymic;
-
-    @OneToMany(mappedBy = "userRole")
-    private List<UserCode> userCodes;
 }

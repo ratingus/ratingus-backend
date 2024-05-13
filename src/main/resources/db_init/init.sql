@@ -8,7 +8,7 @@ create table "user"
     name          VARCHAR NOT NULL,
     surname       VARCHAR NOT NULL,
     patronymic    VARCHAR,
-    login         VARCHAR NOT NULL,
+    login         VARCHAR NOT NULL UNIQUE ,
     password      VARCHAR NOT NULL,
     birth_date    TIMESTAMP NOT NULL
 );
@@ -70,9 +70,8 @@ CREATE TABLE user_code
     school_id INT NOT NULL,
     creator_id INT NOT NULL,
     class_id INT,
-    user_role_id INT,
+    role roles,
 
-    FOREIGN KEY (user_role_id) REFERENCES user_role (id),
     FOREIGN KEY (class_id) REFERENCES class (id),
     FOREIGN KEY (creator_id) REFERENCES "user" (id),
   	FOREIGN KEY (user_id) REFERENCES "user" (id),
