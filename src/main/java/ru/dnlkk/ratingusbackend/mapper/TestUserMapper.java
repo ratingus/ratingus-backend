@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
-public interface UserMapper { //todo: проверить, как упростить класс, после написания
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+public interface TestUserMapper { //todo: проверить, как упростить класс, после написания
+    TestUserMapper INSTANCE = Mappers.getMapper(TestUserMapper.class);
 //    @Mapping(target = "password", ignore = true)
 //    @Mapping(target = "announcements", source = "announcementsId", qualifiedByName = "getAnnouncementsFromIdList")
 //    @Mapping(target = "studentsLessons", source = "studentsLessonsId", qualifiedByName = "getIdList")

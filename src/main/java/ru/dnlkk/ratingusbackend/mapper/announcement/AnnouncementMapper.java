@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.mapper;
+package ru.dnlkk.ratingusbackend.mapper.announcement;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

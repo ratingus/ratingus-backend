@@ -36,11 +36,11 @@ public class UserCode implements IdGettable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;  //todo: нужны оба поля?
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
-    private User creator;  //todo: нужны оба поля?
+    private User creator;
 
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")

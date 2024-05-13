@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface AdminPanelApi {
             description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
     )
     @GetMapping("/users")
-    ResponseEntity<List<UserCodeDto>> getAllUserCodesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
+    ResponseEntity<List<UserCodeViewDto>> getAllUserCodesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
 //            @RequestParam(required = false) String surnameOrLogin
     );
 
@@ -26,7 +27,7 @@ public interface AdminPanelApi {
             description = "Создаёт новый код приглашения и возвращает его"
     )
     @PostMapping("/users")
-    ResponseEntity<UserCodeDto> createUserCode(@RequestBody UserCodeDto userCodeDto);
+    ResponseEntity<UserCodeCreateDto> createUserCode(@RequestBody UserCodeCreateDto userCodeCreateDto);
 
 
     @Operation(

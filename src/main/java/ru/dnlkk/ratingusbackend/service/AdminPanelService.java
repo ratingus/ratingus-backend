@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.repository.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,18 +24,21 @@ public class AdminPanelService {
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
 
-    public List<UserCodeDto> getAllUsersCodesForSchool(Integer schoolId) {
+    public List<UserCodeViewDto> getAllUsersCodesForSchool(Integer schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
-            return null;
-        } else { //todo: затестировать!!!
+            return new ArrayList<>();
+        } else {
             List<UserCode> userCodes = school.get().getUserCodes();
             return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
         }
     }
 
-    public UserCode createUserCode(UserCode userCode) {
-        return userCodeRepository.saveAndFlush(userCode);
+    public UserCode createUserCode(UserCodeCreateDto userCodeCreateDto) {
+        UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
+
+        return null;
+//        return userCodeRepository.saveAndFlush(userCode);
     }
 
     public List<Class> getAllClasses() {
