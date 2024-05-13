@@ -6,15 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.enums.Attendance;
-import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "students_lessons")
-public class StudentLesson implements IdGettable {
+@Table(name = "diary")
+public class Diary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +34,6 @@ public class StudentLesson implements IdGettable {
     @ManyToOne
     @JoinColumn(name = "lesson_id", referencedColumnName = "id")
     private Lesson lesson;
+
+
 }

@@ -1,12 +1,15 @@
 package ru.dnlkk.ratingusbackend.service;
 
+import com.fasterxml.uuid.Generators;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
+import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.repository.*;
@@ -14,6 +17,7 @@ import ru.dnlkk.ratingusbackend.repository.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,21 +28,42 @@ public class AdminPanelService {
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
 
-    public List<UserCodeViewDto> getAllUsersCodesForSchool(Integer schoolId) {
+    public List<UserRoleDto> getAllUsersRolesForSchool(int schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
             return new ArrayList<>();
         } else {
-            List<UserCode> userCodes = school.get().getUserCodes();
-            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
+            List<UserRole> userRoles = school.get().getUserRoles();
+            return UserRoleMapper.INSTANCE.toDtoList(userRoles); //todo;
+//            List<UserCode> userCodes = school.get().getUserCodes();
+//            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
         }
     }
 
-    public UserCode createUserCode(UserCodeCreateDto userCodeCreateDto) {
+    public UserCodeCreateDto createUserCode(UserCodeCreateDto userCodeCreateDto) {
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
 
-        return null;
-//        return userCodeRepository.saveAndFlush(userCode);
+        String userLogin = userCode.getUser().getLogin();
+
+        List<User> userByLogin = userRepository.findByLogin(userLogin);
+        if (userByLogin.size() > 1) {
+            throw new RuntimeException("Обнаружены повторяющиеся логины!");
+        }
+
+        int id = userByLogin.getFirst().getId();
+        userCode.getUser().setId(id);
+
+        UUID uuid = Generators.nameBasedGenerator().generate(userLogin + id);
+
+        System.out.println("Сгенерированный code: " + uuid.toString());
+
+        userCode.setCode(uuid.toString());
+
+        UserCode userCodeAfterSaving = userCodeRepository.saveAndFlush(userCode);
+        UserCodeCreateDto userCodeCreateDtoAfterSaving =
+                UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
+
+        return userCodeCreateDtoAfterSaving;
     }
 
     public List<Class> getAllClasses() {

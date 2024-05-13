@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lessons")
+@Table(name = "lesson")
 public class Lesson implements IdGettable {
 
     @Id
@@ -39,5 +39,5 @@ public class Lesson implements IdGettable {
     private Subject subject;
 
     @OneToMany(mappedBy = "lesson")
-    private List<StudentLesson> studentLessons;
+    private List<Diary> diaries;
 }

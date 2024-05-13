@@ -12,7 +12,7 @@ import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users_codes")
+@Table(name = "user_code")
 public class UserCode implements IdGettable {
 
     @Id
@@ -45,8 +45,4 @@ public class UserCode implements IdGettable {
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
-
-    @ManyToOne
-    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
-    private UserRole userRole;
 }

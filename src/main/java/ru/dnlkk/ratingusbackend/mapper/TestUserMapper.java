@@ -39,13 +39,13 @@ public interface TestUserMapper { //todo: проверить, как упрос�
 
 //    List<User> toModelList(List<UserDto> userDtoList);
 
-    @Mapping(target = "announcementsId", source = "announcements", qualifiedByName = "getIdList")
-    @Mapping(target = "studentsLessonsId", source = "studentsLessons", qualifiedByName = "getIdList")
-    @Mapping(target = "usersCodesId", source = "usersCodes", qualifiedByName = "getIdList")
-    @Mapping(target = "classesId", source = "classes", qualifiedByName = "getIdList")
-    @Mapping(target = "usersRolesId", source = "usersRoles", qualifiedByName = "getIdList")
-    @Mapping(target = "subjectsId", source = "subjects", qualifiedByName = "getIdList")
-    UserDto toDto(User user);
+//    @Mapping(target = "announcementsId", source = "announcements", qualifiedByName = "getIdList")
+//    @Mapping(target = "studentsLessonsId", source = "studentsLessons", qualifiedByName = "getIdList")
+//    @Mapping(target = "usersCodesId", source = "usersCodes", qualifiedByName = "getIdList")
+//    @Mapping(target = "classesId", source = "classes", qualifiedByName = "getIdList")
+//    @Mapping(target = "usersRolesId", source = "usersRoles", qualifiedByName = "getIdList")
+//    @Mapping(target = "subjectsId", source = "subjects", qualifiedByName = "getIdList")
+//    UserDto toDto(User user);
 
     @Named("getIdList")
     static <T extends IdGettable> List<Integer> getIdList(List<T> objects) {

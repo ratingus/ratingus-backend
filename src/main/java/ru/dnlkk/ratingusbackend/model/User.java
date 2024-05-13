@@ -45,7 +45,7 @@ public class User implements IdGettable {
     private List<Announcement> announcements;
 
     @OneToMany(mappedBy = "student")
-    private List<StudentLesson> studentsLessons;
+    private List<Diary> studentsLessons;
 
     @OneToMany(mappedBy = "user")
     private List<UserCode> usersCodes;

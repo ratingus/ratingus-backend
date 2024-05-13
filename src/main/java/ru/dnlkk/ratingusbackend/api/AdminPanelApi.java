@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 
 import java.util.List;
 
@@ -18,9 +19,16 @@ public interface AdminPanelApi {
             description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
     )
     @GetMapping("/users")
-    ResponseEntity<List<UserCodeViewDto>> getAllUserCodesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
+    ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
 //            @RequestParam(required = false) String surnameOrLogin
     );
+
+    @Operation(
+            summary = "Получение списка кодов приглашения",
+            description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)"
+    )
+    @GetMapping("/user-codes")
+    ResponseEntity<List<UserCodeDto>> getAllUserCodesFroSchool();
 
     @Operation(
             summary = "Создание кода приглашения",

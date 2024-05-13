@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "classes")
+@Table(name = "class")
 public class Class implements IdGettable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

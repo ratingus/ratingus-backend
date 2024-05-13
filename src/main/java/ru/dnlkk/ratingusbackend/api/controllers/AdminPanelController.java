@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 
 import java.util.List;
@@ -17,13 +19,19 @@ public class AdminPanelController implements AdminPanelApi {
     private final AdminPanelService adminPanelService;
 
     @Override
-    public ResponseEntity<List<UserCodeViewDto>> getAllUserCodesForSchool() {
-        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(2)); //todo: получаем schoolId
+    public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool() {
+        return ResponseEntity.ok(adminPanelService.getAllUsersRolesForSchool(2));
+//        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(2)); //todo: получаем schoolId
+    }
+
+    @Override
+    public ResponseEntity<List<UserCodeDto>> getAllUserCodesFroSchool() {
+        return null;
     }
 
     @Override
     public ResponseEntity<UserCodeCreateDto> createUserCode(UserCodeCreateDto userCodeCreateDto) {
-        return null;
+        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeCreateDto));
     }
 
     @Override

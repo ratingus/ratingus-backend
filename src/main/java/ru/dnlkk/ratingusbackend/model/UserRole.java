@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users_roles")
+@Table(name = "user_role")
 public class UserRole implements IdGettable {
 
     @Id
@@ -46,7 +46,4 @@ public class UserRole implements IdGettable {
 
     @Column(name = "patronymic")
     private String patronymic;
-
-    @OneToMany(mappedBy = "userRole")
-    private List<UserCode> userCodes;
 }

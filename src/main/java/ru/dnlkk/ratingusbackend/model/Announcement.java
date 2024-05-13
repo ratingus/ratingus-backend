@@ -31,7 +31,7 @@ public class Announcement implements IdGettable {
 
     @ManyToMany
     @JoinTable(
-            name = "classes_announcements",
+            name = "class_announcement",
             joinColumns = @JoinColumn(name = "announcement_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
