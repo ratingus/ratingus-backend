@@ -9,14 +9,34 @@ import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
 public interface UserMapper { //todo: проверить, как упростить класс, после написания
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-//    @Mapping(target = "password", ignore = true)
-//    User toModel(UserDto userDto);
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "announcements", source = "announcementsId", qualifiedByName = "getAnnouncementsFromIdList")
+    @Mapping(target = "studentsLessons", source = "studentsLessonsId", qualifiedByName = "getIdList")
+    @Mapping(target = "usersCodes", source = "usersCodesId", qualifiedByName = "getIdList")
+    @Mapping(target = "classes", source = "classesId", qualifiedByName = "getIdList")
+    @Mapping(target = "usersRoles", source = "usersRolesId", qualifiedByName = "getIdList")
+    @Mapping(target = "subjects", source = "subjectsId", qualifiedByName = "getIdList")
+    User toModel(UserDto userDto);
+
+    @Named("getAnnouncementsFromIdList")
+    static List<User> getAnnouncementsFromIdList(List<UserDto> userDtos) {
+        List<User> resList = new ArrayList<>();
+        for (UserDto userDto : userDtos) {
+            User u = new User();
+            u.setId(userDto.getId());
+            resList.add(u);
+        }
+        return resList; //todo: можно тоже обобщить. И
+        //todo с помощью лямбд? Или в любом случае сделать проверку на null?
+    }
+
 //    List<User> toModelList(List<UserDto> userDtoList);
 
     @Mapping(target = "announcementsId", source = "announcements", qualifiedByName = "getIdList")

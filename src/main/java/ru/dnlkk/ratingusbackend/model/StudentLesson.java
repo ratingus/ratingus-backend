@@ -35,6 +35,4 @@ public class StudentLesson implements IdGettable {
     @ManyToOne
     @JoinColumn(name = "lesson_id", referencedColumnName = "id")
     private Lesson lesson;
-
-
 }
