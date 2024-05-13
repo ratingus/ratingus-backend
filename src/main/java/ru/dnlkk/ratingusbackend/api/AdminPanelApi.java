@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.claz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -55,6 +55,13 @@ public interface AdminPanelApi {
     )
     @PostMapping("/classes")
     ResponseEntity<ClassDto> createClass(@RequestBody ClassDto classDto);
+
+    @Operation(
+            summary = "Удаление класса",
+            description = "Удаляет класс по id и возвращает пустой ответ"
+    )
+    @DeleteMapping("/classes/{id}")
+    ResponseEntity<Void> deleteClass(@PathVariable("id") Integer id);
 
 
     @Operation(

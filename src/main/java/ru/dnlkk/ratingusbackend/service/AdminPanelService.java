@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.claz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -81,8 +81,16 @@ public class AdminPanelService {
         return ClassMapper.INSTANCE.toClassDtoList(classesBySchoolId);
     }
 
-    public Class createClass(Class classEntity) {
-        return classRepository.saveAndFlush(classEntity);
+    public ClassDto createClass(ClassDto classDto, int schoolId) {
+        Class classEntity = ClassMapper.INSTANCE.toClassEntity(classDto);
+        classEntity.setSchool(new School()); //todo: посмотреть, как это можно вынести в маппер
+        classEntity.getSchool().setId(schoolId);
+        Class classFromSaving = classRepository.saveAndFlush(classEntity);
+        return ClassMapper.INSTANCE.toClassDto(classFromSaving);
+    }
+
+    public void deleteClass(int id) {
+        classRepository.deleteById(id);
     }
 
     public List<Timetable> getTimetable() {

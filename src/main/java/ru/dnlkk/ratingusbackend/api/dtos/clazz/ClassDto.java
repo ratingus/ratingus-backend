@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.api.dtos.claz;
+package ru.dnlkk.ratingusbackend.api.dtos.clazz;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

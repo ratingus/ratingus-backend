@@ -2,10 +2,11 @@ package ru.dnlkk.ratingusbackend.api.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.claz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -40,7 +41,13 @@ public class AdminPanelController implements AdminPanelApi {
 
     @Override
     public ResponseEntity<ClassDto> createClass(ClassDto classDto) {
-        return null;
+        return ResponseEntity.ok(adminPanelService.createClass(classDto, 2));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteClass(Integer id) {
+        adminPanelService.deleteClass(id);
+        return ResponseEntity.ok().build();
     }
 
     @Override
