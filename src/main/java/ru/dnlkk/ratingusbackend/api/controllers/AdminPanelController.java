@@ -54,19 +54,4 @@ public class AdminPanelController implements AdminPanelApi {
     public ResponseEntity<List<TimetableDto>> getTimetable() {
         return ResponseEntity.ok(adminPanelService.getTimetable(2));
     }
-
-    @Override
-    public ResponseEntity<List<ApplicationDto>> getAllApplications() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<ApplicationDto> createApplication(ApplicationDto applicationDto) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> deleteApplication() {
-        return null;
-    }
 }

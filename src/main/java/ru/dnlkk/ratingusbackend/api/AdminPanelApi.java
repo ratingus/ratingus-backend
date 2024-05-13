@@ -71,28 +71,4 @@ public interface AdminPanelApi {
     )
     @GetMapping("/timetable")
     ResponseEntity<List<TimetableDto>> getTimetable();
-
-
-    @Operation(
-            summary = "Получение всех заявок",
-            description = "Возвращает список всех заявок на создание школы"
-    )
-    @GetMapping("/applications")
-    ResponseEntity<List<ApplicationDto>> getAllApplications();
-
-
-    @Operation(
-            summary = "Создание заявки",
-            description = "Создаёт заявку на создание школы и возвращает её"
-    )
-    @PostMapping("/applications")
-    ResponseEntity<ApplicationDto> createApplication(@RequestBody ApplicationDto applicationDto);
-
-
-    @Operation(
-            summary = "Удаление заявки",
-            description = "Удаляет заявку на создание школы и ничего не возвращает"
-    )
-    @DeleteMapping("/applications")
-    ResponseEntity<Void> deleteApplication();
 }
