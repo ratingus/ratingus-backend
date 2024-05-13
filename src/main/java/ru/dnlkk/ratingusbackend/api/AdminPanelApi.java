@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -68,7 +69,7 @@ public interface AdminPanelApi {
             summary = "Получение расписания длительности уроков",
             description = "Возвращает список уроков с указанными сроками начала и конца"
     )
-    @GetMapping("/others")
+    @GetMapping("/timetable")
     ResponseEntity<List<TimetableDto>> getTimetable();
 
 

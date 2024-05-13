@@ -2,11 +2,11 @@ package ru.dnlkk.ratingusbackend.api.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -52,7 +52,7 @@ public class AdminPanelController implements AdminPanelApi {
 
     @Override
     public ResponseEntity<List<TimetableDto>> getTimetable() {
-        return null;
+        return ResponseEntity.ok(adminPanelService.getTimetable(2));
     }
 
     @Override

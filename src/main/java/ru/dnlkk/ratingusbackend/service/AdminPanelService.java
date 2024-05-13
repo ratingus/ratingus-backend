@@ -6,10 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
+import ru.dnlkk.ratingusbackend.mapper.TimetableMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.*;
@@ -65,8 +67,6 @@ public class AdminPanelService {
 
         UUID uuid = Generators.nameBasedGenerator().generate(userLogin + id);
 
-        System.out.println("Сгенерированный code: " + uuid.toString());
-
         userCode.setCode(uuid.toString());
 
         UserCode userCodeAfterSaving = userCodeRepository.saveAndFlush(userCode);
@@ -93,8 +93,9 @@ public class AdminPanelService {
         classRepository.deleteById(id);
     }
 
-    public List<Timetable> getTimetable() {
-        return timetableRepository.findAll().stream().toList();
+    public List<TimetableDto> getTimetable(int schoolId) {
+        List<Timetable> timetablesBySchoolId = timetableRepository.findTimetablesBySchoolId(schoolId);
+        return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
     //todo: ApplicationDto - исправить
