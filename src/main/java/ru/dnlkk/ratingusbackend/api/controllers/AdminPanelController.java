@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
+import ru.dnlkk.ratingusbackend.api.dtos.claz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 
@@ -35,7 +35,7 @@ public class AdminPanelController implements AdminPanelApi {
 
     @Override
     public ResponseEntity<List<ClassDto>> getAllClasses() {
-        return null;
+        return ResponseEntity.ok(adminPanelService.getAllClassesForSchool(2));
     }
 
     @Override

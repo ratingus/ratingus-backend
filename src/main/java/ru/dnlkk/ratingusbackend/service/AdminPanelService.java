@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
+import ru.dnlkk.ratingusbackend.api.dtos.claz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.*;
@@ -75,8 +76,9 @@ public class AdminPanelService {
         return userCodeCreateDtoAfterSaving;
     }
 
-    public List<Class> getAllClasses() {
-        return classRepository.findAll().stream().toList();
+    public List<ClassDto> getAllClassesForSchool(int schoolId) {
+        List<Class> classesBySchoolId = classRepository.findClassesBySchoolId(schoolId);
+        return ClassMapper.INSTANCE.toClassDtoList(classesBySchoolId);
     }
 
     public Class createClass(Class classEntity) {
