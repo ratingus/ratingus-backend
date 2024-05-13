@@ -18,10 +18,6 @@ public class AdminPanelController implements AdminPanelApi {
 
     @Override
     public ResponseEntity<List<UserCodeDto>> getAllUserCodesForSchool() {
-//        List<UserCodeDto> userCodes = adminPanelService.getAllUsersForSchool(0);
-//        List<UserCodeDto> userDtos = UserMapper.INSTANCE.toDtoList(users);
-//        return ResponseEntity.ok(userDtos);
-        System.out.println("Пришли в контроллер");
         return ResponseEntity.ok(adminPanelService.getAllUsersForSchool(2)); //todo: получаем schoolId
     }
 

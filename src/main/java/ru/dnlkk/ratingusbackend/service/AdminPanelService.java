@@ -23,15 +23,11 @@ public class AdminPanelService {
     private final SchoolRepository schoolRepository;
 
     public List<UserCodeDto> getAllUsersForSchool(Integer schoolId) {
-        System.out.println("Пришли в сервис");
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
-            System.out.println("Пусто");
             return null;
         } else { //todo: затестировать!!!
-            System.out.println("Не пусто");
             List<UserCode> userCodes = school.get().getUserCodes();
-            System.out.println("Ура");
             return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
         }
     }
