@@ -20,7 +20,7 @@ public class User implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter()
+    @Getter() //todo: не нужно
     private int id;
 
     @Column(name = "name")

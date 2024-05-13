@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.model.Timetable;
-import ru.dnlkk.ratingusbackend.model.User;
-import ru.dnlkk.ratingusbackend.model.UserCode;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
+import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
-import ru.dnlkk.ratingusbackend.repository.ClassRepository;
-import ru.dnlkk.ratingusbackend.repository.TimetableRepository;
-import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
-import ru.dnlkk.ratingusbackend.repository.UserRepository;
+import ru.dnlkk.ratingusbackend.repository.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +20,20 @@ public class AdminPanelService {
     private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
     private final TimetableRepository timetableRepository;
-    public List<User> getAllUsers() {
-        return userRepository.findAll().stream().toList();
+    private final SchoolRepository schoolRepository;
+
+    public List<UserCodeDto> getAllUsersForSchool(Integer schoolId) {
+        System.out.println("Пришли в сервис");
+        Optional<School> school = schoolRepository.findById(schoolId);
+        if (school.isEmpty()) {
+            System.out.println("Пусто");
+            return null;
+        } else { //todo: затестировать!!!
+            System.out.println("Не пусто");
+            List<UserCode> userCodes = school.get().getUserCodes();
+            System.out.println("Ура");
+            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
+        }
     }
 
     public List<UserCode> getAllUserCodes() {

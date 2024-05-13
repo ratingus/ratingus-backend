@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface AdminPanelApi {
             description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
     )
     @GetMapping("/users")
-    ResponseEntity<List<UserDto>> getAllUsers(
+    ResponseEntity<List<UserCodeDto>> getAllUserCodesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
 //            @RequestParam(required = false) String surnameOrLogin
     );
 

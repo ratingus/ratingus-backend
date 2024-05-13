@@ -35,6 +35,7 @@ public class UserRole implements IdGettable {
     private Class roleClass;
 
     @Column(name = "role")
+    @Enumerated(EnumType.STRING) //аннотация нужна, чтобы Enum конвертировать в правильный тип
     private Role role;
 
     @Column(name = "name")
