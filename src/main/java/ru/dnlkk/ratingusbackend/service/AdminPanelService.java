@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
@@ -35,8 +36,16 @@ public class AdminPanelService {
         } else {
             List<UserRole> userRoles = school.get().getUserRoles();
             return UserRoleMapper.INSTANCE.toDtoList(userRoles); //todo;
-//            List<UserCode> userCodes = school.get().getUserCodes();
-//            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
+        }
+    }
+
+    public List<UserCodeDto> getAllUsersCodesForSchool(int schoolId) {
+        Optional<School> school = schoolRepository.findById(schoolId);
+        if (school.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            List<UserCode> userRoles = school.get().getUserCodes();
+            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userRoles); //todo;
         }
     }
 

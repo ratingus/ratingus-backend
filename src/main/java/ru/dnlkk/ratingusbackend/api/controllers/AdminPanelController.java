@@ -21,12 +21,11 @@ public class AdminPanelController implements AdminPanelApi {
     @Override
     public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool() {
         return ResponseEntity.ok(adminPanelService.getAllUsersRolesForSchool(2));
-//        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(2)); //todo: получаем schoolId
     }
 
     @Override
     public ResponseEntity<List<UserCodeDto>> getAllUserCodesFroSchool() {
-        return null;
+        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(2));
     }
 
     @Override

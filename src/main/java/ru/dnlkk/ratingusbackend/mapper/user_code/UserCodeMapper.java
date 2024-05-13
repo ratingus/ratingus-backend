@@ -4,6 +4,7 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
 import ru.dnlkk.ratingusbackend.mapper.user.UserWithLoginMapper;
 import ru.dnlkk.ratingusbackend.model.*;
@@ -20,13 +21,21 @@ public interface UserCodeMapper {
 
     @Mappings({
             @Mapping(target = "userClassName", source = "userClass.name"),
+    })
+    UserCodeDto toUserCodeDto(UserCode userCode);
+    @IterableMapping(elementTargetType = UserCodeDto.class)
+    List<UserCodeDto> toUserCodeDtoList(List<UserCode> userCodeList);
+
+
+    @Mappings({
+            @Mapping(target = "userClassName", source = "userClass.name"),
             @Mapping(target = "userWithLoginDto", source = "user", qualifiedByName = "getUserWithLoginDto"),
             @Mapping(target = "schoolName", source = "school.name"),
     })
     UserCodeViewDto toUserCodeViewDto(UserCode userCode);
 
-    @IterableMapping(elementTargetType = UserCodeViewDto.class)
-    List<UserCodeViewDto> toUserCodeDtoList(List<UserCode> userCodeList);
+//    @IterableMapping(elementTargetType = UserCodeViewDto.class)
+//    List<UserCodeViewDto> toUserCodeDtoList(List<UserCode> userCodeList);
 
     @Mappings({
             @Mapping(target = "userClassId", source = "userClass", qualifiedByName = "getIdFromEntity"),
