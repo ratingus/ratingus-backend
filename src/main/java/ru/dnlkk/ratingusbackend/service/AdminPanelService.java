@@ -22,7 +22,7 @@ public class AdminPanelService {
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
 
-    public List<UserCodeDto> getAllUsersForSchool(Integer schoolId) {
+    public List<UserCodeDto> getAllUsersCodesForSchool(Integer schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
             return null;
@@ -30,10 +30,6 @@ public class AdminPanelService {
             List<UserCode> userCodes = school.get().getUserCodes();
             return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes);
         }
-    }
-
-    public List<UserCode> getAllUserCodes() {
-        return userCodeRepository.findAll().stream().toList();
     }
 
     public UserCode createUserCode(UserCode userCode) {

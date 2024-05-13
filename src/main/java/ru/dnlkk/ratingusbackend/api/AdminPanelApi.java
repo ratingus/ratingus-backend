@@ -21,15 +21,6 @@ public interface AdminPanelApi {
 //            @RequestParam(required = false) String surnameOrLogin
     );
 
-
-    @Operation(
-            summary = "Получение списка кодов приглашения",
-            description = "Возвращает список не активированных кодов приглашения учебной организации"
-    )
-    @GetMapping("/user-codes")
-    ResponseEntity<List<UserCodeDto>> getAllUserCodes();
-
-
     @Operation(
             summary = "Создание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
