@@ -156,6 +156,18 @@ CREATE TABLE student_lesson
 	FOREIGN KEY (lesson_id) REFERENCES lesson (id)
 );
 
+CREATE TABLE application
+(
+    id serial PRIMARY KEY,
+    organisation_mail VARCHAR,
+    organisation_name VARCHAR,
+    organisation_address attendances,
+    creator_id INT NOT NULL,
+
+    FOREIGN KEY (creator_id) REFERENCES "user" (id)
+
+);
+
 
 
 
