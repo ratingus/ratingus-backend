@@ -47,6 +47,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<UserCode> usersCodes;
 
+    @OneToMany(mappedBy = "creator")
+    private List<Application> applicationsl;
+
     @ManyToMany
     @JoinTable(
             name = "classes_students",

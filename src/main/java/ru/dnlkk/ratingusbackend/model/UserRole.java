@@ -29,6 +29,10 @@ public class UserRole {
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
 
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class roleClass;
+
     @Column(name = "role")
     private Role role;
 
