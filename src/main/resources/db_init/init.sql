@@ -2,13 +2,13 @@ CREATE TYPE roles AS ENUM ('STUDENT', 'TEACHER', 'LOCAL_ADMIN', 'MANAGER');
 
 CREATE TYPE attendances AS ENUM ('WAS', 'GOOD', 'BAD');
 
-create table users
+create table "user"
 (
     id serial     PRIMARY KEY,
     name          VARCHAR NOT NULL,
     surname       VARCHAR NOT NULL,
     patronymic    VARCHAR,
-    login         VARCHAR NOT NULL,
+    login         VARCHAR NOT NULL UNIQUE ,
     password      VARCHAR NOT NULL,
     birth_date    TIMESTAMP NOT NULL
 );
@@ -25,7 +25,16 @@ CREATE TABLE school
     FOREIGN KEY (timetable_id) REFERENCES timetable (id)
 );
 
-CREATE TABLE users_roles
+CREATE TABLE class
+(
+    id serial PRIMARY KEY,
+    name VARCHAR NOT NULL UNIQUE ,
+    school_id INT NOT NULL,
+
+    FOREIGN KEY (school_id) REFERENCES school (id)
+);
+
+CREATE TABLE user_role
 (
     id serial PRIMARY KEY,
   	user_id INT,
@@ -34,8 +43,10 @@ CREATE TABLE users_roles
     name          VARCHAR NOT NULL,
     surname       VARCHAR NOT NULL,
     patronymic    VARCHAR,
+    class_id INT,
 
-    foreign key (user_id) references users (id),
+    foreign key (user_id) references "user" (id),
+    foreign key (class_id) references class (id),
   	foreign key (school_id) references school (id)
 );
 
@@ -50,18 +61,8 @@ CREATE TABLE timetable
   FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
-CREATE TABLE classes
-(
-    id serial PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    school_id INT NOT NULL,
-    user_code_id INT,
 
-    FOREIGN KEY (user_code_id) REFERENCES users_codes (id),
-    FOREIGN KEY (school_id) REFERENCES school (id)
-);
-
-CREATE TABLE users_codes
+CREATE TABLE user_code
 (
   	id serial PRIMARY KEY,
   	code VARCHAR NOT NULL,
@@ -75,10 +76,10 @@ CREATE TABLE users_codes
     class_id INT,
     user_role_id INT,
 
-    FOREIGN KEY (user_role_id) REFERENCES users_roles (id),
-    FOREIGN KEY (class_id) REFERENCES classes (id),
-    FOREIGN KEY (creator_id) REFERENCES users (id),
-  	FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (user_role_id) REFERENCES user_role (id),
+    FOREIGN KEY (class_id) REFERENCES class (id),
+    FOREIGN KEY (creator_id) REFERENCES "user" (id),
+  	FOREIGN KEY (user_id) REFERENCES "user" (id),
   	FOREIGN KEY (school_id) REFERENCES school (id)
 
 );
@@ -90,26 +91,26 @@ CREATE TABLE announcement
     name VARCHAR NOT NULL,
     creator_id  INT NOT NULL,
   
-  	FOREIGN KEY (creator_id) REFERENCES users (id)
+  	FOREIGN KEY (creator_id) REFERENCES "user" (id)
 );
 
 
-CREATE TABLE classes_announcements
+CREATE TABLE class_announcement
 (
     class_id INT NOT NULL,
     announcement_id INT NOT NULL,
 
     FOREIGN KEY (announcement_id) REFERENCES announcement (id),
-    FOREIGN KEY (class_id) REFERENCES classes (id)
+    FOREIGN KEY (class_id) REFERENCES class (id)
 );
 
-CREATE TABLE classes_students
+CREATE TABLE class_student
 (
 	class_id INT NOT NULL,
 	student_id INT NOT NULL,
 	
-	FOREIGN KEY (student_id) REFERENCES users (id),
-	FOREIGN KEY (class_id) REFERENCES classes (id)
+	FOREIGN KEY (student_id) REFERENCES "user" (id),
+	FOREIGN KEY (class_id) REFERENCES class (id)
 );
 
 CREATE TABLE subject
@@ -121,16 +122,16 @@ CREATE TABLE subject
 	FOREIGN KEY (school_id) REFERENCES school (id)
 );
 
-CREATE TABLE subjects_teachers
+CREATE TABLE subject_teacher
 (
     subject_id INT NOT NULL,
 	teacher_id INT NOT NULL,
 	
-	FOREIGN KEY (teacher_id) REFERENCES users (id),
-	FOREIGN KEY (subject_id) REFERENCES subjects (id)
+	FOREIGN KEY (teacher_id) REFERENCES "user" (id),
+	FOREIGN KEY (subject_id) REFERENCES subject (id)
 );
 
-CREATE TABLE lessons
+CREATE TABLE lesson
 (
   	id serial PRIMARY KEY,
   	homework VARCHAR NOT NULL,
@@ -139,10 +140,10 @@ CREATE TABLE lessons
 	lesson_number INT NOT NULL,
     subject_id  INT NOT NULL,
   
-  	FOREIGN KEY (subject_id) REFERENCES subjects (id)
+  	FOREIGN KEY (subject_id) REFERENCES subject (id)
 );
 
-CREATE TABLE students_lessons
+CREATE TABLE student_lesson
 (
     id serial PRIMARY KEY,
 	mark VARCHAR,
@@ -151,8 +152,8 @@ CREATE TABLE students_lessons
 	student_id INT NOT NULL,
 	lesson_id INT NOT NULL,
 	
-	FOREIGN KEY (student_id) REFERENCES users (id),
-	FOREIGN KEY (lesson_id) REFERENCES lessons (id)
+	FOREIGN KEY (student_id) REFERENCES "user" (id),
+	FOREIGN KEY (lesson_id) REFERENCES lesson (id)
 );
 
 
