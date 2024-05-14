@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +60,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<UserRole> usersRoles;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Schedule> schedules;
+
+    @OneToMany(mappedBy = "creator")
+    private List<Application> applications;
 
     @ManyToMany
     @JoinTable(

@@ -34,4 +34,6 @@ public class Timetable {
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
 
+    @OneToMany(mappedBy = "timetable")
+    private List<Schedule> schedules;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "studies")
+@Table(name = "subject")
 public class Subject {
 
     @Id
@@ -32,4 +32,7 @@ public class Subject {
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+
+    @OneToMany(mappedBy = "subject")
+    private List<Schedule> schedules;
 }

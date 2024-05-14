@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "classes")
+@Table(name = "class")
 public class Class {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +33,8 @@ public class Class {
 
     @ManyToMany(mappedBy = "classes")
     private List<Announcement> announcements;
+
+    @OneToMany(mappedBy = "class")
+    private List<UserRole> userRole;
 
 }

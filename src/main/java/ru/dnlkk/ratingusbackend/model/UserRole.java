@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users_roles")
+@Table(name = "user_role")
 public class UserRole {
 
     @Id
@@ -40,4 +40,8 @@ public class UserRole {
 
     @Column(name = "patronymic")
     private String patronymic;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class classs;
 }

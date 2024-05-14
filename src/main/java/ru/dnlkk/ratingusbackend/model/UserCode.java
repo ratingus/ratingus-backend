@@ -12,7 +12,7 @@ import ru.dnlkk.ratingusbackend.model.enums.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users_codes")
+@Table(name = "user_code")
 public class UserCode {
 
     @Id
