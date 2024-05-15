@@ -1,8 +1,10 @@
 package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import ru.dnlkk.ratingusbackend.api.dtos.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
 import ru.dnlkk.ratingusbackend.model.School;
 import ru.dnlkk.ratingusbackend.model.User;
@@ -21,15 +23,16 @@ public class UserService {
     private final UserRepository userRepository;
     private UserCodeRepository userCodeRepository;
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-    public User create(User user) {
-        if (userRepository.existsByLogin(user.getLogin())) {
-            throw new RuntimeException("Пользователь с таким login уже существует");
-        }
-        return save(user);
-    }
+    //TODO: исправить регистрацию и вход
+//    public User save(UserDto userDto) {
+//        return userRepository.save(user);
+//    }
+//    public User create(User user) {
+//        if (userRepository.existsByLogin(user.getLogin())) {
+//            throw new RuntimeException("Пользователь с таким login уже существует");
+//        }
+//        return save(user);
+//    }
 
     public User getUserById(UserDto userDto){
         return userRepository.findUserById(userDto.getId());
@@ -61,10 +64,13 @@ public class UserService {
         return null;
     }
 
-    public void addUserToOrganisation(String code){
-        UserCode userCode = userCodeRepository.findUserCodesByCode(code);
-        User user = userRepository.findByFullName(userCode.getName(), userCode.getSurname(), userCode.getPatronymic());
-        userCode.setUser(user);
+    public void addUserToOrganisation(UserCodeDto userCodeDto, UserDetails user){
+        UserCode userCode = userCodeRepository.findUserCodesByCode(userCodeDto.getCode());
+
+        UserRole userRole = new UserRole();
+        //TODO: посмотреть как расширить и расширить UserDetails для security, чтобы туда(JWT) прокидывать шк, класс и тд.
+//        userRole.setUser(user);
+
     }
 
     public UserDetailsService userDetailsService() {

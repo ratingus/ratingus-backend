@@ -2,7 +2,7 @@ CREATE TYPE roles AS ENUM ('STUDENT', 'TEACHER', 'LOCAL_ADMIN', 'MANAGER');
 
 CREATE TYPE attendances AS ENUM ('WAS', 'GOOD', 'BAD');
 
-create table "user"
+create table users
 (
     id serial     PRIMARY KEY,
     name          VARCHAR NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE user_role
     patronymic    VARCHAR,
     class_id INT,
 
-    foreign key (user_id) references "user" (id),
+    foreign key (user_id) references users (id),
     foreign key (class_id) references class (id),
     foreign key (school_id) references school (id)
 );
@@ -76,8 +76,8 @@ CREATE TABLE user_code
 
     FOREIGN KEY (user_role_id) REFERENCES user_role (id),
     FOREIGN KEY (class_id) REFERENCES class (id),
-    FOREIGN KEY (creator_id) REFERENCES "user" (id),
-    FOREIGN KEY (user_id) REFERENCES "user" (id),
+    FOREIGN KEY (creator_id) REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (school_id) REFERENCES school (id)
 
 );
@@ -89,7 +89,7 @@ CREATE TABLE announcement
     name VARCHAR NOT NULL,
     creator_id  INT NOT NULL,
 
-    FOREIGN KEY (creator_id) REFERENCES "user" (id)
+    FOREIGN KEY (creator_id) REFERENCES users (id)
 );
 
 
@@ -107,7 +107,7 @@ CREATE TABLE class_student
     class_id INT NOT NULL,
     student_id INT NOT NULL,
 
-    FOREIGN KEY (student_id) REFERENCES "user" (id),
+    FOREIGN KEY (student_id) REFERENCES users (id),
     FOREIGN KEY (class_id) REFERENCES class (id)
 );
 
@@ -125,7 +125,7 @@ CREATE TABLE subject_teacher
     subject_id INT NOT NULL,
     teacher_id INT NOT NULL,
 
-    FOREIGN KEY (teacher_id) REFERENCES "user" (id),
+    FOREIGN KEY (teacher_id) REFERENCES users (id),
     FOREIGN KEY (subject_id) REFERENCES subject (id)
 );
 
@@ -165,7 +165,7 @@ CREATE TABLE student_lesson
     student_id INT NOT NULL,
     lesson_id INT NOT NULL,
 
-    FOREIGN KEY (student_id) REFERENCES "user" (id),
+    FOREIGN KEY (student_id) REFERENCES users (id),
     FOREIGN KEY (lesson_id) REFERENCES lesson (id)
 );
 
@@ -177,7 +177,7 @@ CREATE TABLE application
     organisation_address VARCHAR,
     creator_id INT NOT NULL,
 
-    FOREIGN KEY (creator_id) REFERENCES "user" (id)
+    FOREIGN KEY (creator_id) REFERENCES users (id)
 
 );
 

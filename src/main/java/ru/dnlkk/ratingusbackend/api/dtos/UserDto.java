@@ -23,7 +23,7 @@ public class UserDto {
     private String password;
     private Timestamp birthDate;
     private List<Announcement> announcements;
-    private List<Diary> studentsLessons;
+    private List<StudentLesson> studentsLessons;
     private List<UserCode> usersCodes;
     private List<Class> classes;
     private List<UserRole> usersRoles;

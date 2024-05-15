@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class User implements UserDetails {
     private List<Announcement> announcements;
 
     @OneToMany(mappedBy = "student")
-    private List<Diary> diaries;
+    private List<StudentLesson> studentLessons;
 
     @OneToMany(mappedBy = "user")
     private List<UserCode> usersCodes;

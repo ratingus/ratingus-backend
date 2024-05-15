@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
-import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -43,5 +41,5 @@ public class UserRole {
 
     @ManyToOne
     @JoinColumn(name = "class_id", referencedColumnName = "id")
-    private Class classs;
+    private Class classForUserRole;
 }

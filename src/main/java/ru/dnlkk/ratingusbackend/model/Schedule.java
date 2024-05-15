@@ -28,6 +28,10 @@ public class Schedule {
     private int dayOfWeek;
 
     @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class scheduleForClass;
+
+    @ManyToOne
     @JoinColumn(name = "timetable_id", referencedColumnName = "id")
     private Timetable timetable;
 

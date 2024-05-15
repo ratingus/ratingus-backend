@@ -34,7 +34,10 @@ public class Class {
     @ManyToMany(mappedBy = "classes")
     private List<Announcement> announcements;
 
-    @OneToMany(mappedBy = "class")
+    @OneToMany(mappedBy = "classForUserRole")
     private List<UserRole> userRole;
+
+    @OneToMany(mappedBy = "scheduleForClass")
+    private List<Schedule> schedules;
 
 }

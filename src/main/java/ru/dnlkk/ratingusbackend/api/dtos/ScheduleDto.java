@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.Lesson;
 import ru.dnlkk.ratingusbackend.model.Subject;
 import ru.dnlkk.ratingusbackend.model.Timetable;
@@ -25,7 +26,7 @@ public class ScheduleDto {
 
     private Timetable timetable;
 
-    private User teacher;
+    private Class scheduleForClass;
 
     private Subject subject;
 
