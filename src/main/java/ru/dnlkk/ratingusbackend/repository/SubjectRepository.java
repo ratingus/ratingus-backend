@@ -8,4 +8,6 @@ import ru.dnlkk.ratingusbackend.model.Subject;
 public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
     Subject findSubjectByName(String name);
+
+    Subject findSubjectById(int id);
 }

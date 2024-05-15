@@ -21,18 +21,22 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 
 
-    private void addLessonToSchedule(UserDto userDto, ScheduleDto scheduleDto, SubjectDto subjectDto){
-        Schedule schedule = scheduleRepository.findScheduleById(scheduleDto.getId());
+    public void addLessonToSchedule(UserDto userDto, SubjectDto subjectDto, ScheduleDto scheduleDto){
+        Schedule schedule = new Schedule();
 
-        User teacher = userRepository.findByFullName(userDto.getName(), userDto.getSurname(), userDto.getPatronymic());
-        Subject subject = subjectRepository.findSubjectByName(subjectDto.getName());
-
-        schedule.setLessonNumber(scheduleDto.getLessonNumber());
-        schedule.setTeacher(teacher);
-        schedule.setSubject(subject);
+        schedule.setSubject(connectTeacherSubject(userDto, subjectDto));
         schedule.setDayOfWeek(scheduleDto.getDayOfWeek());
+        schedule.setLessonNumber(scheduleDto.getLessonNumber());
         schedule.setTimetable(scheduleDto.getTimetable());
 
-        scheduleRepository.save(schedule);
     }
+
+    public Subject connectTeacherSubject(UserDto userDto, SubjectDto subjectDto){
+        User user = userRepository.findUserById(userDto.getId());
+        Subject subject = subjectRepository.findSubjectById(subjectDto.getId());
+
+        subject.getTeachers().add(user);
+        return subject;
+    }
+
 }

@@ -134,12 +134,10 @@ CREATE TABLE schedule
     id serial PRIMARY KEY,
     lesson_number INT,
     day_of_week INT,
-    teacher_id INT NOT NULL,
     lesson_id INT NOT NULL,
     timetable_id INT,
     subject_id INT,
 
-    FOREIGN KEY (teacher_id) REFERENCES "user" (id),
     FOREIGN KEY (lesson_id) REFERENCES lesson (id),
     FOREIGN KEY (subject_id) REFERENCES subject (id),
     FOREIGN KEY (timetable_id) REFERENCES timetable (id)

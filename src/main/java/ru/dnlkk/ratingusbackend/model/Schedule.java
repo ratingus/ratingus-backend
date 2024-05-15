@@ -32,10 +32,6 @@ public class Schedule {
     private Timetable timetable;
 
     @ManyToOne
-    @JoinColumn(name = "teachers_id", referencedColumnName = "id")
-    private User teacher;
-
-    @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
