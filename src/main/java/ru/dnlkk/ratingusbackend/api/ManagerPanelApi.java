@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationIdDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface ManagerPanelApi {
     @GetMapping("/application")
     ResponseEntity<List<ApplicationDto>> getAllApplications();
 
-
+    //todo: мб этот метод не тут должен быть
     @Operation(
             summary = "Создание заявки",
             description = "Создаёт заявку на создание школы и возвращает её"
@@ -37,4 +39,11 @@ public interface ManagerPanelApi {
             @Schema(description = "Id удаляемой заявки")
             @PathVariable("id") int id
     );
+
+    @Operation(
+            summary = "Создание новой школы (одобрение заявки)",
+            description = "Создаёт школу"
+    )
+    @PostMapping("/application-approve")
+    ResponseEntity<SchoolWasCreatedDto> createSchool(@RequestBody ApplicationIdDto applicationIdDto);
 }

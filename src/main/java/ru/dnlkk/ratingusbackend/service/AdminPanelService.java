@@ -75,10 +75,7 @@ public class AdminPanelService {
         userCode.setCode(uuid.toString());
 
         UserCode userCodeAfterSaving = userCodeRepository.saveAndFlush(userCode);
-        UserCodeCreateDto userCodeCreateDtoAfterSaving =
-                UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
-
-        return userCodeCreateDtoAfterSaving;
+        return UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
     }
 
     public List<ClassDto> getAllClassesForSchool(int schoolId) {

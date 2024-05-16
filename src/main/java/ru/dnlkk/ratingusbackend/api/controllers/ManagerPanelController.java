@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.ManagerPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationIdDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.service.ManagerPanelService;
 
 import java.util.List;
@@ -26,5 +28,10 @@ public class ManagerPanelController implements ManagerPanelApi {
     public ResponseEntity<Void> deleteApplication(int id) {
         managerPanelService.deleteApplication(id);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<SchoolWasCreatedDto> createSchool(ApplicationIdDto applicationIdDto) {
+        return ResponseEntity.ok(managerPanelService.createSchool(applicationIdDto));
     }
 }
