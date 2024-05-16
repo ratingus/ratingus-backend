@@ -1,10 +1,11 @@
 package ru.dnlkk.ratingusbackend.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.dtos.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface ManagerPanelApi {
             summary = "Получение всех заявок",
             description = "Возвращает список всех заявок на создание школы"
     )
-    @GetMapping("/applications")
+    @GetMapping("/application")
     ResponseEntity<List<ApplicationDto>> getAllApplications();
 
 
@@ -23,7 +24,7 @@ public interface ManagerPanelApi {
             summary = "Создание заявки",
             description = "Создаёт заявку на создание школы и возвращает её"
     )
-    @PostMapping("/applications")
+    @PostMapping("/application")
     ResponseEntity<ApplicationDto> createApplication(@RequestBody ApplicationDto applicationDto);
 
 
@@ -31,6 +32,9 @@ public interface ManagerPanelApi {
             summary = "Удаление заявки",
             description = "Удаляет заявку на создание школы и ничего не возвращает"
     )
-    @DeleteMapping("/applications")
-    ResponseEntity<Void> deleteApplication();
+    @DeleteMapping("/application/{id}")
+    ResponseEntity<Void> deleteApplication(
+            @Schema(description = "Id удаляемой заявки")
+            @PathVariable("id") int id
+    );
 }

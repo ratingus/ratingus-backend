@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mapper
 public interface ClassMapper {
-
     ClassMapper INSTANCE = Mappers.getMapper(ClassMapper.class);
 
     ClassDto toClassDto(Class c);
