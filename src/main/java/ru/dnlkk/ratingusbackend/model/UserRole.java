@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -19,13 +21,13 @@ public class UserRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @OneToMany
+    private List<User> users;
 
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+    // из роли вытаскивать школу для JWT.
 
     @Column(name = "role")
     private Role role;

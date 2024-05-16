@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -58,8 +58,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRole> usersRoles;
+    @ManyToOne
+    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
+    private UserRole userRole;
+    // мени ту ван (у каждого юзера одна роль, у роли много юзеров)  /swagger-ui/index.html
 
     @OneToMany(mappedBy = "creator")
     private List<Application> applications;
@@ -71,33 +73,4 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(usersRoles.getLast().getName()));
-    }
-
-    @Override
-    public String getUsername() {
-        return login;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

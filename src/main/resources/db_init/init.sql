@@ -2,16 +2,6 @@ CREATE TYPE roles AS ENUM ('STUDENT', 'TEACHER', 'LOCAL_ADMIN', 'MANAGER');
 
 CREATE TYPE attendances AS ENUM ('WAS', 'GOOD', 'BAD');
 
-create table users
-(
-    id serial     PRIMARY KEY,
-    name          VARCHAR NOT NULL,
-    surname       VARCHAR NOT NULL,
-    patronymic    VARCHAR,
-    login         VARCHAR NOT NULL UNIQUE ,
-    password      VARCHAR NOT NULL,
-    birth_date    TIMESTAMP NOT NULL
-);
 
 CREATE TABLE school
 (
@@ -35,7 +25,6 @@ CREATE TABLE class
 CREATE TABLE user_role
 (
     id serial PRIMARY KEY,
-    user_id INT,
     school_id INT,
     role roles,
     name          VARCHAR NOT NULL,
@@ -43,9 +32,22 @@ CREATE TABLE user_role
     patronymic    VARCHAR,
     class_id INT,
 
-    foreign key (user_id) references users (id),
     foreign key (class_id) references class (id),
     foreign key (school_id) references school (id)
+);
+
+create table users
+(
+    id serial     PRIMARY KEY,
+    name          VARCHAR NOT NULL,
+    surname       VARCHAR NOT NULL,
+    patronymic    VARCHAR,
+    login         VARCHAR NOT NULL UNIQUE ,
+    password      VARCHAR NOT NULL,
+    birth_date    TIMESTAMP NOT NULL,
+    user_role_id INT,
+
+    foreign key (user_role_id) references user_role (id)
 );
 
 CREATE TABLE timetable
@@ -72,9 +74,9 @@ CREATE TABLE user_code
     school_id INT NOT NULL,
     creator_id INT NOT NULL,
     class_id INT,
-    user_role_id INT,
+    role roles,
 
-    FOREIGN KEY (user_role_id) REFERENCES user_role (id),
+
     FOREIGN KEY (class_id) REFERENCES class (id),
     FOREIGN KEY (creator_id) REFERENCES users (id),
     FOREIGN KEY (user_id) REFERENCES users (id),
@@ -172,9 +174,10 @@ CREATE TABLE student_lesson
 CREATE TABLE application
 (
     id serial PRIMARY KEY,
-    organisation_mail VARCHAR,
-    organisation_name VARCHAR,
-    organisation_address VARCHAR,
+    organisation_mail VARCHAR NOT NULL,
+    organisation_name VARCHAR NOT NULL,
+    organisation_address VARCHAR NOT NULL,
+    organisation_phone VARCHAR NOT NULL,
     creator_id INT NOT NULL,
 
     FOREIGN KEY (creator_id) REFERENCES users (id)
