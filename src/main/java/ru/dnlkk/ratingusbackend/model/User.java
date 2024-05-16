@@ -72,6 +72,9 @@ public class User implements IdGettable {
     @OneToMany(mappedBy = "creator")
     private List<Application> applications;
 
+    @OneToMany(mappedBy = "creator")
+    private List<Application> applications;
+
     @ManyToMany
     @JoinTable(
             name = "subjects_teachers",

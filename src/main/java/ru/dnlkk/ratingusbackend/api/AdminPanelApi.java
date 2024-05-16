@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
@@ -30,7 +29,7 @@ public interface AdminPanelApi {
             description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)"
     )
     @GetMapping("/user-codes")
-    ResponseEntity<List<UserCodeDto>> getAllUserCodesFroSchool();
+    ResponseEntity<List<UserCodeDto>> getAllUserCodesForSchool();
 
     @Operation(
             summary = "Создание кода приглашения",

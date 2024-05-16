@@ -12,7 +12,7 @@ import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "diary")
+@Table(name = "student_lesson")
 public class StudentLesson {
 
     @Id
@@ -31,6 +31,7 @@ public class StudentLesson {
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     private  User student;
+
     @ManyToOne
     @JoinColumn(name = "lesson_id", referencedColumnName = "id")
     private Lesson lesson;
