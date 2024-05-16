@@ -25,12 +25,12 @@ CREATE TABLE class
 CREATE TABLE user_role
 (
     id serial PRIMARY KEY,
-    school_id INT,
-    role roles,
+    school_id INT NOT NULL,
+    role roles NOT NULL,
     name          VARCHAR NOT NULL,
     surname       VARCHAR NOT NULL,
     patronymic    VARCHAR,
-    class_id INT,
+    class_id INT NOT NULL,
 
     foreign key (class_id) references class (id),
     foreign key (school_id) references school (id)
