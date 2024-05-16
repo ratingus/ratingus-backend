@@ -58,7 +58,7 @@ public class User{
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_role_id", referencedColumnName = "id")
     private UserRole userRole;
     // мени ту ван (у каждого юзера одна роль, у роли много юзеров)  /swagger-ui/index.html

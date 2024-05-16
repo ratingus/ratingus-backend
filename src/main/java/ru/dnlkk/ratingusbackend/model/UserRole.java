@@ -21,8 +21,8 @@ public class UserRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany
-    private List<User> users;
+    @OneToOne(mappedBy = "userRole")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
