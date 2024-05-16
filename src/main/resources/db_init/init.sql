@@ -74,7 +74,7 @@ CREATE TABLE user_code
     school_id INT NOT NULL,
     creator_id INT NOT NULL,
     class_id INT,
-    role roles,
+    role roles NOT NULL,
 
 
     FOREIGN KEY (class_id) REFERENCES class (id),
