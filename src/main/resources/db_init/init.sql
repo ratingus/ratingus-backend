@@ -131,6 +131,19 @@ CREATE TABLE subject_teacher
     FOREIGN KEY (subject_id) REFERENCES subject (id)
 );
 
+
+CREATE TABLE lesson
+(
+    id serial PRIMARY KEY,
+    homework VARCHAR NOT NULL,
+    theme VARCHAR NOT NULL,
+    date_of_lesson TIMESTAMP NOT NULL,
+    lesson_number INT NOT NULL,
+    subject_id  INT NOT NULL,
+
+    FOREIGN KEY (subject_id) REFERENCES subject (id)
+);
+
 CREATE TABLE schedule
 (
     id serial PRIMARY KEY,
@@ -144,18 +157,6 @@ CREATE TABLE schedule
     FOREIGN KEY (subject_id) REFERENCES subject (id),
     FOREIGN KEY (timetable_id) REFERENCES timetable (id)
 
-);
-
-CREATE TABLE lesson
-(
-    id serial PRIMARY KEY,
-    homework VARCHAR NOT NULL,
-    theme VARCHAR NOT NULL,
-    date_of_lesson TIMESTAMP NOT NULL,
-    lesson_number INT NOT NULL,
-    subject_id  INT NOT NULL,
-
-    FOREIGN KEY (subject_id) REFERENCES subject (id)
 );
 
 CREATE TABLE student_lesson
