@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
@@ -70,4 +71,12 @@ public interface AdminPanelApi {
     )
     @GetMapping("/timetable")
     ResponseEntity<List<TimetableDto>> getTimetable();
+
+    @Operation(
+            summary = "Создание нового предмета",
+            description = "Создаёт новый предмет по названию и возвращает его"
+    )
+    @PostMapping("/subject")
+    ResponseEntity<SubjectDto> createSubject(@RequestBody SubjectDto subjectDto);
+
 }

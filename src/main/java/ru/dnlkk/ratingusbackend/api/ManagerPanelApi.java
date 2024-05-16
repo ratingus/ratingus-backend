@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequestMapping("/admin-panel-manager")
 @Tag(name = "Контроллер админ-панели для менеджера", description = "Управление заявками на создание учебной организации")
-public interface AdminPanelManagerApi {
+public interface ManagerPanelApi {
     @Operation(
             summary = "Получение всех заявок",
             description = "Возвращает список всех заявок на создание школы"

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
@@ -53,5 +54,10 @@ public class AdminPanelController implements AdminPanelApi {
     @Override
     public ResponseEntity<List<TimetableDto>> getTimetable() {
         return ResponseEntity.ok(adminPanelService.getTimetable(2));
+    }
+
+    @Override
+    public ResponseEntity<SubjectDto> createSubject(SubjectDto subjectDto) {
+        return ResponseEntity.ok(adminPanelService.createSubject(subjectDto, 2));
     }
 }

@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
+import ru.dnlkk.ratingusbackend.mapper.SubjectMapper;
 import ru.dnlkk.ratingusbackend.mapper.TimetableMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
@@ -31,6 +33,7 @@ public class AdminPanelService {
     private final UserCodeRepository userCodeRepository;
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
+    private final SubjectRepository subjectRepository;
 
     public List<UserRoleDto> getAllUsersRolesForSchool(int schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
@@ -100,16 +103,12 @@ public class AdminPanelService {
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
-    //todo: ApplicationDto - исправить
-    public List<ApplicationDto> getAllApplications() {
-        return null;
-    }
-
-    public ResponseEntity<ApplicationDto> createApplication(ApplicationDto applicationDto) {
-        return null;
-    }
-
-    public ResponseEntity<Void> deleteApplication() {
-        return null;
+    public SubjectDto createSubject(SubjectDto subjectDto, int schoolId) {
+        Subject subject = SubjectMapper.INSTANCE.toEntity(subjectDto);
+        School s = new School();
+        s.setId(schoolId);
+        subject.setSchool(s);
+        Subject savedSubject = subjectRepository.saveAndFlush(subject);
+        return SubjectMapper.INSTANCE.toDto(savedSubject);
     }
 }

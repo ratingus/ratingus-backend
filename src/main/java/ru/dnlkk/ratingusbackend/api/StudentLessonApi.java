@@ -12,7 +12,7 @@ import java.util.List;
 
 @Tag(name = "Контроллер дневника", description = "Просмотр оценок, домашнего задания")
 @RequestMapping("/diary")
-public interface DiaryApi {
+public interface StudentLessonApi {
     @Operation(
             summary = "Получение уроков за неделю",
             description = "Возвращает список всех уроков за неделю по указанной дате"
