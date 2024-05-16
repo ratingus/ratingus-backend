@@ -2,6 +2,16 @@ CREATE TYPE roles AS ENUM ('STUDENT', 'TEACHER', 'LOCAL_ADMIN', 'MANAGER');
 
 CREATE TYPE attendances AS ENUM ('WAS', 'GOOD', 'BAD');
 
+create table users
+(
+    id serial     PRIMARY KEY,
+    name          VARCHAR NOT NULL,
+    surname       VARCHAR NOT NULL,
+    patronymic    VARCHAR,
+    login         VARCHAR NOT NULL UNIQUE ,
+    password      VARCHAR NOT NULL,
+    birth_date    TIMESTAMP NOT NULL
+);
 
 CREATE TABLE school
 (
@@ -31,24 +41,13 @@ CREATE TABLE user_role
     surname       VARCHAR NOT NULL,
     patronymic    VARCHAR,
     class_id INT NOT NULL,
+    user_id INT NOT NULL UNIQUE ,
 
     foreign key (class_id) references class (id),
+    foreign key (user_id) references users (id),
     foreign key (school_id) references school (id)
 );
 
-create table users
-(
-    id serial     PRIMARY KEY,
-    name          VARCHAR NOT NULL,
-    surname       VARCHAR NOT NULL,
-    patronymic    VARCHAR,
-    login         VARCHAR NOT NULL UNIQUE ,
-    password      VARCHAR NOT NULL,
-    birth_date    TIMESTAMP NOT NULL,
-    user_role_id INT,
-
-    foreign key (user_role_id) references user_role (id)
-);
 
 CREATE TABLE timetable
 (
