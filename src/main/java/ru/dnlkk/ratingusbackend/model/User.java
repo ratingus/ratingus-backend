@@ -17,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements IdGettable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter() //todo: не нужно
@@ -40,9 +41,6 @@ public class User implements IdGettable {
     @Column(name = "birth_date")
     private Timestamp birthDate;
 
-    @OneToOne(mappedBy = "user")
-    private UserRole userRole;
-
     @OneToMany(mappedBy = "creator")
     private List<Announcement> announcements;
 
@@ -52,9 +50,6 @@ public class User implements IdGettable {
     @OneToMany(mappedBy = "user")
     private List<UserCode> usersCodes;
 
-    @OneToMany(mappedBy = "creator")
-    private List<Application> applications;
-
     @ManyToMany
     @JoinTable(
             name = "classes_students",
@@ -62,6 +57,8 @@ public class User implements IdGettable {
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
 
+    @OneToOne(mappedBy = "user")
+    private UserRole userRole;
 
     @OneToMany(mappedBy = "creator")
     private List<Application> applications;
