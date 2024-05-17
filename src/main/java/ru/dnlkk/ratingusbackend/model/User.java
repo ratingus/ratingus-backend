@@ -44,6 +44,10 @@ public class User implements IdGettable, UserDetails {
     @Column(name = "birth_date")
     private Timestamp birthDate;
 
+    @OneToOne
+    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
+    private UserRole userRole;
+
     @OneToMany(mappedBy = "creator")
     private List<Announcement> announcements;
 
@@ -63,8 +67,10 @@ public class User implements IdGettable, UserDetails {
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRole> usersRoles;
+    // мени ту ван (у каждого юзера одна роль, у роли много юзеров)  /swagger-ui/index.html
+
+    @OneToMany(mappedBy = "creator")
+    private List<Application> applications;
 
     @ManyToMany
     @JoinTable(
@@ -73,33 +79,4 @@ public class User implements IdGettable, UserDetails {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(usersRoles.getLast().getName()));
-    }
-
-    @Override
-    public String getUsername() {
-        return login;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

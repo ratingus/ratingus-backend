@@ -34,4 +34,11 @@ public class Class implements IdGettable {
 
     @ManyToMany(mappedBy = "classes")
     private List<Announcement> announcements;
+
+    @OneToMany(mappedBy = "classForUserRole")
+    private List<UserRole> userRole;
+
+    @OneToMany(mappedBy = "scheduleForClass")
+    private List<Schedule> schedules;
+
 }

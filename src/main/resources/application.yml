@@ -21,7 +21,6 @@ spring:
 server:
   port: 5000
 
-
-token:
-  signing:
-    key: ${TOKEN_KEY}
+jwt:
+  secret: ${TOKEN_KEY}
+  expiration: 1800000

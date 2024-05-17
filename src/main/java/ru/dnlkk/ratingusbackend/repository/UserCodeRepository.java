@@ -6,4 +6,6 @@ import ru.dnlkk.ratingusbackend.model.UserCode;
 
 @Repository
 public interface UserCodeRepository extends JpaRepository<UserCode, Integer> {
+
+    UserCode findUserCodesByCode(String code);
 }

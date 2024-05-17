@@ -22,13 +22,13 @@ public class UserRole implements IdGettable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "userRole")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+    // из роли вытаскивать школу для JWT.
 
     @ManyToOne
     @JoinColumn(name = "class_id", referencedColumnName = "id")
@@ -46,4 +46,8 @@ public class UserRole implements IdGettable {
 
     @Column(name = "patronymic")
     private String patronymic;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class classForUserRole;
 }

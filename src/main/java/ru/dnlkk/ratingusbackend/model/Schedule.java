@@ -1,13 +1,12 @@
 package ru.dnlkk.ratingusbackend.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Setter
@@ -15,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lesson")
-public class Lesson implements IdGettable {
+@Table(name = "schedule")
+public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,22 +24,24 @@ public class Lesson implements IdGettable {
     @Column(name = "lesson_number")
     private int lessonNumber;
 
-    @Column(name = "homework")
-    private String homework;
+    @Column(name = "day_of_week")
+    private int dayOfWeek;
 
-    @Column(name = "theme")
-    private String theme;
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class scheduleForClass;
 
-    @Column(name = "date_of_lesson")
-    private Timestamp date;
+    @ManyToOne
+    @JoinColumn(name = "timetable_id", referencedColumnName = "id")
+    private Timetable timetable;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
-    @OneToMany(mappedBy = "lesson")
-    private List<Schedule> schedules;
+    @ManyToOne
+    @JoinColumn(name = "lesson_id", referencedColumnName = "id")
+    private Lesson lesson;
 
-    @OneToMany(mappedBy = "lesson")
-    private List<Diary> diaries;
+
 }
