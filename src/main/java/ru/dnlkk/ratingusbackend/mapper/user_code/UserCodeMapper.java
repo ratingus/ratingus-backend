@@ -3,8 +3,11 @@ package ru.dnlkk.ratingusbackend.mapper.user_code;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 //import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
@@ -17,6 +20,66 @@ import java.util.stream.Collectors;
 public interface UserCodeMapper {
     UserCodeMapper INSTANCE = Mappers.getMapper(UserCodeMapper.class);
 
+    @Mapping(target = "classDto", source = "userClass", qualifiedByName = "getDtoFromClass")
+    UserCodeWithClassDto toUserCodeWithClassDto(UserCode userCode);
+
+    @IterableMapping(elementTargetType = UserCodeWithClassDto.class)
+    List<UserCodeWithClassDto> toUserCodeWithClassDtoList(List<UserCode> userCodeList);
+
+    @Mappings({
+            @Mapping(target = "userClass", source = "classDto", qualifiedByName = "createClassFromDto"),
+            @Mapping(target = "school", expression = "java(createSchool())"),
+            @Mapping(target = "creator", expression = "java(createCreator())"),
+
+//            @Mapping(target = "school", qualifiedByName = "createSchool"),
+//            @Mapping(target = "creator", qualifiedByName = "createCreator"),
+    })
+    UserCode toUserCode(UserCodeWithClassDto userCodeWithClassDto);
+
+    @Named("createSchool")
+    default School createSchool() {
+        // Здесь вы можете создать новый экземпляр School
+        // либо получить его из другого источника данных
+        // например, из базы данных, используя репозиторий
+        return new School();
+    }
+
+    @Named("createClassFromDto")
+    static Class createClassFromDto(ClassDto classDto) {
+        return ClassMapper.INSTANCE.toClassEntity(classDto);
+    }
+
+    @Named("getDtoFromClass")
+    static ClassDto getDtoFromClass(Class c) {
+        return ClassMapper.INSTANCE.toClassDto(c);
+    }
+
+//    @Named("createSchool")
+//    static School createSchool() {
+//        return new School();
+//    }
+
+    @Named("createCreator")
+    default User createCreator() {
+        return new User();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Mappings({
             @Mapping(target = "userClassName", source = "userClass.name"),
             @Mapping(target = "userRole", source = "role"),
@@ -26,20 +89,29 @@ public interface UserCodeMapper {
     List<UserCodeDto> toUserCodeDtoList(List<UserCode> userCodeList);
 
 
+
     @Mappings({
             @Mapping(target = "userClassId", source = "userClass", qualifiedByName = "getIdFromEntity"),
-            @Mapping(target = "creatorId", source = "creator", qualifiedByName = "getIdFromEntity"),
-            @Mapping(target = "schoolId", source = "school", qualifiedByName = "getIdFromEntity"),
     })
     UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
 
     @Mappings({
             @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
-            @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getCreator"),
-            @Mapping(target = "school", source = "schoolId", qualifiedByName = "getSchool"),
-//            @Mapping(target = "role", source = "userRole"),
+            @Mapping(target = "school", expression = "java(createSchool())"),
+            @Mapping(target = "creator", expression = "java(createCreator())"),
     })
     UserCode toUserCode(UserCodeCreateDto userCodeCreateDto);
+
+//    @Named("createSchool")
+//    static School createSchool() {
+//        return new School();
+//    }
+//
+//    @Named("createCreator")
+//    static User createCreator() {
+//        return new User();
+//    }
+
 
     @Named("getRoleFromUser")
     static Role getRoleFromUser(UserRole role) {

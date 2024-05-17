@@ -49,18 +49,21 @@ public class AdminPanelService {
         }
     }
 
-    public List<UserCodeDto> getAllUsersCodesForSchool(int schoolId) {
+    public List<UserCodeWithClassDto> getAllUsersCodesForSchool(int schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
             return new ArrayList<>();
         } else {
             List<UserCode> userCodes = school.get().getUserCodes();
-            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes); //todo;
+            return UserCodeMapper.INSTANCE.toUserCodeWithClassDtoList(userCodes); //todo;
         }
     }
 
-    public UserCodeCreateDto createUserCode(UserCodeCreateDto userCodeCreateDto) {
+    public UserCodeCreateDto createUserCode(UserCodeCreateDto userCodeCreateDto, int creatorId, int schoolId) {
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
+
+        userCode.getCreator().setId(creatorId);
+        userCode.getSchool().setId(schoolId);
 
         UUID uuid = Generators.nameBasedGenerator().generate(userCode.getUserClass().toString());
         //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
