@@ -1,15 +1,10 @@
 package ru.dnlkk.ratingusbackend.service;
 
-import com.fasterxml.uuid.Generators;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
@@ -21,11 +16,9 @@ import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.*;
+import ru.dnlkk.ratingusbackend.service.util.RandomSequenceGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +29,6 @@ public class AdminPanelService {
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
     private final SubjectRepository subjectRepository;
-
-    private final String SOME_TEXT = "some_text";
 
     public List<UserRoleDto> getAllUsersRolesForSchool(int schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
@@ -69,15 +60,36 @@ public class AdminPanelService {
 
         checkIsClassCorrectInUserCode(userCode, schoolId);
 
-        String code = generateUniqueCode();
-        userCode.setCode(code);
-
+        userCode.setCode("temp_code");
         UserCode userCodeAfterSaving = userCodeRepository.saveAndFlush(userCode);
-        return UserCodeMapper.INSTANCE.toUserCodeWithClassDto(userCodeAfterSaving);
+        String code = generateUniqueCodeById(userCode.getId());
+        userCodeAfterSaving.setCode(code);
+        UserCode finalUserCode = userCodeRepository.save(userCodeAfterSaving);
+
+        return UserCodeMapper.INSTANCE.toUserCodeWithClassDto(finalUserCode);
     }
 
     public UserCodeWithClassDto updateUserCode(int userCodeId, UserCodeWithClassDto userCodeWithClassDto, int schoolId) {
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
+
+        Optional<UserCode> userCodeById = userCodeRepository.findById(userCodeId);
+        if (userCodeById.isEmpty()) {
+            throw new RuntimeException("Нет пользователя с id " + userCodeId);
+        } else {
+            UserCode userCodeFromRepo = userCodeById.get();
+            if (userCodeFromRepo.getSchool().getId() != schoolId) {
+                throw new RuntimeException("Нет доступа к пользователю с id " + userCodeId);
+            } else {
+                userCode.getCreator().setId(userCodeFromRepo.getCreator().getId());
+            }
+        }
+
+        if (userCode.getCode() == null) {
+            userCode.setCode(generateUniqueCodeById(userCodeId));
+        }
+
+        //todo: сделать некую функцию, которая будет смотреть, можем ли мы работать с этой сущностью (смотрит по schoolId)
+
         userCode.setId(userCodeId);
         userCode.getSchool().setId(schoolId);
 
@@ -135,11 +147,16 @@ public class AdminPanelService {
                     }
                 }
             }
+        } else {
+            if (userCode.getUserClass() != null) {
+                throw new RuntimeException("Пользователю с ролью " + userCode.getRole() + " не может быть присвоен класс");
+            }
         }
     }
 
-    private String generateUniqueCode() {
+    private String generateUniqueCodeById(int id) {
         //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
-        return Generators.nameBasedGenerator().generate(SOME_TEXT).toString();
+//        return Generators.nameBasedGenerator().generate(str).toString();
+        return RandomSequenceGenerator.generateRandomSequence() + id;
     }
 }

@@ -30,9 +30,6 @@ public interface UserCodeMapper {
             @Mapping(target = "userClass", source = "classDto", qualifiedByName = "createClassFromDto"),
             @Mapping(target = "school", expression = "java(createSchool())"),
             @Mapping(target = "creator", expression = "java(createCreator())"),
-
-//            @Mapping(target = "school", qualifiedByName = "createSchool"),
-//            @Mapping(target = "creator", qualifiedByName = "createCreator"),
     })
     UserCode toUserCode(UserCodeWithClassDto userCodeWithClassDto);
 
@@ -70,92 +67,82 @@ public interface UserCodeMapper {
 
 
 
+//
+//
+//    @Mappings({
+//            @Mapping(target = "userClassName", source = "userClass.name"),
+//            @Mapping(target = "userRole", source = "role"),
+//    })
+//    UserCodeDto toUserCodeDto(UserCode userCode);
+//    @IterableMapping(elementTargetType = UserCodeDto.class)
+//    List<UserCodeDto> toUserCodeDtoList(List<UserCode> userCodeList);
+//
 
 
-    @Mappings({
-            @Mapping(target = "userClassName", source = "userClass.name"),
-            @Mapping(target = "userRole", source = "role"),
-    })
-    UserCodeDto toUserCodeDto(UserCode userCode);
-    @IterableMapping(elementTargetType = UserCodeDto.class)
-    List<UserCodeDto> toUserCodeDtoList(List<UserCode> userCodeList);
-
-
-
-    @Mappings({
-            @Mapping(target = "userClassId", source = "userClass", qualifiedByName = "getIdFromEntity"),
-    })
-    UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
-
-    @Mappings({
-            @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
-            @Mapping(target = "school", expression = "java(createSchool())"),
-            @Mapping(target = "creator", expression = "java(createCreator())"),
-    })
-    UserCode toUserCode(UserCodeCreateDto userCodeCreateDto);
-
-//    @Named("createSchool")
-//    static School createSchool() {
-//        return new School();
+//    @Mappings({
+//            @Mapping(target = "userClassId", source = "userClass", qualifiedByName = "getIdFromEntity"),
+//    })
+//    UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
+//
+//    @Mappings({
+//            @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
+//            @Mapping(target = "school", expression = "java(createSchool())"),
+//            @Mapping(target = "creator", expression = "java(createCreator())"),
+//    })
+//    UserCode toUserCode(UserCodeCreateDto userCodeCreateDto);
+//
+//
+//    @Named("getRoleFromUser")
+//    static Role getRoleFromUser(UserRole role) {
+//        return role.getRole();
 //    }
 //
-//    @Named("createCreator")
-//    static User createCreator() {
-//        return new User();
+//    @Named("getRoleFromDto")
+//    static UserRole getRoleFromDto(Role role) {
+//        UserRole ur = new UserRole();
+//        ur.setRole(role);
+//        return ur;
 //    }
-
-
-    @Named("getRoleFromUser")
-    static Role getRoleFromUser(UserRole role) {
-        return role.getRole();
-    }
-
-    @Named("getRoleFromDto")
-    static UserRole getRoleFromDto(Role role) {
-        UserRole ur = new UserRole();
-        ur.setRole(role);
-        return ur;
-    }
-
-    @Named("getUserClass")
-    static Class getUserClass(int id) {
-        Class entity = new Class();
-        entity.setId(id);
-        return entity;
-    }
-
-    @Named("getUserByLogin")
-    static User getUserByLogin(String login) {
-        User entity = new User();
-        entity.setLogin(login);
-        return entity;
-    }
-
-    @Named("getCreator")
-    static User getCreator(int id) {
-        User entity = new User();
-        entity.setId(id);
-        return entity;
-    }
-
-    @Named("getSchool")
-    static School getSchool(int id) {
-        School entity = new School();
-        entity.setId(id);
-        return entity;
-    }
-
-    @Named("getIdFromEntity")
-    static <T extends IdGettable> Integer getIdFromEntity(T entity) {
-        return entity.getId();
-    }
-
-    @Named("getIdFromList")
-    static <T extends IdGettable> List<Integer> getIdList(List<T> objects) {
-        return objects.stream()
-                .map(IdGettable::getId)
-                .collect(Collectors.toList());
-    }
+//
+//    @Named("getUserClass")
+//    static Class getUserClass(int id) {
+//        Class entity = new Class();
+//        entity.setId(id);
+//        return entity;
+//    }
+//
+//    @Named("getUserByLogin")
+//    static User getUserByLogin(String login) {
+//        User entity = new User();
+//        entity.setLogin(login);
+//        return entity;
+//    }
+//
+//    @Named("getCreator")
+//    static User getCreator(int id) {
+//        User entity = new User();
+//        entity.setId(id);
+//        return entity;
+//    }
+//
+//    @Named("getSchool")
+//    static School getSchool(int id) {
+//        School entity = new School();
+//        entity.setId(id);
+//        return entity;
+//    }
+//
+//    @Named("getIdFromEntity")
+//    static <T extends IdGettable> Integer getIdFromEntity(T entity) {
+//        return entity.getId();
+//    }
+//
+//    @Named("getIdFromList")
+//    static <T extends IdGettable> List<Integer> getIdList(List<T> objects) {
+//        return objects.stream()
+//                .map(IdGettable::getId)
+//                .collect(Collectors.toList());
+//    }
 
 //    @Mappings({
 //            @Mapping(target = "userClass", source = "userClass.name"),
