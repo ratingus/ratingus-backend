@@ -70,7 +70,7 @@ CREATE TABLE user_code
     school_id  INT     NOT NULL,
     creator_id INT     NOT NULL,
     class_id   INT,
-    role       roles   NOT NULL,
+    role       VARCHAR NOT NULL CHECK (role IN ('STUDENT', 'TEACHER', 'LOCAL_ADMIN', 'MANAGER')),
 
 
     FOREIGN KEY (class_id) REFERENCES class (id),
