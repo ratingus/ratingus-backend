@@ -36,7 +36,12 @@ public class UserCode implements IdGettable {
     private String patronymic;
 
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class userClass;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

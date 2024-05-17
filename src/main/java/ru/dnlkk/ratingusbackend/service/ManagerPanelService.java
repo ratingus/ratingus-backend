@@ -28,14 +28,11 @@ public class ManagerPanelService {
     }
 
     public ApplicationDto createApplication(ApplicationDto applicationDto, int creatorId) {
-        System.out.println("ТЕЛЕФОН дто до сохр: " + applicationDto.getOrganisationPhone());
         Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
-        System.out.println("ТЕЛЕФОН модели до сохр: " + application.getOrganisationPhone());
         User creator = new User();
         creator.setId(creatorId);
         application.setCreator(creator);
         Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
-        System.out.println("ТЕЛЕФОН: " + applicationAfterSaving.getOrganisationPhone());
         return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
     }
 

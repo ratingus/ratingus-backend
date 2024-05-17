@@ -16,7 +16,7 @@ public class UserCodeCreateDto {
     private String name;
     private String surname;
     private String patronymic;
-    private String login;
+    //private String login;
     private int userClassId;
     private int creatorId;
     private int schoolId;

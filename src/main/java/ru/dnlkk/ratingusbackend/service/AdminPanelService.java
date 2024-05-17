@@ -18,6 +18,7 @@ import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.*;
 
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class AdminPanelService {
             return new ArrayList<>();
         } else {
             List<UserRole> userRoles = school.get().getUserRoles();
+            System.out.println(userRoles.get(0).toString());
+            System.out.println(userRoles.get(0).getUser());
             return UserRoleMapper.INSTANCE.toDtoList(userRoles); //todo;
         }
     }
@@ -50,32 +53,46 @@ public class AdminPanelService {
         if (school.isEmpty()) {
             return new ArrayList<>();
         } else {
-            List<UserCode> userRoles = school.get().getUserCodes();
-            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userRoles); //todo;
+            List<UserCode> userCodes = school.get().getUserCodes();
+            return UserCodeMapper.INSTANCE.toUserCodeDtoList(userCodes); //todo;
         }
     }
 
     public UserCodeCreateDto createUserCode(UserCodeCreateDto userCodeCreateDto) {
+        //todo: если роль студент, и класс - null - ошибка
+        System.out.println("ТЕСТ (роли) в дто: " + userCodeCreateDto.getUserRole());
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
+        System.out.println("ТЕСТ (роли) в модели из дто: " + userCode.getRole());
+//        String userLogin = userCode.getUser().getLogin();
 
-        String userLogin = userCode.getUser().getLogin();
+//        List<User> userByLogin = userRepository.findByLogin(userLogin);
+//        if (userByLogin.size() > 1) {
+//            throw new RuntimeException("Обнаружены повторяющиеся логины!");
+//        } else if (userByLogin.isEmpty()) {
+//            return null;
+//        }
 
-        List<User> userByLogin = userRepository.findByLogin(userLogin);
-        if (userByLogin.size() > 1) {
-            throw new RuntimeException("Обнаружены повторяющиеся логины!");
-        } else if (userByLogin.isEmpty()) {
-            return null;
-        }
+//        int id = userByLogin.getFirst().getId();
+//        userCode.getUser().setId(id);
 
-        int id = userByLogin.getFirst().getId();
-        userCode.getUser().setId(id);
-
-        UUID uuid = Generators.nameBasedGenerator().generate(userLogin + id);
+        UUID uuid = Generators.nameBasedGenerator().generate(userCode.getUserClass().toString());
         //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
         userCode.setCode(uuid.toString());
 
-        UserCode userCodeAfterSaving = userCodeRepository.saveAndFlush(userCode);
+        System.out.println("ТЕСТ");
+        System.out.println(userCode.getRole());
+        System.out.println(userCode.getRole() instanceof Role);
+
+
+        UserCode userCodeAfterSaving =
+                userCodeRepository.saveAndFlush(userCode);
         return UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
+    }
+
+    public UserCodeCreateDto updateUserCode(UserCodeCreateDto userCodeCreateDto) {
+        UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
+        int userCodeId = userCode.getId();
+        return null;
     }
 
     public List<ClassDto> getAllClassesForSchool(int schoolId) {

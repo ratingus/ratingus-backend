@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
 @AllArgsConstructor

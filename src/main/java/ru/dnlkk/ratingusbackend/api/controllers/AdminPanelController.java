@@ -30,9 +30,15 @@ public class AdminPanelController implements AdminPanelApi {
         return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(2));
     }
 
+
     @Override
     public ResponseEntity<UserCodeCreateDto> createUserCode(UserCodeCreateDto userCodeCreateDto) {
         return ResponseEntity.ok(adminPanelService.createUserCode(userCodeCreateDto));
+    }
+
+    @Override
+    public ResponseEntity<UserCodeCreateDto> updateUserCode(UserCodeCreateDto userCodeCreateDto) {
+        return null;
     }
 
     @Override

@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
-import ru.dnlkk.ratingusbackend.model.School;
-import ru.dnlkk.ratingusbackend.model.User;
-import ru.dnlkk.ratingusbackend.model.UserCode;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
 import java.sql.Timestamp;

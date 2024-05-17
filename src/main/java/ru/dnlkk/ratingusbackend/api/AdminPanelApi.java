@@ -20,7 +20,7 @@ public interface AdminPanelApi {
             summary = "Получение списка пользователей",
             description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
     )
-    @GetMapping("/users")
+    @GetMapping("/user-role")
     ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
 //            @RequestParam(required = false) String surnameOrLogin
     );
@@ -29,39 +29,45 @@ public interface AdminPanelApi {
             summary = "Получение списка кодов приглашения",
             description = "Возвращает список не активированных кодов приглашения учебной организации (с пагинацией через query-параметры)"
     )
-    @GetMapping("/user-codes")
+    @GetMapping("/user-code")
     ResponseEntity<List<UserCodeDto>> getAllUserCodesForSchool();
 
     @Operation(
             summary = "Создание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
     )
-    @PostMapping("/users")
+    @PostMapping("/user-code")
     ResponseEntity<UserCodeCreateDto> createUserCode(@RequestBody UserCodeCreateDto userCodeCreateDto);
+
+    @Operation(
+            summary = "Пересоздание кода приглашения",
+            description = "Создаёт новый код приглашения и возвращает его"
+    )
+    @PutMapping("/user-code")
+    ResponseEntity<UserCodeCreateDto> updateUserCode(@RequestBody UserCodeCreateDto userCodeCreateDto);
 
 
     @Operation(
             summary = "Получение списка классов",
             description = "Возвращает список всех классов учебной организации" //. Доступен query-параметр для поиска по названию класса
     )
-    @GetMapping("/classes") //
+    @GetMapping("/class") //
     ResponseEntity<List<ClassDto>> getAllClasses(
 //            @RequestParam(required = false) String className
     );
-
 
     @Operation(
             summary = "Создание нового класса",
             description = "Создаёт новый класс по названию и возвращает его"
     )
-    @PostMapping("/classes")
+    @PostMapping("/class")
     ResponseEntity<ClassDto> createClass(@RequestBody ClassDto classDto);
 
     @Operation(
             summary = "Удаление класса",
             description = "Удаляет класс по id и возвращает пустой ответ"
     )
-    @DeleteMapping("/classes/{id}")
+    @DeleteMapping("/class/{id}")
     ResponseEntity<Void> deleteClass(@PathVariable("id") Integer id);
 
 

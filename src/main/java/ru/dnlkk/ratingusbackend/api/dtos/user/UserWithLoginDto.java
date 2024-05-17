@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Data
-public class UserWithLoginDto {
+public class UserWithLoginDto { //todo: УДАЛИТЬ
     private int id;
     private String login;
     private Timestamp birthDate;

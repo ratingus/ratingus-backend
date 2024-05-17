@@ -11,7 +11,7 @@ import ru.dnlkk.ratingusbackend.model.User;
 
 import java.util.List;
 
-@Mapper
+@Mapper()
 public interface ApplicationMapper {
     ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
     @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getCreatorById")
