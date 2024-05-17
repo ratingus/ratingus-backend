@@ -38,16 +38,16 @@ public interface AdminPanelApi {
             description = "Создаёт новый код приглашения и возвращает его"
     )
     @PostMapping("/user-code")
-    ResponseEntity<UserCodeCreateDto> createUserCode(@RequestBody UserCodeCreateDto userCodeCreateDto);
+    ResponseEntity<UserCodeWithClassDto> createUserCode(@RequestBody UserCodeWithClassDto userCodeWithClassDto);
 
     @Operation(
             summary = "Пересоздание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
     )
     @PutMapping("/user-code/{id}")
-    ResponseEntity<UserCodeCreateDto> updateUserCode(
+    ResponseEntity<UserCodeWithClassDto> updateUserCode(
             @PathVariable("id") int id,
-            @RequestBody UserCodeCreateDto userCodeCreateDto
+            @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
 
 

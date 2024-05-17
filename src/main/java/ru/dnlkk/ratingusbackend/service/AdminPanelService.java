@@ -37,6 +37,8 @@ public class AdminPanelService {
     private final SchoolRepository schoolRepository;
     private final SubjectRepository subjectRepository;
 
+    private final String SOME_TEXT = "some_text";
+
     public List<UserRoleDto> getAllUsersRolesForSchool(int schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
@@ -59,28 +61,30 @@ public class AdminPanelService {
         }
     }
 
-    public UserCodeCreateDto createUserCode(UserCodeCreateDto userCodeCreateDto, int creatorId, int schoolId) {
-        UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
+    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, int creatorId, int schoolId) {
+        UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
 
         userCode.getCreator().setId(creatorId);
         userCode.getSchool().setId(schoolId);
 
-        UUID uuid = Generators.nameBasedGenerator().generate(userCode.getUserClass().toString());
-        //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
-        userCode.setCode(uuid.toString());
+        checkIsClassCorrectInUserCode(userCode, schoolId);
 
-        UserCode userCodeAfterSaving =
-                userCodeRepository.saveAndFlush(userCode);
-        return UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
+        String code = generateUniqueCode();
+        userCode.setCode(code);
+
+        UserCode userCodeAfterSaving = userCodeRepository.saveAndFlush(userCode);
+        return UserCodeMapper.INSTANCE.toUserCodeWithClassDto(userCodeAfterSaving);
     }
 
-    public UserCodeCreateDto updateUserCode(int userCodeId, UserCodeCreateDto userCodeCreateDto, int schoolId) {
-        UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
+    public UserCodeWithClassDto updateUserCode(int userCodeId, UserCodeWithClassDto userCodeWithClassDto, int schoolId) {
+        UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
         userCode.setId(userCodeId);
+        userCode.getSchool().setId(schoolId);
+
+        checkIsClassCorrectInUserCode(userCode, schoolId);
+
         UserCode userCodeAfterSaving = userCodeRepository.save(userCode); //проверить работу апдейта
-//        int userCodeId = userCode.getId();
-        //todo: проверить, что schoolId совпадает
-        return UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
+        return UserCodeMapper.INSTANCE.toUserCodeWithClassDto(userCodeAfterSaving);
     }
 
     public List<ClassDto> getAllClassesForSchool(int schoolId) {
@@ -112,5 +116,30 @@ public class AdminPanelService {
         subject.setSchool(s);
         Subject savedSubject = subjectRepository.saveAndFlush(subject);
         return SubjectMapper.INSTANCE.toDto(savedSubject);
+    }
+
+    private void checkIsClassCorrectInUserCode(UserCode userCode, int schoolId) {
+        if (userCode.getRole() == Role.STUDENT) {
+            if (userCode.getUserClass() == null) {
+                throw new RuntimeException("Учащемуся не был присвоен класс");
+            } else {
+                Optional<Class> classById = classRepository.findById(userCode.getUserClass().getId());
+                if (classById.isEmpty()) {
+                    throw new RuntimeException("Нет класса с таким id");
+                } else {
+                    Class c = classById.get();
+                    if (c.getSchool().getId() != schoolId) {
+                        throw new RuntimeException("В школе нет класса с таким id");
+                    } else {
+                        userCode.setUserClass(c);
+                    }
+                }
+            }
+        }
+    }
+
+    private String generateUniqueCode() {
+        //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
+        return Generators.nameBasedGenerator().generate(SOME_TEXT).toString();
     }
 }

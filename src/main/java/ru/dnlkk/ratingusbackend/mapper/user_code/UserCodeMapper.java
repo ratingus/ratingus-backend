@@ -38,9 +38,6 @@ public interface UserCodeMapper {
 
     @Named("createSchool")
     default School createSchool() {
-        // Здесь вы можете создать новый экземпляр School
-        // либо получить его из другого источника данных
-        // например, из базы данных, используя репозиторий
         return new School();
     }
 
@@ -53,11 +50,6 @@ public interface UserCodeMapper {
     static ClassDto getDtoFromClass(Class c) {
         return ClassMapper.INSTANCE.toClassDto(c);
     }
-
-//    @Named("createSchool")
-//    static School createSchool() {
-//        return new School();
-//    }
 
     @Named("createCreator")
     default User createCreator() {
