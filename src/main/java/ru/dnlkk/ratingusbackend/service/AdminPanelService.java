@@ -10,6 +10,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
 import ru.dnlkk.ratingusbackend.mapper.SubjectMapper;
@@ -59,40 +60,24 @@ public class AdminPanelService {
     }
 
     public UserCodeCreateDto createUserCode(UserCodeCreateDto userCodeCreateDto) {
-        //todo: если роль студент, и класс - null - ошибка
-        System.out.println("ТЕСТ (роли) в дто: " + userCodeCreateDto.getUserRole());
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
-        System.out.println("ТЕСТ (роли) в модели из дто: " + userCode.getRole());
-//        String userLogin = userCode.getUser().getLogin();
-
-//        List<User> userByLogin = userRepository.findByLogin(userLogin);
-//        if (userByLogin.size() > 1) {
-//            throw new RuntimeException("Обнаружены повторяющиеся логины!");
-//        } else if (userByLogin.isEmpty()) {
-//            return null;
-//        }
-
-//        int id = userByLogin.getFirst().getId();
-//        userCode.getUser().setId(id);
 
         UUID uuid = Generators.nameBasedGenerator().generate(userCode.getUserClass().toString());
         //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
         userCode.setCode(uuid.toString());
-
-        System.out.println("ТЕСТ");
-        System.out.println(userCode.getRole());
-        System.out.println(userCode.getRole() instanceof Role);
-
 
         UserCode userCodeAfterSaving =
                 userCodeRepository.saveAndFlush(userCode);
         return UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
     }
 
-    public UserCodeCreateDto updateUserCode(UserCodeCreateDto userCodeCreateDto) {
+    public UserCodeCreateDto updateUserCode(int userCodeId, UserCodeCreateDto userCodeCreateDto, int schoolId) {
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeCreateDto);
-        int userCodeId = userCode.getId();
-        return null;
+        userCode.setId(userCodeId);
+        UserCode userCodeAfterSaving = userCodeRepository.save(userCode); //проверить работу апдейта
+//        int userCodeId = userCode.getId();
+        //todo: проверить, что schoolId совпадает
+        return UserCodeMapper.INSTANCE.toUserCodeCreateDto(userCodeAfterSaving);
     }
 
     public List<ClassDto> getAllClassesForSchool(int schoolId) {

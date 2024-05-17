@@ -4,21 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class UserCodeCreateDto {
+public class UserCodeWithClassDto {
     private int id;
     private String code;
     private String name;
     private String surname;
     private String patronymic;
-    //private String login;
-    private int userClassId;
-    private int creatorId;
-    private int schoolId;
+    private Class userClass;
     private Role role;
 }

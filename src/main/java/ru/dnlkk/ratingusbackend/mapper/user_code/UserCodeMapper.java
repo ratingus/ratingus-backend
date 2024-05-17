@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.mapper.user.UserWithLoginMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
@@ -46,29 +47,26 @@ public interface UserCodeMapper {
     UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
 
     @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "code", ignore = true),
-            @Mapping(target = "activated", ignore = true),
             @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
             @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getCreator"),
             @Mapping(target = "school", source = "schoolId", qualifiedByName = "getSchool"),
-            @Mapping(target = "role", source = "userRole"),
+//            @Mapping(target = "role", source = "userRole"),
     })
     UserCode toUserCode(UserCodeCreateDto userCodeCreateDto);
+
+//    @Mappings({
+//            @Mapping(target = "activated", ignore = true),
+//            @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
+//            @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getCreator"),
+//            @Mapping(target = "school", source = "schoolId", qualifiedByName = "getSchool"),
+//            @Mapping(target = "role", source = "userRole"),
+//    })
+//    UserCode toUserCode(UserCodeDto userCodeDto);
 
 //    @Named("role")
 //    static Role role(Role role) {
 //        return role;
 //    }
-
-
-
-
-//    @Named("getUserWithLoginDto")
-//    static UserWithLoginDto getUserWithLoginDto(User u) {
-//        return UserWithLoginMapper.INSTANCE.toDto(u);
-//    }
-
     @Named("getRoleFromUser")
     static Role getRoleFromUser(UserRole role) {
         return role.getRole();

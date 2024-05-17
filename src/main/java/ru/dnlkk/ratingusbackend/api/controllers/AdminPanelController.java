@@ -10,6 +10,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 
@@ -37,8 +38,8 @@ public class AdminPanelController implements AdminPanelApi {
     }
 
     @Override
-    public ResponseEntity<UserCodeCreateDto> updateUserCode(UserCodeCreateDto userCodeCreateDto) {
-        return null;
+    public ResponseEntity<UserCodeCreateDto> updateUserCode(int id, UserCodeCreateDto userCodeCreateDto) {
+        return ResponseEntity.ok(adminPanelService.updateUserCode(id, userCodeCreateDto, 2));
     }
 
     @Override

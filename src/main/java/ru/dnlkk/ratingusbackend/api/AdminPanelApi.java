@@ -9,6 +9,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 
 import java.util.List;
@@ -43,8 +44,11 @@ public interface AdminPanelApi {
             summary = "Пересоздание кода приглашения",
             description = "Создаёт новый код приглашения и возвращает его"
     )
-    @PutMapping("/user-code")
-    ResponseEntity<UserCodeCreateDto> updateUserCode(@RequestBody UserCodeCreateDto userCodeCreateDto);
+    @PutMapping("/user-code/{id}")
+    ResponseEntity<UserCodeCreateDto> updateUserCode(
+            @PathVariable("id") int id,
+            @RequestBody UserCodeCreateDto userCodeCreateDto
+    );
 
 
     @Operation(
