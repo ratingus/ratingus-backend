@@ -1,6 +1,3 @@
-CREATE TYPE roles AS ENUM ('STUDENT', 'TEACHER', 'LOCAL_ADMIN', 'MANAGER');
-
-CREATE TYPE attendances AS ENUM ('WAS', 'GOOD', 'BAD');
 
 create table users
 (
