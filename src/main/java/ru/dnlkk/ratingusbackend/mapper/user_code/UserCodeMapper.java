@@ -5,9 +5,6 @@ import org.mapstruct.factory.Mappers;
 //import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
-import ru.dnlkk.ratingusbackend.mapper.user.UserWithLoginMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
@@ -29,16 +26,6 @@ public interface UserCodeMapper {
     List<UserCodeDto> toUserCodeDtoList(List<UserCode> userCodeList);
 
 
-//    @Mappings({
-//            @Mapping(target = "userClassName", source = "userClass.name"),
-//            @Mapping(target = "userWithLoginDto", source = "user", qualifiedByName = "getUserWithLoginDto"),
-//            @Mapping(target = "schoolName", source = "school.name"),
-//    })
-//    UserCodeViewDto toUserCodeViewDto(UserCode userCode);
-
-//    @IterableMapping(elementTargetType = UserCodeViewDto.class)
-//    List<UserCodeViewDto> toUserCodeDtoList(List<UserCode> userCodeList);
-
     @Mappings({
             @Mapping(target = "userClassId", source = "userClass", qualifiedByName = "getIdFromEntity"),
             @Mapping(target = "creatorId", source = "creator", qualifiedByName = "getIdFromEntity"),
@@ -54,19 +41,6 @@ public interface UserCodeMapper {
     })
     UserCode toUserCode(UserCodeCreateDto userCodeCreateDto);
 
-//    @Mappings({
-//            @Mapping(target = "activated", ignore = true),
-//            @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
-//            @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getCreator"),
-//            @Mapping(target = "school", source = "schoolId", qualifiedByName = "getSchool"),
-//            @Mapping(target = "role", source = "userRole"),
-//    })
-//    UserCode toUserCode(UserCodeDto userCodeDto);
-
-//    @Named("role")
-//    static Role role(Role role) {
-//        return role;
-//    }
     @Named("getRoleFromUser")
     static Role getRoleFromUser(UserRole role) {
         return role.getRole();
