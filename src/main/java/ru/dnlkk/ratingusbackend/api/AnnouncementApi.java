@@ -18,16 +18,6 @@ public interface AnnouncementApi {
     String defaultLimit = "25";
 
     @Operation(
-            summary = "Получение объявления по id",
-            description = "Возвращает объявление по указанному id"
-    )
-    @GetMapping("/{id}")
-    ResponseEntity<AnnouncementDto> getAnnouncementById(
-            @Schema(description = "Id запрашиваемого объявления")
-            @PathVariable int id
-    );
-
-    @Operation(
             summary = "Получение списка объявлений",
             description = "Возвращает список объявлений учебной организации (с пагинацией через query-параметры)"
     )
@@ -47,6 +37,16 @@ public interface AnnouncementApi {
             @RequestParam(name = "classId", required = false)
             @Min(0)
             Integer classId
+    );
+
+    @Operation(
+            summary = "Получение объявления по id",
+            description = "Возвращает объявление по указанному id"
+    )
+    @GetMapping("/{id}")
+    ResponseEntity<AnnouncementDto> getAnnouncementById(
+            @Schema(description = "Id запрашиваемого объявления")
+            @PathVariable int id
     );
 
 

@@ -18,12 +18,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class AdminPanelController implements AdminPanelApi {
+public class AdminPanelController extends ExceptionHandlerController implements AdminPanelApi {
     private final AdminPanelService adminPanelService;
 
     @Override
-    public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool() {
-        return ResponseEntity.ok(adminPanelService.getAllUsersRolesForSchool(2));
+    public ResponseEntity getAllUserRolesForSchool() {
+        try {
+            List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(2);
+            return ResponseEntity.ok(allUsersRolesForSchool);
+        } catch (RuntimeException e) { //todo: отдельный контроллер для обработки ошибок ExceptionHandler
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @Override
