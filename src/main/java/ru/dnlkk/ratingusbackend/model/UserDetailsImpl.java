@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.dnlkk.ratingusbackend.model.User;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +20,11 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getUserRole().getName());
+        String roleName = String.valueOf(Role.GUEST);
+        if (user.getUserRole() != null){
+            roleName = user.getUserRole().getName();
+        }
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
         return Collections.singletonList(authority);
     }
 

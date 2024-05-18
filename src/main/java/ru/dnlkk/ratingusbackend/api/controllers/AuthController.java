@@ -2,6 +2,7 @@ package ru.dnlkk.ratingusbackend.api.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AuthApi;
 import ru.dnlkk.ratingusbackend.api.model.JWTRegistrationDto;

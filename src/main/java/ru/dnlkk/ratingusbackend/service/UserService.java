@@ -8,10 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dnlkk.ratingusbackend.api.model.UserDto;
-import ru.dnlkk.ratingusbackend.model.School;
-import ru.dnlkk.ratingusbackend.model.User;
-import ru.dnlkk.ratingusbackend.model.UserCode;
-import ru.dnlkk.ratingusbackend.model.UserRole;
+import ru.dnlkk.ratingusbackend.model.*;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
 
@@ -76,19 +74,12 @@ public class UserService implements UserDetailsService{
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+    public UserDetailsImpl loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = getByUsername(login).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь '%s' не найден", login)
         ));
-
-        String roleName = user.getUserRole().getName();
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getLogin(),
-                user.getPassword(),
-                Collections.singletonList(authority)
-        );
+        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+        return userDetails;
     }
 
 }
