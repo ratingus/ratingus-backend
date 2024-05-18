@@ -37,13 +37,13 @@ public class JwtTokenService {
         claims.put("patronymic", user.getPatronymic());
         claims.put("login", user.getLogin());
         String roleName = String.valueOf(Role.GUEST);
-        if (user.getUserRole() != null){
-            roleName = user.getUserRole().getName();
-        }
-        claims.put("role", roleName);
-        if (user.getUserRole() != null){
-            claims.put("school", user.getUserRole().getSchool());
-        }
+//        if (user.getUserRole() != null){
+//            roleName = user.getUserRole().getName();
+//        }
+//        claims.put("role", roleName);
+//        if (user.getUserRole() != null){
+//            claims.put("school", user.getUserRole().getSchool());
+//        }
 
 
         return Jwts.builder()

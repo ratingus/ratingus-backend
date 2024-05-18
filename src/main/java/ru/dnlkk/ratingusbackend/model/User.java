@@ -56,8 +56,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
 
-    @OneToOne(mappedBy = "user")
-    private UserRole userRole;
+//    @OneToOne(mappedBy = "user")
+//    private UserRole userRole;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> usersRoles;
 
     @OneToMany(mappedBy = "creator")
     private List<Application> applications;
