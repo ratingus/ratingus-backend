@@ -8,6 +8,7 @@ import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Setter
 @Getter

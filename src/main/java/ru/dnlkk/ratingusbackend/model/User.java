@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements IdGettable, UserDetails {
+public class User implements IdGettable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter() //todo: не нужно
@@ -52,7 +52,7 @@ public class User implements IdGettable, UserDetails {
     private List<Announcement> announcements;
 
     @OneToMany(mappedBy = "student")
-    private List<Diary> studentsLessons;
+    private List<StudentLesson> studentsLessons;
 
     @OneToMany(mappedBy = "user")
     private List<UserCode> usersCodes;
@@ -79,34 +79,34 @@ public class User implements IdGettable, UserDetails {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.getUserRole().getName());
-        return Collections.singletonList(authority);
-    }
-
-    @Override
-    public String getUsername() {
-        return getLogin();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(this.getUserRole().getName());
+//        return Collections.singletonList(authority);
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return getLogin();
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

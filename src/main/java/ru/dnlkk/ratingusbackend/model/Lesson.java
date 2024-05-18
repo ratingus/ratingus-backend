@@ -42,5 +42,5 @@ public class Lesson implements IdGettable {
     private List<Schedule> schedules;
 
     @OneToMany(mappedBy = "lesson")
-    private List<Diary> diaries;
+    private List<StudentLesson> diaries;
 }

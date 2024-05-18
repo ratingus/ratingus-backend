@@ -8,7 +8,6 @@ import ru.dnlkk.ratingusbackend.api.AuthApi;
 import ru.dnlkk.ratingusbackend.api.model.JWTRegistrationDto;
 import ru.dnlkk.ratingusbackend.api.model.JWTRequest;
 import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
-import ru.dnlkk.ratingusbackend.api.model.UserLoginDto;
 import ru.dnlkk.ratingusbackend.service.AuthService;
 
 @RestController

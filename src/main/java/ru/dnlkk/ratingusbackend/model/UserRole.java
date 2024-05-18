@@ -47,8 +47,4 @@ public class UserRole implements IdGettable {
 
     @Column(name = "patronymic")
     private String patronymic;
-
-    @ManyToOne
-    @JoinColumn(name = "class_id", referencedColumnName = "id")
-    private Class classForUserRole;
 }

@@ -1,6 +1,7 @@
 package ru.dnlkk.ratingusbackend.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,13 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@AllArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
     private JwtTokenService jwtTokenService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
