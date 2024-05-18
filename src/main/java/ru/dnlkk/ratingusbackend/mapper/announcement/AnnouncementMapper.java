@@ -18,7 +18,6 @@ public interface AnnouncementMapper {
     AnnouncementMapper INSTANCE = Mappers.getMapper(AnnouncementMapper.class);
 
     @Mapping(target = "classes", source = "classesId", qualifiedByName = "getClassListFromIdsList")
-//    @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getUserFromId")
     @Mapping(target = "creator", expression = "java(createCreator())")
     Announcement toModel(AnnouncementDto announcementDto);
 
@@ -37,20 +36,13 @@ public interface AnnouncementMapper {
         }
         return classes;
     }
-//    @Named("getUserFromId")
-//    static User getUserFromId(int userId) {
-//        User user = new User();
-//        user.setId(userId);
-//        return user;
-//    }
 
-//    @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
     @IterableMapping(elementTargetType = AnnouncementDto.class)
     List<AnnouncementDto> toDtoList(List<Announcement> announcementList);
 
     @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
+    @Mapping(target = "creatorId", source = "creator.id")
     AnnouncementDto toDto(Announcement announcement);
-
 
     @Named("idFromClasses")
     static List<Integer> idFromClasses(List<Class> classes) {
@@ -60,11 +52,4 @@ public interface AnnouncementMapper {
         }
         return ids;
     }
-
-//    @Named("idFromClasses")
-//    static <T extends IdGettable> List<Integer> idFromClasses(List<T> objects) {
-//        return objects.stream()
-//                .map(IdGettable::getId)
-//                .collect(Collectors.toList());
-//    }
 }

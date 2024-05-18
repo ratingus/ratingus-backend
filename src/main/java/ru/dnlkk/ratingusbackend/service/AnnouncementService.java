@@ -71,7 +71,7 @@ public class AnnouncementService {
             }
             Class cc = classById.get();
             if (cc.getSchool().getId() != schoolId) {
-                throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId());
+                throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId() );
             }
         }
         announcement.getCreator().setId(creatorId);

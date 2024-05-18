@@ -33,9 +33,7 @@ public class AnnouncementController extends ExceptionHandlerController implement
 
     @Override
     public ResponseEntity<AnnouncementDto> createAnnouncement(AnnouncementDto announcementDto) {
-//        Announcement announcementFromService = announcementService.createAnnouncement(announcementDto);
         AnnouncementDto announcementDtoFromService = announcementService.createAnnouncement(announcementDto, userIdTest, schoolIdTest);
-//        AnnouncementDto announcementDtoFromService = AnnouncementMapper.INSTANCE.toDto(announcementFromService);
         return ResponseEntity.ok(announcementDtoFromService);
     }
 
