@@ -1,6 +1,7 @@
 package ru.dnlkk.ratingusbackend.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.security.JwtTokenService;
 import ru.dnlkk.ratingusbackend.service.UserService;
 
@@ -29,6 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
+        System.out.println(requestTokenHeader);
 
         String username = null;
         String jwtToken = null;
@@ -36,6 +39,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             System.out.println(jwtToken);
+            if (jwtToken.trim().isEmpty()){
+                filterChain.doFilter(request, response);
+                return;
+            }
             try {
                 username = jwtTokenService.getName(jwtToken);
             } catch (IllegalArgumentException e) {
@@ -48,8 +55,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(username);
-
+            UserDetailsImpl userDetails = userService.loadUserByUsername(username);
+            System.out.println(userDetails.getUsername());
+            System.out.println(jwtTokenService.validateToken(jwtToken, userDetails));
             if (jwtTokenService.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

@@ -1,15 +1,14 @@
-package ru.dnlkk.ratingusbackend.api.dtos;
+package ru.dnlkk.ratingusbackend.api.dtos.application;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JWTRequest {
-    private String login;
-    private String password;
+@Data
+public class ApplicationIdDto {
+    private int id;
 }

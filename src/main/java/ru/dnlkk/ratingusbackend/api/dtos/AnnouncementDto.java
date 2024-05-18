@@ -12,6 +12,6 @@ public class AnnouncementDto {
     private int id;
     private String name;
     private String content;
-    private int userId;
+    private int creatorId;
     private List<Integer> classesId;
 }

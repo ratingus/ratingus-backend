@@ -1,68 +1,96 @@
-//package ru.dnlkk.ratingusbackend.mapper.user_code;
-//
-//import org.mapstruct.*;
-//import org.mapstruct.factory.Mappers;
+package ru.dnlkk.ratingusbackend.mapper.user_code;
+
+import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 //import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
-//import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
-//import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
-//import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeViewDto;
-//import ru.dnlkk.ratingusbackend.mapper.user.UserWithLoginMapper;
-//import ru.dnlkk.ratingusbackend.model.*;
-//import ru.dnlkk.ratingusbackend.model.Class;
-//import ru.dnlkk.ratingusbackend.model.enums.Role;
-//import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
+import ru.dnlkk.ratingusbackend.model.*;
+import ru.dnlkk.ratingusbackend.model.Class;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Mapper
+public interface UserCodeMapper {
+    UserCodeMapper INSTANCE = Mappers.getMapper(UserCodeMapper.class);
+
+    @Mapping(target = "classDto", source = "userClass", qualifiedByName = "getDtoFromClass")
+    UserCodeWithClassDto toUserCodeWithClassDto(UserCode userCode);
+
+    @IterableMapping(elementTargetType = UserCodeWithClassDto.class)
+    List<UserCodeWithClassDto> toUserCodeWithClassDtoList(List<UserCode> userCodeList);
+
+    @Mappings({
+            @Mapping(target = "userClass", source = "classDto", qualifiedByName = "createClassFromDto"),
+            @Mapping(target = "school", expression = "java(createSchool())"),
+            @Mapping(target = "creator", expression = "java(createCreator())"),
+    })
+    UserCode toUserCode(UserCodeWithClassDto userCodeWithClassDto);
+
+    @Named("createSchool")
+    default School createSchool() {
+        return new School();
+    }
+
+    @Named("createClassFromDto")
+    static Class createClassFromDto(ClassDto classDto) {
+        return ClassMapper.INSTANCE.toClassEntity(classDto);
+    }
+
+    @Named("getDtoFromClass")
+    static ClassDto getDtoFromClass(Class c) {
+        return ClassMapper.INSTANCE.toClassDto(c);
+    }
+
+    @Named("createCreator")
+    default User createCreator() {
+        return new User();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//@Mapper
-//public interface UserCodeMapper {
-//    UserCodeMapper INSTANCE = Mappers.getMapper(UserCodeMapper.class);
 //
 //    @Mappings({
 //            @Mapping(target = "userClassName", source = "userClass.name"),
+//            @Mapping(target = "userRole", source = "role"),
 //    })
 //    UserCodeDto toUserCodeDto(UserCode userCode);
 //    @IterableMapping(elementTargetType = UserCodeDto.class)
 //    List<UserCodeDto> toUserCodeDtoList(List<UserCode> userCodeList);
 //
-//
-//    @Mappings({
-//            @Mapping(target = "userClassName", source = "userClass.name"),
-//            @Mapping(target = "userWithLoginDto", source = "user", qualifiedByName = "getUserWithLoginDto"),
-//            @Mapping(target = "schoolName", source = "school.name"),
-//    })
-//    UserCodeViewDto toUserCodeViewDto(UserCode userCode);
-//
-////    @IterableMapping(elementTargetType = UserCodeViewDto.class)
-////    List<UserCodeViewDto> toUserCodeDtoList(List<UserCode> userCodeList);
-//
+
+
 //    @Mappings({
 //            @Mapping(target = "userClassId", source = "userClass", qualifiedByName = "getIdFromEntity"),
-//            @Mapping(target = "login", source = "user.login"),
-//            @Mapping(target = "creatorId", source = "creator", qualifiedByName = "getIdFromEntity"),
-//            @Mapping(target = "schoolId", source = "school", qualifiedByName = "getIdFromEntity"),
 //    })
 //    UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
 //
 //    @Mappings({
-//            @Mapping(target = "id", ignore = true),
-//            @Mapping(target = "code", ignore = true),
-//            @Mapping(target = "activated", ignore = true),
 //            @Mapping(target = "userClass", source = "userClassId", qualifiedByName = "getUserClass"),
-//            @Mapping(target = "user", source = "login", qualifiedByName = "getUserByLogin"),
-//            @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getCreator"),
-//            @Mapping(target = "school", source = "schoolId", qualifiedByName = "getSchool"),
+//            @Mapping(target = "school", expression = "java(createSchool())"),
+//            @Mapping(target = "creator", expression = "java(createCreator())"),
 //    })
 //    UserCode toUserCode(UserCodeCreateDto userCodeCreateDto);
 //
-//
-//
-//
-//    @Named("getUserWithLoginDto")
-//    static UserWithLoginDto getUserWithLoginDto(User u) {
-//        return UserWithLoginMapper.INSTANCE.toDto(u);
-//    }
 //
 //    @Named("getRoleFromUser")
 //    static Role getRoleFromUser(UserRole role) {
@@ -115,14 +143,14 @@
 //                .map(IdGettable::getId)
 //                .collect(Collectors.toList());
 //    }
-//
-////    @Mappings({
-////            @Mapping(target = "userClass", source = "userClass.name"),
-////            @Mapping(target = "userWithLoginDto", source = "user", qualifiedByName = "getUserWithLoginDto"),
-////            @Mapping(target = "schoolName", source = "school.name"),
-////            @Mapping(target = "userRole", source = "userRole.role")
-////    })
-////    UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
-//
-//
-//}
+
+//    @Mappings({
+//            @Mapping(target = "userClass", source = "userClass.name"),
+//            @Mapping(target = "userWithLoginDto", source = "user", qualifiedByName = "getUserWithLoginDto"),
+//            @Mapping(target = "schoolName", source = "school.name"),
+//            @Mapping(target = "userRole", source = "userRole.role")
+//    })
+//    UserCodeCreateDto toUserCodeCreateDto(UserCode userCode);
+
+
+}

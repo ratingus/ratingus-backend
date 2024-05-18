@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AuthApi;
 import ru.dnlkk.ratingusbackend.api.model.JWTRegistrationDto;
-import ru.dnlkk.ratingusbackend.api.model.JWTRequest;
 import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
 import ru.dnlkk.ratingusbackend.service.AuthService;
+import ru.dnlkk.ratingusbackend.api.dtos.JWTRequest;
 
 @RestController
 @RequiredArgsConstructor
