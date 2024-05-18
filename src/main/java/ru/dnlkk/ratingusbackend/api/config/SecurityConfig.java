@@ -22,6 +22,7 @@ import ru.dnlkk.ratingusbackend.service.UserService;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,44 +30,38 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    private final UserService userService;
-//    private final JwtRequestFilter jwtRequestFilter;
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .cors(cors -> {
-//                    CorsConfigurationSource source = request -> {
-//                        CorsConfiguration config = new CorsConfiguration();
-//                        if (request.getRequestURI().contains("/swagger-ui/")) {
-//                            config.setAllowedOrigins(Collections.singletonList("*"));
-//                            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//                            config.setAllowedHeaders(Collections.singletonList("*"));
-//                        } else {
-//                            config.setAllowedOriginPatterns(Collections.singletonList("*"));
-//                            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-//                            config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//                        }
-//                        return config;
-//                    };
-//                    cors.configurationSource(source);
-//                })
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/swagger-ui/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
-//
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider(){
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(userService);
-//        return daoAuthenticationProvider;
-//    }
+    private final UserService userService;
+    private final JwtRequestFilter jwtRequestFilter;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfiguration.setAllowedHeaders(List.of("*"));
+                    corsConfiguration.setAllowCredentials(true);
+                    return corsConfiguration;
+                }))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(userService);
+        System.out.println(daoAuthenticationProvider);
+        return daoAuthenticationProvider;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

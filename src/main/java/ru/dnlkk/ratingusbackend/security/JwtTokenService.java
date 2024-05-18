@@ -24,14 +24,15 @@ public class JwtTokenService {
     @Value("${jwt.expiration}")
     private long expirationTime;
 
-    public String generateToken(User user) {
-//        User user = ((UserDetailsImpl) userDetails).getUser();
+    public String generateToken(UserDetails userDetails) {
+        User user = ((UserDetailsImpl) userDetails).getUser();
         Map<String, Object> claims = new HashMap<>();
         claims.put("name", user.getName());
         claims.put("surname", user.getSurname());
         claims.put("patronymic", user.getPatronymic());
         claims.put("login", user.getLogin());
-        claims.put("role", user.getUserRole().getRole());
+//        claims.put("role", user.getUserRole().getRole());
+//        claims.put("school", user.getUserRole().getSchool());
 
         return Jwts.builder()
                 .setClaims(claims)

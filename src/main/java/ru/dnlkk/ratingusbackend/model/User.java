@@ -44,8 +44,7 @@ public class User implements IdGettable, UserDetails {
     @Column(name = "birth_date")
     private Timestamp birthDate;
 
-    @OneToOne
-    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "user")
     private UserRole userRole;
 
     @OneToMany(mappedBy = "creator")

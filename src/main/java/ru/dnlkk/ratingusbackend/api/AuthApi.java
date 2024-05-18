@@ -25,7 +25,7 @@ public interface AuthApi {
             description = "Возвращает JWT-токен для переданных логина и пароля"
     )
     @GetMapping("/login")
-    ResponseEntity<JWTResponseDto> login(@RequestBody UserLoginDto userLoginDto);
+    ResponseEntity<JWTResponseDto> login(@RequestBody JWTRequest jwtRequest);
 
 
     @Operation(

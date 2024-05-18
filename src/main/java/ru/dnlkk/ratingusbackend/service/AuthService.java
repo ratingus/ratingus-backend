@@ -38,11 +38,11 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User registeredUser = userService.registerUser(user);
-
-        String jwt = jwtService.generateToken(registeredUser);
-        System.out.println(jwt + "wqerqwer");
-//        String jwt = jwtService.generateToken(new UserDetailsImpl(registeredUser));
-        return new JWTResponseDto(jwt + "qwertqwer");
+        System.out.println(registeredUser);
+//        String jwt = jwtService.generateToken((UserDetails) registeredUser);
+//        System.out.println(jwt + "wqerqwer");
+        String jwt = jwtService.generateToken(new UserDetailsImpl(registeredUser));
+        return new JWTResponseDto(jwt);
     }
 
 
@@ -52,18 +52,19 @@ public class AuthService {
      * @param request данные пользователя
      * @return токен
      */
-//    public JWTResponseDto signIn(JWTRequest request) {
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                request.getLogin(),
-//                request.getPassword()
-//        ));
-//
-//        UserDetails userDetails = userService.loadUserByUsername(request.getLogin());
-//        User user = ((UserDetailsImpl) userDetails).getUser();
-//
-//        String jwt = jwtService.generateToken(userDetails);
-//        return new JWTResponseDto(jwt);
-//    }
+    public JWTResponseDto signIn(JWTRequest request) {
+        System.out.println("1");
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.getLogin(),
+                request.getPassword()
+        ));
+        System.out.println("2");
+        UserDetails userDetails = userService.loadUserByUsername(request.getLogin());
+        System.out.println(userDetails);
+        String jwt = jwtService.generateToken(userDetails);
+        System.out.println(jwt);
+        return new JWTResponseDto(jwt);
+    }
 
 }
 
