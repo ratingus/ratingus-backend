@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.mapper.announcement;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,10 +17,15 @@ import java.util.List;
 public interface AnnouncementMapper {
     AnnouncementMapper INSTANCE = Mappers.getMapper(AnnouncementMapper.class);
 
-
     @Mapping(target = "classes", source = "classesId", qualifiedByName = "getClassListFromIdsList")
-    @Mapping(target = "creator", source = "userId", qualifiedByName = "getUserFromId")
+//    @Mapping(target = "creator", source = "creatorId", qualifiedByName = "getUserFromId")
+    @Mapping(target = "creator", expression = "java(createCreator())")
     Announcement toModel(AnnouncementDto announcementDto);
+
+    @Named("createCreator()")
+    default User createCreator() {
+        return new User();
+    }
 
     @Named("getClassListFromIdsList")
     static List<Class> getClassListFromIdsList(List<Integer> classesId) {
@@ -31,19 +37,17 @@ public interface AnnouncementMapper {
         }
         return classes;
     }
-    @Named("getUserFromId")
-    static User getUserFromId(int userId) {
-        User user = new User();
-        user.setId(userId);
-        return user;
-    }
+//    @Named("getUserFromId")
+//    static User getUserFromId(int userId) {
+//        User user = new User();
+//        user.setId(userId);
+//        return user;
+//    }
 
-
-    @Mapping(target = "userId", source = "creator.id")
-    @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
+//    @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
+    @IterableMapping(elementTargetType = AnnouncementDto.class)
     List<AnnouncementDto> toDtoList(List<Announcement> announcementList);
 
-    @Mapping(target = "userId", source = "creator.id") //, qualifiedByName = "idFromUser"
     @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
     AnnouncementDto toDto(Announcement announcement);
 

@@ -53,9 +53,7 @@ public class AnnouncementService {
         }
         Announcement announcement = optionalAnnouncement.get();
         List<Class> classes = announcement.getClasses();
-        System.out.println("school id");
         for (Class c : classes) {
-            System.out.println(c.getSchool().getId());
             if (c.getSchool().getId() == schoolId) {
                 return AnnouncementMapper.INSTANCE.toDto(announcement);
             }
@@ -63,8 +61,22 @@ public class AnnouncementService {
         throw new ForbiddenException("Нет доступа к этому объявлению");
     }
 
-    public Announcement createAnnouncement(Announcement announcement) {
-        return announcementRepository.saveAndFlush(announcement);
+    public AnnouncementDto createAnnouncement(AnnouncementDto announcementDto, int creatorId, int schoolId) {
+        Announcement announcement = AnnouncementMapper.INSTANCE.toModel(announcementDto);
+        List<Class> classes = announcement.getClasses();
+        for (Class c : classes) {
+            Optional<Class> classById = classRepository.findById(c.getId());
+            if (classById.isEmpty()) {
+                throw new NotFoundException("Не найден класс с id=" + c.getId());
+            }
+            Class cc = classById.get();
+            if (cc.getSchool().getId() != schoolId) {
+                throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId());
+            }
+        }
+        announcement.getCreator().setId(creatorId);
+        Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
+        return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }
 
     public void deleteAnnouncementById(int id) {
