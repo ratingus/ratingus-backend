@@ -75,6 +75,7 @@ public class UserService implements UserDetailsService{
     @Override
     @Transactional
     public UserDetailsImpl loadUserByUsername(String login) throws UsernameNotFoundException {
+        System.out.println(login);
         User user = getByUsername(login).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь '%s' не найден", login)
         ));

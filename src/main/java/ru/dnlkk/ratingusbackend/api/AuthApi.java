@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.dnlkk.ratingusbackend.api.model.*;
-import ru.dnlkk.ratingusbackend.api.model.JWTRequest;
+import ru.dnlkk.ratingusbackend.api.dtos.JWTRequest;
 
 @Tag(name = "Контроллер авторизации", description = "Авторизация, регистрация")
 @RequestMapping("/auth")
