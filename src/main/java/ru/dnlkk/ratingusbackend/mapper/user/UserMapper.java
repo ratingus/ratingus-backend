@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+import ru.dnlkk.ratingusbackend.api.dtos.user.CreatorDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForAdminPanelDto;
 import ru.dnlkk.ratingusbackend.model.User;
 
@@ -21,6 +22,7 @@ public interface UserMapper {
     @IterableMapping(elementTargetType = UserForAdminPanelDto.class)
     List<UserForAdminPanelDto> toUserForAdminPanelDtoList(List<User> userList);
 
+    CreatorDto toCreatorDto(User user);
 
 
 }

@@ -7,7 +7,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
 
 import java.util.List;
 
@@ -46,9 +47,9 @@ public interface AnnouncementApi {
     @GetMapping("/{id}")
     ResponseEntity<AnnouncementDto> getAnnouncementById(
             @Schema(description = "Id запрашиваемого объявления")
+            @Min(0)
             @PathVariable int id
     );
-
 
     @Operation(
             summary = "Создание объявления",
@@ -57,7 +58,7 @@ public interface AnnouncementApi {
     @PostMapping()
     ResponseEntity<AnnouncementDto> createAnnouncement(
             @Schema(description = "DTO создаваемого объявления")
-            @RequestBody AnnouncementDto announcementDto
+            @RequestBody AnnouncementCreateDto announcementCreateDto
     );
 
 
@@ -68,6 +69,7 @@ public interface AnnouncementApi {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteAnnouncement(
             @Schema(description = "Id удаляемого объявления")
+            @Min(0)
             @PathVariable("id") int id
     );
 }
