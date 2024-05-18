@@ -5,7 +5,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.CreatorDto;
+import ru.dnlkk.ratingusbackend.mapper.user.UserMapper;
+import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.model.Announcement;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.User;
@@ -19,7 +23,7 @@ public interface AnnouncementMapper {
 
     @Mapping(target = "classes", source = "classesId", qualifiedByName = "getClassListFromIdsList")
     @Mapping(target = "creator", expression = "java(createCreator())")
-    Announcement toModel(AnnouncementDto announcementDto);
+    Announcement toModel(AnnouncementCreateDto announcementDto);
 
     @Named("createCreator()")
     default User createCreator() {
@@ -40,9 +44,14 @@ public interface AnnouncementMapper {
     @IterableMapping(elementTargetType = AnnouncementDto.class)
     List<AnnouncementDto> toDtoList(List<Announcement> announcementList);
 
+    @Mapping(target = "creator", source = "creator", qualifiedByName = "createCreatorDtoFromUser")
     @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
-    @Mapping(target = "creatorId", source = "creator.id")
     AnnouncementDto toDto(Announcement announcement);
+
+    @Named("createCreatorDtoFromUser")
+    static CreatorDto createCreatorDtoFromUser(User user) {
+        return UserMapper.INSTANCE.toCreatorDto(user);
+    }
 
     @Named("idFromClasses")
     static List<Integer> idFromClasses(List<Class> classes) {

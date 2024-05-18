@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AnnouncementApi;
-import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
-import ru.dnlkk.ratingusbackend.mapper.announcement.AnnouncementMapper;
-import ru.dnlkk.ratingusbackend.model.Announcement;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
 import ru.dnlkk.ratingusbackend.service.AnnouncementService;
 
 import java.util.List;
@@ -32,8 +31,8 @@ public class AnnouncementController extends ExceptionHandlerController implement
     }
 
     @Override
-    public ResponseEntity<AnnouncementDto> createAnnouncement(AnnouncementDto announcementDto) {
-        AnnouncementDto announcementDtoFromService = announcementService.createAnnouncement(announcementDto, userIdTest, schoolIdTest);
+    public ResponseEntity<AnnouncementDto> createAnnouncement(AnnouncementCreateDto announcementCreateDto) {
+        AnnouncementDto announcementDtoFromService = announcementService.createAnnouncement(announcementCreateDto, userIdTest, schoolIdTest);
         return ResponseEntity.ok(announcementDtoFromService);
     }
 

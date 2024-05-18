@@ -3,19 +3,20 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.announcement.AnnouncementMapper;
 import ru.dnlkk.ratingusbackend.model.Announcement;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.School;
+import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.repository.AnnouncementRepository;
 import ru.dnlkk.ratingusbackend.repository.ClassRepository;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +62,8 @@ public class AnnouncementService {
         throw new ForbiddenException("Нет доступа к этому объявлению");
     }
 
-    public AnnouncementDto createAnnouncement(AnnouncementDto announcementDto, int creatorId, int schoolId) {
-        Announcement announcement = AnnouncementMapper.INSTANCE.toModel(announcementDto);
+    public AnnouncementDto createAnnouncement(AnnouncementCreateDto announcementCreateDto, int creatorId, int schoolId) {
+        Announcement announcement = AnnouncementMapper.INSTANCE.toModel(announcementCreateDto);
         List<Class> classes = announcement.getClasses();
         for (Class c : classes) {
             Optional<Class> classById = classRepository.findById(c.getId());
@@ -74,7 +75,8 @@ public class AnnouncementService {
                 throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId() );
             }
         }
-        announcement.getCreator().setId(creatorId);
+        User userFromRepo = userRepository.findById(creatorId).get();
+        announcement.setCreator(userFromRepo);
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }

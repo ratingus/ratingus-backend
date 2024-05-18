@@ -2,8 +2,10 @@ package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Setter
@@ -28,6 +30,13 @@ public class Announcement implements IdGettable {
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
+
+    @Column(name = "create_date")
+    @CreationTimestamp
+    private Timestamp createDate;
+
+    @Column(name = "views")
+    private int views;
 
     @ManyToMany
     @JoinTable(
