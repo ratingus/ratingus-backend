@@ -31,10 +31,8 @@ public class UserService implements UserDetailsService{
     }
 
     public User registerUser(User user) {
-        if (userRepository.findByLogin(user.getLogin()).isPresent()) {
-            return null;
-        }
-        return userRepository.save(user);
+        var registerUser = userRepository.findByLogin(user.getLogin());
+        return registerUser.orElseGet(() -> userRepository.save(user));
     }
 
     public User updateUser(UserDto updatedUser) {

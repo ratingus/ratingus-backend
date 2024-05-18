@@ -20,4 +20,7 @@ public interface UserMapper {
     UserForAdminPanelDto toUserForAdminPanelDto(User user);
     @IterableMapping(elementTargetType = UserForAdminPanelDto.class)
     List<UserForAdminPanelDto> toUserForAdminPanelDtoList(List<User> userList);
+
+
+
 }
