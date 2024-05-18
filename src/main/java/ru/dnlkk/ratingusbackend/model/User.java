@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements IdGettable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
