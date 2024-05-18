@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.mapper;
+package ru.dnlkk.ratingusbackend.mapper.announcement;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,7 +39,6 @@ public interface AnnouncementMapper {
     }
 
 
-
     @Mapping(target = "userId", source = "creator.id")
     @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
     List<AnnouncementDto> toDtoList(List<Announcement> announcementList);
@@ -57,4 +56,11 @@ public interface AnnouncementMapper {
         }
         return ids;
     }
+
+//    @Named("idFromClasses")
+//    static <T extends IdGettable> List<Integer> idFromClasses(List<T> objects) {
+//        return objects.stream()
+//                .map(IdGettable::getId)
+//                .collect(Collectors.toList());
+//    }
 }

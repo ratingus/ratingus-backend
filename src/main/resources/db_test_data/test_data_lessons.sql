@@ -1,0 +1,5 @@
+insert into lessons (homework, theme, date_of_lesson, lesson_number, subject_id) values ('Написать эссе о теме "Эволюция в культуре"', 'Эволюция культуры', '25.04.24', '5', '4');
+insert into lessons (homework, theme, date_of_lesson, lesson_number, subject_id) values ('Выучить стихотворение А.С.Пушкина', 'Русские классики', '29.04.24', '4', '3');
+insert into lessons (homework, theme, date_of_lesson, lesson_number, subject_id) values ('Подготовить презентацию на тему "Роль микроорганизмов в экосистемах"', 'Микроорганизмы', '30.04.24', '2', '5');
+insert into lessons (homework, theme, date_of_lesson, lesson_number, subject_id) values ('Подготовиться к тесту', 'Алканы', '28.04.24', '1', '2');
+insert into lessons (homework, theme, date_of_lesson, lesson_number, subject_id) values ('Решить задачи на тему "Применение производной"', 'Производные', '26.04.24', '6', '1');

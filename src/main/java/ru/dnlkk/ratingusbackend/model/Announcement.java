@@ -2,6 +2,7 @@ package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "announcement")
-public class Announcement {
+public class Announcement implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +26,12 @@ public class Announcement {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
     private User creator;
 
     @ManyToMany
     @JoinTable(
-            name = "classes_announcements",
+            name = "class_announcement",
             joinColumns = @JoinColumn(name = "announcement_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;

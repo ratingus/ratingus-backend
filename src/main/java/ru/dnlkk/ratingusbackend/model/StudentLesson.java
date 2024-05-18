@@ -12,7 +12,7 @@ import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "students_lessons")
+@Table(name = "diary")
 public class StudentLesson {
 
     @Id

@@ -1,0 +1,3 @@
+insert into announcement (content, name, creator_id) values ('Не забудьте о встрече с родителями на следующей неделе','Встреча с родителями','2');
+insert into announcement (content, name, creator_id) values ('Помните, что завтра последний день сдачи проектов по математике','Срок сдачи проектов','5');
+insert into announcement (content, name, creator_id) values ('Важное собрание для всех студентов в пятницу в 14:00','Собрание','2');

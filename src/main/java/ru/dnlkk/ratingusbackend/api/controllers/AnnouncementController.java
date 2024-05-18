@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AnnouncementApi;
 import ru.dnlkk.ratingusbackend.api.dtos.AnnouncementDto;
-import ru.dnlkk.ratingusbackend.mapper.AnnouncementMapper;
+import ru.dnlkk.ratingusbackend.mapper.announcement.AnnouncementMapper;
 import ru.dnlkk.ratingusbackend.model.Announcement;
 import ru.dnlkk.ratingusbackend.service.AnnouncementService;
 

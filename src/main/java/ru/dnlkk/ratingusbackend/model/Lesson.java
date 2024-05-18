@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lessons")
-public class Lesson {
+@Table(name = "lesson")
+public class Lesson implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,5 +39,8 @@ public class Lesson {
     private Subject subject;
 
     @OneToMany(mappedBy = "lesson")
-    private List<StudentLesson> studentLessons;
+    private List<Schedule> schedules;
+
+    @OneToMany(mappedBy = "lesson")
+    private List<StudentLesson> diaries;
 }

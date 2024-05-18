@@ -1,0 +1,5 @@
+insert into users_codes (code, activated, name, surname, patronymic, user_id, school_id, creator_id, class_id, user_role_id) values ('4bS2c8PqR', 'true', 'Елена', 'Петровна', 'Сидорова','2','5','3','3','1');
+insert into users_codes (code, activated, name, surname, patronymic, user_id, school_id, creator_id, class_id, user_role_id) values ('7aL9e5TrF', 'true', 'Мария', 'Ивановна', 'Петрова','3','2','3','2','2');
+insert into users_codes (code, activated, name, surname, patronymic, user_id, school_id, creator_id, class_id, user_role_id) values ('2mD1s8XrP', 'true', 'Павел', 'Сергеевич', 'Козлов','4','4','3','3','3');
+insert into users_codes (code, activated, name, surname, patronymic, user_id, school_id, creator_id, class_id, user_role_id) values ('9hF4g3PtQ', 'true', 'Анна', 'Андреевна', 'Смирнова','5','1','3','4','4');
+insert into users_codes (code, activated, name, surname, patronymic, user_id, school_id, creator_id, class_id, user_role_id) values ('1rT6u5FgK', 'true', 'Александр','Александрович','Александров','1','3','3','1','5');
