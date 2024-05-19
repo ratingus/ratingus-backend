@@ -65,10 +65,10 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private List<Application> applications;
 
-    @ManyToMany
-    @JoinTable(
-            name = "subjects_teachers",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    private List<Subject> subjects;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "subjects_teachers",
+//            joinColumns = @JoinColumn(name = "teacher_id"),
+//            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+//    private List<Subject> subjects;
 }

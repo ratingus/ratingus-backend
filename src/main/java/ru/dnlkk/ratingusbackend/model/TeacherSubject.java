@@ -14,15 +14,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "subject_teacher")
+@Table(name = "teacher_subject")
 public class TeacherSubject implements IdGettable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private User teacher;
+//    private User teacher;
+    private UserRole teacher;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "id")

@@ -24,8 +24,11 @@ public class Subject {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "subjects")
-    private List<User> teachers;
+//    @ManyToMany(mappedBy = "subjects")
+////    private List<User> teachers;
+//    private List<UserRole> teachers;
+    @OneToMany(mappedBy = "subject")
+    private List<TeacherSubject> teacherSubjects;
 
     @OneToMany(mappedBy = "subject")
     private List<Lesson> lessons;

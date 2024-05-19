@@ -4,11 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
+import ru.dnlkk.ratingusbackend.exceptions.LogicException;
+import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
 import ru.dnlkk.ratingusbackend.mapper.SubjectMapper;
+import ru.dnlkk.ratingusbackend.mapper.TeacherSubjectMapper;
 import ru.dnlkk.ratingusbackend.mapper.TimetableMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
@@ -29,6 +35,8 @@ public class AdminPanelService {
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
     private final SubjectRepository subjectRepository;
+    private final TeacherSubjectRepository teacherSubjectRepository;
+    private final UserRoleRepository userRoleRepository;
 
     public List<UserRoleDto> getAllUsersRolesForSchool(int schoolId) {
         Optional<School> school = schoolRepository.findById(schoolId);
@@ -36,9 +44,7 @@ public class AdminPanelService {
             return new ArrayList<>();
         } else {
             List<UserRole> userRoles = school.get().getUserRoles();
-            System.out.println(userRoles.get(0).toString());
-            System.out.println(userRoles.get(0).getUser());
-            return UserRoleMapper.INSTANCE.toDtoList(userRoles); //todo;
+            return UserRoleMapper.INSTANCE.toDtoList(userRoles);
         }
     }
 
@@ -74,11 +80,11 @@ public class AdminPanelService {
 
         Optional<UserCode> userCodeById = userCodeRepository.findById(userCodeId);
         if (userCodeById.isEmpty()) {
-            throw new RuntimeException("Нет пользователя с id " + userCodeId);
+            throw new NotFoundException("Нет пользователя с id " + userCodeId);
         } else {
             UserCode userCodeFromRepo = userCodeById.get();
             if (userCodeFromRepo.getSchool().getId() != schoolId) {
-                throw new RuntimeException("Нет доступа к пользователю с id " + userCodeId);
+                throw new ForbiddenException("Нет доступа к пользователю с id " + userCodeId);
             } else {
                 userCode.getCreator().setId(userCodeFromRepo.getCreator().getId());
             }
@@ -121,13 +127,41 @@ public class AdminPanelService {
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
-    public SubjectDto createSubject(SubjectDto subjectDto, int schoolId) {
-        Subject subject = SubjectMapper.INSTANCE.toEntity(subjectDto);
-        School s = new School();
-        s.setId(schoolId);
-        subject.setSchool(s);
-        Subject savedSubject = subjectRepository.saveAndFlush(subject);
-        return SubjectMapper.INSTANCE.toDto(savedSubject);
+    public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, int schoolId) {
+        int subjectId = teacherSubjectCreateDto.getSubjId();
+        int teacherId = teacherSubjectCreateDto.getTeacherId();
+
+        checkIsSubjectCorrectAndAvailableForSchool(subjectId, schoolId);
+        Subject subject = subjectRepository.findById(subjectId).get();
+
+        Optional<UserRole> teachOptional = userRoleRepository.findById(teacherId);
+        if (teachOptional.isEmpty()) {
+            throw new NotFoundException("Нет учителя с id=" + teacherId);
+        }
+        UserRole teacher = teachOptional.get();
+
+        if (teacher.getSchool().getId() != schoolId) {
+            throw new ForbiddenException("Нет доступа к учителю с id=" + teacherId);
+        }
+
+        TeacherSubject teacherSubject = new TeacherSubject();
+        teacherSubject.setSubject(subject);
+        teacherSubject.setTeacher(teacher);
+
+        TeacherSubject teacherSubjectAfterSaving = teacherSubjectRepository.saveAndFlush(teacherSubject);
+
+        return TeacherSubjectMapper.INSTANCE.toTeacherSubjectDto(teacherSubjectAfterSaving);
+    }
+
+    private void checkIsSubjectCorrectAndAvailableForSchool(int subjId, int schoolId) {
+        Optional<Subject> byIdFromRepo = subjectRepository.findById(subjId);
+        if (byIdFromRepo.isEmpty()) {
+            throw new NotFoundException("Предмет с id=" + subjId + " не найден");
+        }
+        Subject subjFromRepo = byIdFromRepo.get();
+        if (subjFromRepo.getSchool().getId() != schoolId) {
+            throw new ForbiddenException("Нет доступа к предмету с id=" + subjId);
+        }
     }
 
     private void checkIsClassCorrectInUserCode(UserCode userCode, int schoolId) {
@@ -135,13 +169,14 @@ public class AdminPanelService {
             if (userCode.getUserClass() == null) {
                 throw new RuntimeException("Учащемуся не был присвоен класс");
             } else {
-                Optional<Class> classById = classRepository.findById(userCode.getUserClass().getId());
+                int classId = userCode.getUserClass().getId();
+                Optional<Class> classById = classRepository.findById(classId);
                 if (classById.isEmpty()) {
-                    throw new RuntimeException("Нет класса с таким id");
+                    throw new NotFoundException("Нет класса с id=" + classId);
                 } else {
                     Class c = classById.get();
                     if (c.getSchool().getId() != schoolId) {
-                        throw new RuntimeException("В школе нет класса с таким id");
+                        throw new ForbiddenException("Нет доступа к классу с id=" + classId);
                     } else {
                         userCode.setUserClass(c);
                     }
@@ -149,7 +184,7 @@ public class AdminPanelService {
             }
         } else {
             if (userCode.getUserClass() != null) {
-                throw new RuntimeException("Пользователю с ролью " + userCode.getRole() + " не может быть присвоен класс");
+                throw new LogicException("Пользователю с ролью " + userCode.getRole() + " не может быть присвоен класс");
             }
         }
     }
