@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
-import ru.dnlkk.ratingusbackend.api.dtos.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
@@ -22,14 +22,9 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     private final AdminPanelService adminPanelService;
 
     @Override
-    public ResponseEntity getAllUserRolesForSchool() {
-        try {
-            List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(2);
-            return ResponseEntity.ok(allUsersRolesForSchool);
-        } catch (RuntimeException e) { //todo: отдельный контроллер для обработки ошибок ExceptionHandler
-
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool() {
+        List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(2);
+        return ResponseEntity.ok(allUsersRolesForSchool);
     }
 
     @Override
@@ -70,7 +65,23 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     }
 
     @Override
-    public ResponseEntity<SubjectDto> createSubject(SubjectDto subjectDto) {
+    public ResponseEntity<List<TeacherSubjectDto>> getAllSubjects() {
+        return ResponseEntity.ok(adminPanelService.getAllSubjects(2));
+    }
+
+    @Override
+    public ResponseEntity<SubjectDto> createSubject(SubjectCreateDto subjectDto) {
         return ResponseEntity.ok(adminPanelService.createSubject(subjectDto, 2));
+    }
+
+    @Override
+    public ResponseEntity<TeacherSubjectDto> setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto) {
+        return ResponseEntity.ok(adminPanelService.setTeacherToSubject(teacherSubjectCreateDto, 2));
+    }
+
+    @Override
+    public ResponseEntity<TeacherSubjectDto> deleteTeacherToSubject(int teacherSubjectId) {
+        adminPanelService.deleteTeacherToSubject(teacherSubjectId, 2);
+        return ResponseEntity.ok().build();
     }
 }

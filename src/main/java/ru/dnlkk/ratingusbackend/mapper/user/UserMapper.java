@@ -15,12 +15,12 @@ import java.util.List;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mappings({
-            @Mapping(target = "name", source = "userRole.name")
-    })
-    UserForAdminPanelDto toUserForAdminPanelDto(User user);
-    @IterableMapping(elementTargetType = UserForAdminPanelDto.class)
-    List<UserForAdminPanelDto> toUserForAdminPanelDtoList(List<User> userList);
+//    @Mappings({
+//            @Mapping(target = "name", source = "userRole.name")
+//    })
+//    UserForAdminPanelDto toUserForAdminPanelDto(User user);
+//    @IterableMapping(elementTargetType = UserForAdminPanelDto.class)
+//    List<UserForAdminPanelDto> toUserForAdminPanelDtoList(List<User> userList);
 
     CreatorDto toCreatorDto(User user);
 

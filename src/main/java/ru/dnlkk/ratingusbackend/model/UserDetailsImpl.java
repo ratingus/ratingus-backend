@@ -21,9 +21,9 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String roleName = String.valueOf(Role.GUEST);
-        if (user.getUserRole() != null){
-            roleName = user.getUserRole().getName();
-        }
+//        if (user.getUserRole() != null){
+//            roleName = user.getUserRole().getName();
+//        }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
         return Collections.singletonList(authority);
     }

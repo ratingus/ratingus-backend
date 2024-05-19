@@ -2,6 +2,7 @@ package ru.dnlkk.ratingusbackend.mapper;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.model.Subject;
 
@@ -9,5 +10,7 @@ import ru.dnlkk.ratingusbackend.model.Subject;
 public interface SubjectMapper {
     SubjectMapper INSTANCE = Mappers.getMapper(SubjectMapper.class);
     Subject toEntity(SubjectDto subjectDto);
+    Subject toEntity(SubjectCreateDto subjectCreateDto);
     SubjectDto toDto(Subject subject);
+
 }

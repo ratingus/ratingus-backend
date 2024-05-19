@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "subject")
-public class Subject implements IdGettable {
+public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class Subject implements IdGettable {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "subjects")
-    private List<User> teachers;
+    @OneToMany(mappedBy = "subject")
+    private List<TeacherSubject> teacherSubjects;
 
     @OneToMany(mappedBy = "subject")
     private List<Lesson> lessons;
