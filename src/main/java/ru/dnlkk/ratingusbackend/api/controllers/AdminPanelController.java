@@ -65,6 +65,11 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     }
 
     @Override
+    public ResponseEntity<List<TeacherSubjectDto>> getAllSubjects() {
+        return ResponseEntity.ok(adminPanelService.getAllSubjects(2));
+    }
+
+    @Override
     public ResponseEntity<SubjectDto> createSubject(SubjectCreateDto subjectDto) {
         return null;
     }

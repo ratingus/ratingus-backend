@@ -1,8 +1,10 @@
 package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
@@ -25,6 +27,7 @@ import ru.dnlkk.ratingusbackend.repository.*;
 import ru.dnlkk.ratingusbackend.service.util.RandomSequenceGenerator;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,8 +115,8 @@ public class AdminPanelService {
 
     public ClassDto createClass(ClassDto classDto, int schoolId) {
         Class classEntity = ClassMapper.INSTANCE.toClassEntity(classDto);
-        classEntity.setSchool(new School()); //todo: посмотреть, как это можно вынести в маппер
-        classEntity.getSchool().setId(schoolId);
+        School school = schoolRepository.findById(schoolId).get();
+        classEntity.setSchool(school);
         Class classFromSaving = classRepository.saveAndFlush(classEntity);
         return ClassMapper.INSTANCE.toClassDto(classFromSaving);
     }
@@ -125,6 +128,17 @@ public class AdminPanelService {
     public List<TimetableDto> getTimetable(int schoolId) {
         List<Timetable> timetablesBySchoolId = timetableRepository.findTimetablesBySchoolId(schoolId);
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
+    }
+
+    public List<TeacherSubjectDto> getAllSubjects(int schoolId) {
+        List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
+        List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();
+        List<TeacherSubject> teacherSubjects = teacherSubjectRepository.findBySubjectIds(subjectIds);
+        return TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoList(teacherSubjects);
+    }
+
+    public SubjectDto createSubject(SubjectCreateDto subjectDto) {
+        return null;
     }
 
     public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, int schoolId) {

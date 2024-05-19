@@ -89,6 +89,13 @@ public interface AdminPanelApi {
     ResponseEntity<List<TimetableDto>> getTimetable();
 
     @Operation(
+            summary = "Получение всех предметов",
+            description = "Возвращает список всех предметов учебной организации"
+    )
+    @GetMapping("/subject")
+    ResponseEntity<List<TeacherSubjectDto>> getAllSubjects();
+
+    @Operation(
             summary = "Создание нового предмета",
             description = "Создаёт новый предмет по названию и возвращает его"
     )

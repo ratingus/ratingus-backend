@@ -1,9 +1,6 @@
 package ru.dnlkk.ratingusbackend.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
@@ -12,6 +9,8 @@ import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.Subject;
 import ru.dnlkk.ratingusbackend.model.TeacherSubject;
 import ru.dnlkk.ratingusbackend.model.UserRole;
+
+import java.util.List;
 
 @Mapper
 public interface TeacherSubjectMapper {
@@ -22,6 +21,9 @@ public interface TeacherSubjectMapper {
             @Mapping(target = "teacher", source = "teacher", qualifiedByName = "createUserRoleSimpleDto"),
     })
     TeacherSubjectDto toTeacherSubjectDto(TeacherSubject teacherSubject);
+
+    @IterableMapping(elementTargetType = TeacherSubjectDto.class)
+    List<TeacherSubjectDto> toTeacherSubjectDtoList(List<TeacherSubject> teacherSubject);
 
     @Named("createSubjectDto")
     static SubjectDto createSubjectDto(Subject subject) {
