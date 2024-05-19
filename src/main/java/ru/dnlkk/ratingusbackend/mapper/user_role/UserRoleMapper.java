@@ -2,8 +2,10 @@ package ru.dnlkk.ratingusbackend.mapper.user_role;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import ru.dnlkk.ratingusbackend.api.dtos.user.CreatorDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
+import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.model.UserRole;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
@@ -25,6 +27,8 @@ public interface UserRoleMapper {
     List<UserRoleDto> toDtoList(List<UserRole> userRoleList);
 
     UserRoleSimpleDto toUserRoleSimpleDto(UserRole userRole);
+
+    CreatorDto toCreatorDto(UserRole user);
 
 //    UserRole toEntity(UserRoleDto userRoleDto);
 

@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dnlkk.ratingusbackend.api.model.UserDto;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
+import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
+import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService{
     private final UserRepository userRepository;
+    private final SchoolRepository schoolRepository;
+    private final UserRoleRepository userRoleRepository;
     private UserCodeRepository userCodeRepository;
 
     //TODO: исправить регистрацию и вход
@@ -74,11 +78,19 @@ public class UserService implements UserDetailsService{
     @Transactional
     public UserDetailsImpl loadUserByUsername(String login) throws UsernameNotFoundException {
         System.out.println(login);
-        User user = getByUsername(login).orElseThrow(() -> new UsernameNotFoundException(
-                String.format("Пользователь '%s' не найден", login)
+        String[] loginSplit = login.split("-");
+        String username = loginSplit[0];
+        String schoolId = loginSplit.length > 1 ? loginSplit[1] : "null";
+        User user = getByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("Пользователь '%s' не найден", username)
         ));
-        UserDetailsImpl userDetails = new UserDetailsImpl(user);
-        return userDetails;
+        UserRole userRole = null;
+        if (!schoolId.isBlank() && schoolId != null && !schoolId.equals("null")) {
+            // TODO: пока норм, но только если у пользователя не более одной роли в школе
+            School school = schoolRepository.findSchoolById(Integer.parseInt(schoolId));
+            userRole = userRoleRepository.findUserRoleByUserAndSchool(user, school);
+        }
+        return new UserDetailsImpl(user, userRole);
     }
 
 }

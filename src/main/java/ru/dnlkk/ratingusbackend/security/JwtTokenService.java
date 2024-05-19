@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
+import ru.dnlkk.ratingusbackend.model.UserRole;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
 import javax.crypto.SecretKey;
@@ -30,21 +31,9 @@ public class JwtTokenService {
     private long expirationTime;
 
     public String generateToken(UserDetailsImpl userDetails) {
+        UserRole userRole = userDetails.getUserRole();
         User user = userDetails.getUser();
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("name", user.getName());
-        claims.put("surname", user.getSurname());
-        claims.put("patronymic", user.getPatronymic());
-        claims.put("login", user.getLogin());
-        String roleName = String.valueOf(Role.GUEST);
-//        if (user.getUserRole() != null){
-//            roleName = user.getUserRole().getName();
-//        }
-//        claims.put("role", roleName);
-//        if (user.getUserRole() != null){
-//            claims.put("school", user.getUserRole().getSchool());
-//        }
-
+        Map<String, Object> claims = getStringObjectMap(userRole, user);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -53,6 +42,23 @@ public class JwtTokenService {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey(),SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    private static Map<String, Object> getStringObjectMap(UserRole userRole, User user) {
+        Map<String, Object> claims = new HashMap<>();
+        if (userRole != null){
+            claims.put("name", userRole.getName());
+            claims.put("surname", userRole.getSurname());
+            claims.put("patronymic", userRole.getPatronymic());
+            claims.put("role", userRole.getRole().name());
+        } else {
+            claims.put("name", user.getName());
+            claims.put("surname", user.getSurname());
+            claims.put("patronymic", user.getPatronymic());
+            claims.put("role", Role.GUEST.name());
+        }
+        claims.put("login", user.getLogin());
+        return claims;
     }
 
 

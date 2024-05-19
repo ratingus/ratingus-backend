@@ -61,10 +61,10 @@ public class AdminPanelService {
         }
     }
 
-    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, int creatorId, int schoolId) {
+    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl user, int schoolId) {
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
 
-        userCode.getCreator().setId(creatorId);
+        userCode.setCreator(user.getUser());
         userCode.getSchool().setId(schoolId);
 
         checkIsClassCorrectInUserCode(userCode, schoolId);

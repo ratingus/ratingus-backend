@@ -29,7 +29,7 @@ public class Announcement implements IdGettable {
 
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
-    private User creator;
+    private UserRole creator;
 
     @Column(name = "create_date")
     @CreationTimestamp

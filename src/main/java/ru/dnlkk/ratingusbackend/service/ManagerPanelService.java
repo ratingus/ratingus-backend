@@ -27,11 +27,9 @@ public class ManagerPanelService {
         return ApplicationMapper.INSTANCE.toDtoList(applicationList);
     }
 
-    public ApplicationDto createApplication(ApplicationDto applicationDto, int creatorId) {
+    public ApplicationDto createApplication(ApplicationDto applicationDto, User user) {
         Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
-        User creator = new User();
-        creator.setId(creatorId);
-        application.setCreator(creator);
+        application.setCreator(user);
         Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
         return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
     }

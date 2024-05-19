@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.model.Application;
 import ru.dnlkk.ratingusbackend.model.User;
+import ru.dnlkk.ratingusbackend.model.UserRole;
 
 import java.util.List;
 

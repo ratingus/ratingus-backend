@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
 
@@ -58,7 +60,7 @@ public interface AnnouncementApi {
     @PostMapping()
     ResponseEntity<AnnouncementDto> createAnnouncement(
             @Schema(description = "DTO создаваемого объявления")
-            @RequestBody AnnouncementCreateDto announcementCreateDto
+            @RequestBody AnnouncementCreateDto announcementCreateDto, @AuthenticationPrincipal UserDetailsImpl creator
     );
 
 

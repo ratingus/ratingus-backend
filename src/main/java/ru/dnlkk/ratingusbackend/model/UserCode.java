@@ -45,7 +45,7 @@ public class UserCode implements IdGettable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user; //сюда запишем юзера при использовании кода
+    private UserRole user; //сюда запишем юзера при использовании кода
 
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "id")

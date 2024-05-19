@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
@@ -13,6 +14,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
 
@@ -41,7 +43,8 @@ public interface AdminPanelApi {
     @PostMapping("/user-code")
     ResponseEntity<UserCodeWithClassDto> createUserCode(
             @Schema(description = "DTO создаваемого кода приглашения")
-            @RequestBody UserCodeWithClassDto userCodeWithClassDto
+            @RequestBody UserCodeWithClassDto userCodeWithClassDto,
+            @AuthenticationPrincipal UserDetailsImpl user
     );
 
     @Operation(

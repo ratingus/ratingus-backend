@@ -1,6 +1,8 @@
 package ru.dnlkk.ratingusbackend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,20 +12,19 @@ import ru.dnlkk.ratingusbackend.model.enums.Role;
 import java.util.Collection;
 import java.util.Collections;
 
+@AllArgsConstructor
 @Getter
+@Setter
 public class UserDetailsImpl implements UserDetails {
     private final User user;
-
-    public UserDetailsImpl(User user) {
-        this.user = user;
-    }
+    private UserRole userRole;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String roleName = String.valueOf(Role.GUEST);
-//        if (user.getUserRole() != null){
-//            roleName = user.getUserRole().getName();
-//        }
+        if (userRole != null){
+            roleName = userRole.getRole().name();
+        }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
         return Collections.singletonList(authority);
     }
