@@ -36,10 +36,15 @@ public class ProfileController implements ProfileApi {
     }
 
     @Override
-    public ResponseEntity<JWTResponseDto> setUserCode(UserDetailsImpl userDetails, SetUserCodeDto userCodeDto) {
+    public ResponseEntity setUserCode(UserDetailsImpl userDetails, SetUserCodeDto userCodeDto) {
+        UserCode code = userCodeRepository.findUserCodesByCode(userCodeDto.getCode());
+
+        if (code.isActivated()) {
+            return ResponseEntity.badRequest().body("Код уже активирован");
+        }
+
         UserRole userRole = new UserRole();
         userRole.setUser(userDetails.getUser());
-        UserCode code = userCodeRepository.findUserCodesByCode(userCodeDto.getCode());
         userRole.setSchool(code.getSchool());
         userRole.setName(code.getName());
         userRole.setSurname(code.getSurname());
@@ -47,10 +52,12 @@ public class ProfileController implements ProfileApi {
         userRole.setRole(code.getRole());
         userRole.setRoleClass(code.getUserClass());
 
-        code.setActivated(true);
-
         userDetails.setUserRole(userRole);
         String token = jwtTokenService.generateToken(userDetails);
+
+        userRoleRepository.save(userRole);
+        code.setActivated(true);
+
         return ResponseEntity.ok(new JWTResponseDto(token));
     }
 
