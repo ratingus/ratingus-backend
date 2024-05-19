@@ -1,23 +1,14 @@
 package ru.dnlkk.ratingusbackend.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
-import ru.dnlkk.ratingusbackend.security.JwtTokenService;
 import ru.dnlkk.ratingusbackend.service.UserService;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
@@ -40,10 +31,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             System.out.println(jwtToken);
-            if (jwtToken.trim().isEmpty()){
-                filterChain.doFilter(request, response);
-                return;
-            }
             try {
                 username = jwtTokenService.getName(jwtToken);
                 school = jwtTokenService.getSchool(jwtToken);
@@ -51,6 +38,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                filterChain.doFilter(request, response);
+                return;
             }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");

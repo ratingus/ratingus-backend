@@ -1,24 +1,18 @@
 package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dnlkk.ratingusbackend.api.model.UserDto;
 import ru.dnlkk.ratingusbackend.model.*;
-import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +30,10 @@ public class UserService implements UserDetailsService{
 
     public User registerUser(User user) {
         var registerUser = userRepository.findByLogin(user.getLogin());
-        return registerUser.orElseGet(() -> userRepository.save(user));
+        if (registerUser.isEmpty()) {
+            return userRepository.save(user);
+        }
+        throw new RuntimeException("User already exists");
     }
 
     public User updateUser(UserDto updatedUser) {

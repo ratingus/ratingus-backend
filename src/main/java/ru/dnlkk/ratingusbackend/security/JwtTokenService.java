@@ -7,14 +7,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.model.UserRole;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
-import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,7 +60,7 @@ public class JwtTokenService {
     }
 
 
-    public String getName(String token) {
+    public String getName(String token) throws RuntimeException {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -83,7 +81,7 @@ public class JwtTokenService {
         return getAllClaimsFromToken(token).get("school", String.class);
     }
 
-    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) throws RuntimeException {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
@@ -94,11 +92,15 @@ public class JwtTokenService {
 
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Неверный JWT", e);
+        }
     }
 
     private Boolean isTokenExpired(String token) {
