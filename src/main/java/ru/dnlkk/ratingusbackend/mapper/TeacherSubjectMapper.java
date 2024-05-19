@@ -36,6 +36,8 @@ public interface TeacherSubjectMapper {
     }
 
     @Mapping(target = "teacher", ignore = true)
+    @Mapping(target = "subject.name", source = "name")
+    @Mapping(target = "subject.id", source = "id")
     TeacherSubjectDto toTeacherSubjectDtoFromSubject(Subject subject);
 
     @IterableMapping(elementTargetType = TeacherSubjectDto.class)

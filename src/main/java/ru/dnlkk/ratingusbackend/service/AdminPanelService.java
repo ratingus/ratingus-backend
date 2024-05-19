@@ -133,9 +133,7 @@ public class AdminPanelService {
     public List<TeacherSubjectDto> getAllSubjects(int schoolId) {
         List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
         List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();
-        System.out.println(subjectIds);
         List<TeacherSubject> teacherSubjects = teacherSubjectRepository.findBySubjectIds(subjectIds);
-        System.out.println(teacherSubjects);
         List<TeacherSubjectDto> res = TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoList(teacherSubjects);
         res.addAll(
                 TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoListFromSubjectList(subjects)
@@ -154,6 +152,8 @@ public class AdminPanelService {
     public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, int schoolId) {
         int subjectId = teacherSubjectCreateDto.getSubjId();
         int teacherId = teacherSubjectCreateDto.getTeacherId();
+
+        //todo: проверка на то, что такой записи нет ещё
 
         checkIsSubjectCorrectAndAvailableForSchool(subjectId, schoolId);
         Subject subject = subjectRepository.findById(subjectId).get();
@@ -175,6 +175,23 @@ public class AdminPanelService {
         TeacherSubject teacherSubjectAfterSaving = teacherSubjectRepository.saveAndFlush(teacherSubject);
 
         return TeacherSubjectMapper.INSTANCE.toTeacherSubjectDto(teacherSubjectAfterSaving);
+    }
+
+    public void deleteTeacherToSubject(int teacherSubjectId, int schoolId) {
+        Optional<TeacherSubject> byId = teacherSubjectRepository.findById(teacherSubjectId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Нет связи учителя с классом с id=" + teacherSubjectId);
+        }
+        TeacherSubject teacherSubject = byId.get();
+        int teacherSchoolId = userRoleRepository.findById(
+                teacherSubject.getTeacher().getId())
+                .get()
+                .getSchool()
+                .getId();
+        if (teacherSchoolId != schoolId) {
+            throw new ForbiddenException("Нет доступа к связи предмет-учитель с id=" + teacherSchoolId);
+        }
+        teacherSubjectRepository.deleteById(teacherSubjectId);
     }
 
     private void checkIsSubjectCorrectAndAvailableForSchool(int subjId, int schoolId) {

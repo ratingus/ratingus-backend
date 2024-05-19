@@ -52,13 +52,6 @@ public class UserRole implements IdGettable {
     @Column(name = "patronymic")
     private String patronymic;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "subjects_teachers",
-//            joinColumns = @JoinColumn(name = "teacher_id"),
-//            inverseJoinColumns = @JoinColumn(name = "subject_id"))
-//    private List<Subject> subjects;
-
     @OneToMany(mappedBy = "teacher")
     private List<TeacherSubject> teacherSubjects;
 }

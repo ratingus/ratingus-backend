@@ -78,4 +78,10 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     public ResponseEntity<TeacherSubjectDto> setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto) {
         return ResponseEntity.ok(adminPanelService.setTeacherToSubject(teacherSubjectCreateDto, 2));
     }
+
+    @Override
+    public ResponseEntity<TeacherSubjectDto> deleteTeacherToSubject(int teacherSubjectId) {
+        adminPanelService.deleteTeacherToSubject(teacherSubjectId, 2);
+        return ResponseEntity.ok().build();
+    }
 }

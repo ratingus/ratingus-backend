@@ -114,4 +114,13 @@ public interface AdminPanelApi {
             @Schema(description = "DTO связываемых предмета с учителем")
             @RequestBody TeacherSubjectCreateDto teacherSubjectCreateDto
     );
+
+    @Operation(
+            summary = "Удаление привязки учителя к предмету",
+            description = "Удаляет связь предмета с учителем, который его ведёт"
+    )
+    @DeleteMapping("/subject-teacher/{id}")
+    ResponseEntity<TeacherSubjectDto> deleteTeacherToSubject(
+            @PathVariable(name = "id") int teacherSubjectId
+    );
 }

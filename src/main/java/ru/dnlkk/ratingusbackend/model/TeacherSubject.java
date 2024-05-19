@@ -23,7 +23,6 @@ public class TeacherSubject implements IdGettable {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-//    private User teacher;
     private UserRole teacher;
 
     @ManyToOne
