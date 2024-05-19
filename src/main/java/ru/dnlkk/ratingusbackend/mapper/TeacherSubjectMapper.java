@@ -34,4 +34,10 @@ public interface TeacherSubjectMapper {
     static UserRoleSimpleDto createUserRoleSimpleDto(UserRole userRole) {
         return UserRoleMapper.INSTANCE.toUserRoleSimpleDto(userRole);
     }
+
+    @Mapping(target = "teacher", ignore = true)
+    TeacherSubjectDto toTeacherSubjectDtoFromSubject(Subject subject);
+
+    @IterableMapping(elementTargetType = TeacherSubjectDto.class)
+    List<TeacherSubjectDto> toTeacherSubjectDtoListFromSubjectList(List<Subject> subjects);
 }

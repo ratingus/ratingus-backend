@@ -71,7 +71,7 @@ public class AdminPanelController extends ExceptionHandlerController implements 
 
     @Override
     public ResponseEntity<SubjectDto> createSubject(SubjectCreateDto subjectDto) {
-        return null;
+        return ResponseEntity.ok(adminPanelService.createSubject(subjectDto, 2));
     }
 
     @Override

@@ -133,12 +133,22 @@ public class AdminPanelService {
     public List<TeacherSubjectDto> getAllSubjects(int schoolId) {
         List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
         List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();
+        System.out.println(subjectIds);
         List<TeacherSubject> teacherSubjects = teacherSubjectRepository.findBySubjectIds(subjectIds);
-        return TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoList(teacherSubjects);
+        System.out.println(teacherSubjects);
+        List<TeacherSubjectDto> res = TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoList(teacherSubjects);
+        res.addAll(
+                TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoListFromSubjectList(subjects)
+        );
+        return res;
     }
 
-    public SubjectDto createSubject(SubjectCreateDto subjectDto) {
-        return null;
+    public SubjectDto createSubject(SubjectCreateDto subjectDto, int schoolId) {
+        School school = schoolRepository.findById(schoolId).get();
+        Subject subject = SubjectMapper.INSTANCE.toEntity(subjectDto);
+        subject.setSchool(school);
+        Subject subjectAfterSaving = subjectRepository.saveAndFlush(subject);
+        return SubjectMapper.INSTANCE.toDto(subjectAfterSaving);
     }
 
     public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, int schoolId) {
@@ -204,7 +214,6 @@ public class AdminPanelService {
     }
 
     private String generateUniqueCodeById(int id) {
-        //todo: можно сократить код (оставляем несколько цифр, в начале и конце - добавляем id пользователя и школы)
 //        return Generators.nameBasedGenerator().generate(str).toString();
         return RandomSequenceGenerator.generateRandomSequence() + id;
     }
