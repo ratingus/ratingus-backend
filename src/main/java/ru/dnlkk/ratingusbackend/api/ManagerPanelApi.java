@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
-import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationIdDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
@@ -44,8 +43,8 @@ public interface ManagerPanelApi {
 
     @Operation(
             summary = "Создание новой школы (одобрение заявки)",
-            description = "Создаёт школу"
+            description = "Создаёт школу и возвращает её"
     )
-    @PostMapping("/application-approve")
-    ResponseEntity<SchoolWasCreatedDto> createSchool(@RequestBody ApplicationIdDto applicationIdDto);
+    @PostMapping("/application-approve/{id}")
+    ResponseEntity<SchoolWasCreatedDto> createSchool(@PathVariable(name = "id") int applicationId);
 }
