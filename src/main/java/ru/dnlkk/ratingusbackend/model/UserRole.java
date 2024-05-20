@@ -22,9 +22,14 @@ public class UserRole implements IdGettable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
+    @OneToMany(mappedBy = "creator")
+    private List<Announcement> announcements;
+
+    @OneToMany(mappedBy = "student")
+    private List<StudentLesson> studentsLessons;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserCode> usersCodes;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

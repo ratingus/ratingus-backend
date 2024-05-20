@@ -2,11 +2,9 @@ package ru.dnlkk.ratingusbackend.api.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AuthApi;
 import ru.dnlkk.ratingusbackend.api.model.JWTRegistrationDto;
-import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
 import ru.dnlkk.ratingusbackend.service.AuthService;
 import ru.dnlkk.ratingusbackend.api.dtos.JWTRequest;
 
@@ -21,14 +19,20 @@ public class AuthController implements AuthApi {
     }
 
     @Override
-    public ResponseEntity<JWTResponseDto> login(JWTRequest jwtRequest) {
-        System.out.println("login");
-        return ResponseEntity.ok(authService.signIn(jwtRequest));
+    public ResponseEntity login(JWTRequest jwtRequest) {
+        try {
+            return ResponseEntity.ok(authService.signIn(jwtRequest));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @Override
-    public ResponseEntity<JWTResponseDto> register(JWTRegistrationDto jwtRegistrationDto) {
-        System.out.println("register");
-        return ResponseEntity.ok(authService.signUp(jwtRegistrationDto));
+    public ResponseEntity register(JWTRegistrationDto jwtRegistrationDto) {
+        try {
+            return ResponseEntity.ok(authService.signUp(jwtRegistrationDto));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

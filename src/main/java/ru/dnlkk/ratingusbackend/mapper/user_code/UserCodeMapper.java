@@ -4,17 +4,12 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 //import ru.dnlkk.ratingusbackend.api.dtos.user.UserWithLoginDto;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeCreateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.mapper.ClassMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
-import ru.dnlkk.ratingusbackend.model.enums.Role;
-import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper
 public interface UserCodeMapper {

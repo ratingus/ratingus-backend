@@ -50,7 +50,7 @@ public class AuthService {
             User registeredUser = userService.registerUser(user);
             log.info("User registered: {}", registeredUser);
 
-            String jwt = jwtService.generateToken(new UserDetailsImpl(registeredUser));
+            String jwt = jwtService.generateToken(new UserDetailsImpl(registeredUser, null));
             log.debug("JWT token generated: {}", jwt);
 
             return new JWTResponseDto(jwt);
@@ -68,6 +68,7 @@ public class AuthService {
      */
     public JWTResponseDto signIn(JWTRequest request) {
         // Проверка входных данных
+        log.info("Invalid login data: {}", request);
         if (request == null || !isValidLoginData(request)) {
             log.warn("Invalid login data: {}", request);
             throw new IllegalArgumentException("Invalid login data");
@@ -79,7 +80,7 @@ public class AuthService {
                     request.getPassword()
             ));
 
-            UserDetailsImpl userDetails = userService.loadUserByUsername(request.getLogin());
+            UserDetailsImpl userDetails = userService.loadUserByUsername(request.getLogin() + "-" + null);
             log.info("User authenticated: {}", userDetails.getUsername());
 
             String jwt = jwtService.generateToken(userDetails);

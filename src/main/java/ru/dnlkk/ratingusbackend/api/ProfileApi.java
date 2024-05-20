@@ -3,11 +3,14 @@ package ru.dnlkk.ratingusbackend.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.ChangeSchoolDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.SetUserCodeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeDto;
+import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 
 @Tag(name = "Контроллер профиля", description = "Просмотр и редактирование профиля")
@@ -27,4 +30,20 @@ public interface ProfileApi {
     )
     @PutMapping
     ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto);
+
+
+    @Operation(
+            summary = "Обновление пользователя",
+            description = "Обновляет пользователя и возвращает его"
+    )
+    @PostMapping("/user-code")
+    ResponseEntity<JWTResponseDto> setUserCode(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody SetUserCodeDto userCodeDto);
+
+
+    @Operation(
+            summary = "Обновление пользователя",
+            description = "Обновляет пользователя и возвращает его"
+    )
+    @PostMapping("/change-school")
+    ResponseEntity<JWTResponseDto> changeSchool(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ChangeSchoolDto schoolDto);
 }

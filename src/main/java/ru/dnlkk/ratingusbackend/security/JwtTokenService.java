@@ -7,13 +7,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
+import ru.dnlkk.ratingusbackend.model.UserRole;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
-import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,21 +29,9 @@ public class JwtTokenService {
     private long expirationTime;
 
     public String generateToken(UserDetailsImpl userDetails) {
+        UserRole userRole = userDetails.getUserRole();
         User user = userDetails.getUser();
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("name", user.getName());
-        claims.put("surname", user.getSurname());
-        claims.put("patronymic", user.getPatronymic());
-        claims.put("login", user.getLogin());
-        String roleName = String.valueOf(Role.GUEST);
-//        if (user.getUserRole() != null){
-//            roleName = user.getUserRole().getName();
-//        }
-//        claims.put("role", roleName);
-//        if (user.getUserRole() != null){
-//            claims.put("school", user.getUserRole().getSchool());
-//        }
-
+        Map<String, Object> claims = getStringObjectMap(userRole, user);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -55,8 +42,25 @@ public class JwtTokenService {
                 .compact();
     }
 
+    private static Map<String, Object> getStringObjectMap(UserRole userRole, User user) {
+        Map<String, Object> claims = new HashMap<>();
+        if (userRole != null){
+            claims.put("name", userRole.getName());
+            claims.put("surname", userRole.getSurname());
+            claims.put("patronymic", userRole.getPatronymic());
+            claims.put("role", userRole.getRole().name());
+        } else {
+            claims.put("name", user.getName());
+            claims.put("surname", user.getSurname());
+            claims.put("patronymic", user.getPatronymic());
+            claims.put("role", Role.GUEST.name());
+        }
+        claims.put("login", user.getLogin());
+        return claims;
+    }
 
-    public String getName(String token) {
+
+    public String getName(String token) throws RuntimeException {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -77,7 +81,7 @@ public class JwtTokenService {
         return getAllClaimsFromToken(token).get("school", String.class);
     }
 
-    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) throws RuntimeException {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
@@ -88,11 +92,15 @@ public class JwtTokenService {
 
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Неверный JWT", e);
+        }
     }
 
     private Boolean isTokenExpired(String token) {

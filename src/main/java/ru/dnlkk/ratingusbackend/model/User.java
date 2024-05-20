@@ -40,25 +40,15 @@ public class User {
     @Column(name = "birth_date")
     private Timestamp birthDate;
 
-    @OneToMany(mappedBy = "creator")
-    private List<Announcement> announcements;
-
-    @OneToMany(mappedBy = "student")
-    private List<StudentLesson> studentsLessons;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserCode> usersCodes;
-
-    @ManyToMany
-    @JoinTable(
-            name = "classes_students",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "class_id"))
-    private List<Class> classes;
-
     @OneToMany(mappedBy = "user")
     private List<UserRole> usersRoles;
 
     @OneToMany(mappedBy = "creator")
     private List<Application> applications;
+
+    @Column(name = "is_admin")
+    private Boolean isAdmin;
+
+    @OneToMany(mappedBy = "creator")
+    private List<UserCode> usersCodes;
 }

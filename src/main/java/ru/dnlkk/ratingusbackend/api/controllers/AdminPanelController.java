@@ -12,6 +12,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 
 import java.util.List;
@@ -23,34 +24,34 @@ public class AdminPanelController extends ExceptionHandlerController implements 
 
     @Override
     public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool() {
-        List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(2);
+        List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(1);
         return ResponseEntity.ok(allUsersRolesForSchool);
     }
 
     @Override
     public ResponseEntity<List<UserCodeWithClassDto>> getAllUserCodesForSchool() {
-        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(2));
+        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(1));
     }
 
 
     @Override
-    public ResponseEntity<UserCodeWithClassDto> createUserCode(UserCodeWithClassDto userCodeWithClassDto) {
-        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeWithClassDto, 2, 2));
+    public ResponseEntity<UserCodeWithClassDto> createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl user) {
+        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeWithClassDto, user, 1));
     }
 
     @Override
     public ResponseEntity<UserCodeWithClassDto> updateUserCode(int id, UserCodeWithClassDto userCodeWithClassDto) {
-        return ResponseEntity.ok(adminPanelService.updateUserCode(id, userCodeWithClassDto, 2));
+        return ResponseEntity.ok(adminPanelService.updateUserCode(id, userCodeWithClassDto, 1));
     }
 
     @Override
     public ResponseEntity<List<ClassDto>> getAllClasses() {
-        return ResponseEntity.ok(adminPanelService.getAllClassesForSchool(2));
+        return ResponseEntity.ok(adminPanelService.getAllClassesForSchool(1));
     }
 
     @Override
     public ResponseEntity<ClassDto> createClass(ClassDto classDto) {
-        return ResponseEntity.ok(adminPanelService.createClass(classDto, 2));
+        return ResponseEntity.ok(adminPanelService.createClass(classDto, 1));
     }
 
     @Override

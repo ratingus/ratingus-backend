@@ -4,10 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationIdDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public interface ManagerPanelApi {
             description = "Создаёт заявку на создание школы и возвращает её"
     )
     @PostMapping("/application")
-    ResponseEntity<ApplicationDto> createApplication(@RequestBody ApplicationDto applicationDto);
+    ResponseEntity<ApplicationDto> createApplication(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ApplicationDto applicationDto);
 
 
     @Operation(

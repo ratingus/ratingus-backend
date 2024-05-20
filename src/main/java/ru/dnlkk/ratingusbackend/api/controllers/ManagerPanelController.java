@@ -7,6 +7,7 @@ import ru.dnlkk.ratingusbackend.api.ManagerPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationIdDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.service.ManagerPanelService;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class ManagerPanelController implements ManagerPanelApi {
     }
 
     @Override
-    public ResponseEntity<ApplicationDto> createApplication(ApplicationDto applicationDto) {
-        return ResponseEntity.ok(managerPanelService.createApplication(applicationDto, 2)); //todo
+    public ResponseEntity<ApplicationDto> createApplication(UserDetailsImpl userDetails, ApplicationDto applicationDto) {
+        return ResponseEntity.ok(managerPanelService.createApplication(applicationDto, userDetails.getUser())); //todo
     }
 
     @Override

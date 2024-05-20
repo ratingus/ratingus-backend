@@ -10,9 +10,11 @@ import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.CreatorDto;
 import ru.dnlkk.ratingusbackend.mapper.user.UserMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
+import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.Announcement;
 import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.User;
+import ru.dnlkk.ratingusbackend.model.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,8 @@ public interface AnnouncementMapper {
     Announcement toModel(AnnouncementCreateDto announcementDto);
 
     @Named("createCreator()")
-    default User createCreator() {
-        return new User();
+    default UserRole createCreator() {
+        return new UserRole();
     }
 
     @Named("getClassListFromIdsList")
@@ -49,8 +51,8 @@ public interface AnnouncementMapper {
     AnnouncementDto toDto(Announcement announcement);
 
     @Named("createCreatorDtoFromUser")
-    static CreatorDto createCreatorDtoFromUser(User user) {
-        return UserMapper.INSTANCE.toCreatorDto(user);
+    static CreatorDto createCreatorDtoFromUser(UserRole user) {
+        return UserRoleMapper.INSTANCE.toCreatorDto(user);
     }
 
     @Named("idFromClasses")

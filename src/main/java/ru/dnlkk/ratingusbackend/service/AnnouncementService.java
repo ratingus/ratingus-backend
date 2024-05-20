@@ -8,10 +8,8 @@ import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.announcement.AnnouncementMapper;
-import ru.dnlkk.ratingusbackend.model.Announcement;
+import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
-import ru.dnlkk.ratingusbackend.model.School;
-import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.repository.AnnouncementRepository;
 import ru.dnlkk.ratingusbackend.repository.ClassRepository;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
@@ -62,7 +60,7 @@ public class AnnouncementService {
         throw new ForbiddenException("Нет доступа к этому объявлению");
     }
 
-    public AnnouncementDto createAnnouncement(AnnouncementCreateDto announcementCreateDto, int creatorId, int schoolId) {
+    public AnnouncementDto createAnnouncement(AnnouncementCreateDto announcementCreateDto, UserDetailsImpl creator) {
         Announcement announcement = AnnouncementMapper.INSTANCE.toModel(announcementCreateDto);
         List<Class> classes = announcement.getClasses();
         for (Class c : classes) {
@@ -71,12 +69,11 @@ public class AnnouncementService {
                 throw new NotFoundException("Не найден класс с id=" + c.getId());
             }
             Class cc = classById.get();
-            if (cc.getSchool().getId() != schoolId) {
+            if (cc.getSchool().getId() != creator.getUserRole().getSchool().getId()) {
                 throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId() );
             }
         }
-        User userFromRepo = userRepository.findById(creatorId).get();
-        announcement.setCreator(userFromRepo);
+        announcement.setCreator(creator.getUserRole());
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }
