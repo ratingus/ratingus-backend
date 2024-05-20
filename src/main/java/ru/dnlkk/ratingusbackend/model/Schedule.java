@@ -22,25 +22,21 @@ public class Schedule implements IdGettable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "lesson_number")
-    private int lessonNumber;
-
     @Column(name = "day_of_week")
     private int dayOfWeek;
-
-    @ManyToOne
-    @JoinColumn(name = "class_id", referencedColumnName = "id")
-    private Class scheduleForClass;
 
     @ManyToOne
     @JoinColumn(name = "timetable_id", referencedColumnName = "id")
     private Timetable timetable;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id", referencedColumnName = "id")
-    private Subject subject;
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private Class scheduleForClass;
 
     @ManyToOne
-    @JoinColumn(name = "lesson_id", referencedColumnName = "id")
-    private Lesson lesson;
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
+    private TeacherSubject subject;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<Lesson> lessons;
 }

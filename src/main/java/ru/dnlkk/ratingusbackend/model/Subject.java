@@ -27,13 +27,7 @@ public class Subject {
     @OneToMany(mappedBy = "subject")
     private List<TeacherSubject> teacherSubjects;
 
-    @OneToMany(mappedBy = "subject")
-    private List<Lesson> lessons;
-
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
-
-    @OneToMany(mappedBy = "subject")
-    private List<Schedule> schedules;
 }
