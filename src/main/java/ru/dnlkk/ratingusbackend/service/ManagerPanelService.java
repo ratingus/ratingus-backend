@@ -51,7 +51,6 @@ public class ManagerPanelService {
 
     public SchoolWasCreatedDto createSchool(UserDetailsImpl userDetails, int applicationId) {
         checkIsUserManager(userDetails);
-        System.out.println("СОЗДАЁМ школу!");
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if (applicationOptional.isEmpty()) {
             throw new NotFoundException("Не существует заявки с id=" + applicationId);

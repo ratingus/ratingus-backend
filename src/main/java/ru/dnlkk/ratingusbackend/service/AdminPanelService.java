@@ -42,10 +42,16 @@ public class AdminPanelService {
     private final UserRoleRepository userRoleRepository;
 
     private void forbidAccessForNullUserRole(UserDetailsImpl userDetails) {
+        if (userDetails.getUser().getIsAdmin() == null) {
+            throw new ForbiddenException("Доступ запрещён");
+        }
         if (userDetails.getUser().getIsAdmin()) { //todo: не до конца всё проверяет и работает
             return;
         }
         if (userDetails.getUserRole() == null) {
+            throw new ForbiddenException("Доступ запрещён");
+        }
+        if (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
