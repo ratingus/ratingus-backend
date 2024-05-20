@@ -15,7 +15,7 @@ import java.util.List;
 public class ManagerPanelController implements ManagerPanelApi {
     private final ManagerPanelService managerPanelService;
     @Override
-    public ResponseEntity<List<ApplicationDto>> getAllApplications() {
+    public ResponseEntity<List<ApplicationDto>> getAllApplications(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllApplications());
     }
 
@@ -25,13 +25,13 @@ public class ManagerPanelController implements ManagerPanelApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteApplication(int id) {
+    public ResponseEntity<Void> deleteApplication(UserDetailsImpl userDetails, int id) {
         managerPanelService.deleteApplication(id);
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<SchoolWasCreatedDto> createSchool(int applicationId) {
-        return ResponseEntity.ok(managerPanelService.createSchool(applicationId));
+    public ResponseEntity<SchoolWasCreatedDto> createSchool(UserDetailsImpl userDetails, int applicationId) {
+        return ResponseEntity.ok(managerPanelService.createSchool(userDetails, applicationId));
     }
 }

@@ -11,6 +11,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
 import ru.dnlkk.ratingusbackend.exceptions.LogicException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
@@ -33,7 +34,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminPanelService {
     private final ClassRepository classRepository;
-    private final UserRepository userRepository;
     private final UserCodeRepository userCodeRepository;
     private final TimetableRepository timetableRepository;
     private final SchoolRepository schoolRepository;
@@ -41,7 +41,18 @@ public class AdminPanelService {
     private final TeacherSubjectRepository teacherSubjectRepository;
     private final UserRoleRepository userRoleRepository;
 
-    public List<UserRoleDto> getAllUsersRolesForSchool(int schoolId) {
+    private void forbidAccessForNullUserRole(UserDetailsImpl userDetails) {
+        if (userDetails.getUser().getIsAdmin()) {
+            return;
+        }
+        if (userDetails.getUserRole() == null) {
+            throw new ForbiddenException("Доступ запрещён");
+        }
+    }
+
+    public List<UserRoleDto> getAllUsersRolesForSchool(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
             return new ArrayList<>();
@@ -51,20 +62,31 @@ public class AdminPanelService {
         }
     }
 
-    public List<UserCodeWithClassDto> getAllUsersCodesForSchool(int schoolId) {
+    public List<UserRoleSimpleDto> getAllTeachersForSchool(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
+        List<UserRole> userRolesBySchoolIdAndRole = userRoleRepository.findUserRolesBySchoolIdAndRole(schoolId, Role.TEACHER);
+        return UserRoleMapper.INSTANCE.toUserRoleSimpleDtoList(userRolesBySchoolIdAndRole);
+    }
+
+    public List<UserCodeWithClassDto> getAllUsersCodesForSchool(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         Optional<School> school = schoolRepository.findById(schoolId);
         if (school.isEmpty()) {
             return new ArrayList<>();
         } else {
             List<UserCode> userCodes = school.get().getUserCodes();
-            return UserCodeMapper.INSTANCE.toUserCodeWithClassDtoList(userCodes); //todo;
+            return UserCodeMapper.INSTANCE.toUserCodeWithClassDtoList(userCodes);
         }
     }
 
-    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl user, int schoolId) {
+    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
 
-        userCode.setCreator(user.getUser());
+        userCode.setCreator(userDetails.getUser());
         userCode.getSchool().setId(schoolId);
 
         checkIsClassCorrectInUserCode(userCode, schoolId);
@@ -78,8 +100,10 @@ public class AdminPanelService {
         return UserCodeMapper.INSTANCE.toUserCodeWithClassDto(finalUserCode);
     }
 
-    public UserCodeWithClassDto updateUserCode(int userCodeId, UserCodeWithClassDto userCodeWithClassDto, int schoolId) {
+    public UserCodeWithClassDto updateUserCode(int userCodeId, UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
 
         Optional<UserCode> userCodeById = userCodeRepository.findById(userCodeId);
         if (userCodeById.isEmpty()) {
@@ -97,8 +121,6 @@ public class AdminPanelService {
             userCode.setCode(generateUniqueCodeById(userCodeId));
         }
 
-        //todo: сделать некую функцию, которая будет смотреть, можем ли мы работать с этой сущностью (смотрит по schoolId)
-
         userCode.setId(userCodeId);
         userCode.getSchool().setId(schoolId);
 
@@ -108,12 +130,16 @@ public class AdminPanelService {
         return UserCodeMapper.INSTANCE.toUserCodeWithClassDto(userCodeAfterSaving);
     }
 
-    public List<ClassDto> getAllClassesForSchool(int schoolId) {
+    public List<ClassDto> getAllClassesForSchool(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Class> classesBySchoolId = classRepository.findClassesBySchoolId(schoolId);
         return ClassMapper.INSTANCE.toClassDtoList(classesBySchoolId);
     }
 
-    public ClassDto createClass(ClassDto classDto, int schoolId) {
+    public ClassDto createClass(ClassDto classDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         Class classEntity = ClassMapper.INSTANCE.toClassEntity(classDto);
         School school = schoolRepository.findById(schoolId).get();
         classEntity.setSchool(school);
@@ -121,16 +147,30 @@ public class AdminPanelService {
         return ClassMapper.INSTANCE.toClassDto(classFromSaving);
     }
 
-    public void deleteClass(int id) {
+    public void deleteClass(int id, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
+        Optional<Class> byId = classRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Не найден класс с id=" + id);
+        }
+        Class cl = byId.get();
+        if (cl.getSchool().getId() != schoolId) {
+            throw new ForbiddenException("Нет доступа к классу с id=" + id);
+        }
         classRepository.deleteById(id);
     }
 
-    public List<TimetableDto> getTimetable(int schoolId) {
+    public List<TimetableDto> getTimetable(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Timetable> timetablesBySchoolId = timetableRepository.findTimetablesBySchoolId(schoolId);
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
-    public List<TeacherSubjectDto> getAllSubjects(int schoolId) {
+    public List<TeacherSubjectDto> getAllSubjects(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
         List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();
         List<TeacherSubject> teacherSubjects = teacherSubjectRepository.findBySubjectIds(subjectIds);
@@ -141,7 +181,9 @@ public class AdminPanelService {
         return res;
     }
 
-    public SubjectDto createSubject(SubjectCreateDto subjectDto, int schoolId) {
+    public SubjectDto createSubject(SubjectCreateDto subjectDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         School school = schoolRepository.findById(schoolId).get();
         Subject subject = SubjectMapper.INSTANCE.toEntity(subjectDto);
         subject.setSchool(school);
@@ -149,11 +191,12 @@ public class AdminPanelService {
         return SubjectMapper.INSTANCE.toDto(subjectAfterSaving);
     }
 
-    public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, int schoolId) {
+    public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
+
         int subjectId = teacherSubjectCreateDto.getSubjId();
         int teacherId = teacherSubjectCreateDto.getTeacherId();
-
-        //todo: проверка на то, что такой записи нет ещё
 
         checkIsSubjectCorrectAndAvailableForSchool(subjectId, schoolId);
         Subject subject = subjectRepository.findById(subjectId).get();
@@ -168,6 +211,13 @@ public class AdminPanelService {
             throw new ForbiddenException("Нет доступа к учителю с id=" + teacherId);
         }
 
+        Optional<TeacherSubject> teacherSubjectsBySubjectId = teacherSubjectRepository
+                .findTeacherSubjectsBySubjectIdAndTeacherId(subjectId, teacherId);
+
+        if (teacherSubjectsBySubjectId.isPresent()) {
+            throw new LogicException("Связь предмета с id=" + subjectId + " с учителем с id=" + teacherId + " уже существует");
+        }
+
         TeacherSubject teacherSubject = new TeacherSubject();
         teacherSubject.setSubject(subject);
         teacherSubject.setTeacher(teacher);
@@ -177,7 +227,9 @@ public class AdminPanelService {
         return TeacherSubjectMapper.INSTANCE.toTeacherSubjectDto(teacherSubjectAfterSaving);
     }
 
-    public void deleteTeacherToSubject(int teacherSubjectId, int schoolId) {
+    public void deleteTeacherToSubject(int teacherSubjectId, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         Optional<TeacherSubject> byId = teacherSubjectRepository.findById(teacherSubjectId);
         if (byId.isEmpty()) {
             throw new NotFoundException("Нет связи учителя с классом с id=" + teacherSubjectId);

@@ -7,11 +7,11 @@ import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.ApplicationMapper;
 import ru.dnlkk.ratingusbackend.mapper.SchoolMapper;
-import ru.dnlkk.ratingusbackend.model.Application;
-import ru.dnlkk.ratingusbackend.model.School;
-import ru.dnlkk.ratingusbackend.model.User;
+import ru.dnlkk.ratingusbackend.model.*;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.ApplicationRepository;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
+import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ManagerPanelService {
     private final ApplicationRepository applicationRepository;
+    private final UserRoleRepository userRoleRepository;
+
     private final SchoolRepository schoolRepository;
     public List<ApplicationDto> getAllApplications() {
         List<Application> applicationList = applicationRepository.findAll();
@@ -37,7 +39,7 @@ public class ManagerPanelService {
         applicationRepository.deleteById(id);
     }
 
-    public SchoolWasCreatedDto createSchool(int applicationId) {
+    public SchoolWasCreatedDto createSchool(UserDetailsImpl userDetails, int applicationId) {
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if (applicationOptional.isEmpty()) {
             throw new NotFoundException("Не существует заявки с id=" + applicationId);
@@ -52,6 +54,17 @@ public class ManagerPanelService {
         School schoolAfterSaving = schoolRepository.saveAndFlush(school);
 
         deleteApplication(applicationId);
+
+        User manager = userDetails.getUser();
+
+        UserRole localAdmin = new UserRole();
+        localAdmin.setSchool(school);
+        localAdmin.setRole(Role.LOCAL_ADMIN);
+        localAdmin.setUser(manager);
+        localAdmin.setName(manager.getName());
+        localAdmin.setSurname(manager.getSurname());
+        localAdmin.setPatronymic(manager.getPatronymic());
+        userRoleRepository.saveAndFlush(localAdmin);
 
         return SchoolMapper.INSTANCE.toSchoolWasCreatedDto(schoolAfterSaving);
     }
