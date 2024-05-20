@@ -14,6 +14,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
@@ -21,12 +22,23 @@ import java.util.List;
 @RequestMapping("/admin-panel")
 @Tag(name = "Контроллер админ-панели", description = "Управление пользователями учебной организации")
 public interface AdminPanelApi {
+
     @Operation(
             summary = "Получение списка пользователей",
-            description = "Возвращает список пользователей учебной организации" //. Доступны query-параметры для поиска по логину/фамилии
+            description = "Возвращает список пользователей учебной организации"
     )
     @GetMapping("/user-role")
-    ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool( //todo: дописать @AuthenticationPrincipal ApplicationUser user (секьюрити)
+    ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
+
+    @Operation(
+            summary = "Получение списка учителей",
+            description = "Возвращает список учителей учебной организации"
+    )
+    @GetMapping("/teacher")
+    ResponseEntity<List<UserRoleSimpleDto>> getAllTeachersForSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 
     @Operation(
@@ -34,7 +46,9 @@ public interface AdminPanelApi {
             description = "Возвращает список не активированных кодов приглашения учебной организации"
     )
     @GetMapping("/user-code")
-    ResponseEntity<List<UserCodeWithClassDto>> getAllUserCodesForSchool();
+    ResponseEntity<List<UserCodeWithClassDto>> getAllUserCodesForSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 
     @Operation(
             summary = "Создание кода приглашения",
@@ -42,9 +56,10 @@ public interface AdminPanelApi {
     )
     @PostMapping("/user-code")
     ResponseEntity<UserCodeWithClassDto> createUserCode(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "DTO создаваемого кода приглашения")
-            @RequestBody UserCodeWithClassDto userCodeWithClassDto,
-            @AuthenticationPrincipal UserDetailsImpl user
+            @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
 
     @Operation(
@@ -53,7 +68,11 @@ public interface AdminPanelApi {
     )
     @PutMapping("/user-code/{id}")
     ResponseEntity<UserCodeWithClassDto> updateUserCode(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "id пересоздаваемого кода приглашения")
             @PathVariable("id") int id,
+
             @Schema(description = "DTO обновляемого кода приглашения (если задать для code значение null, то будет сгенерирован новый код")
             @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
@@ -64,7 +83,9 @@ public interface AdminPanelApi {
             description = "Возвращает список всех классов учебной организации"
     )
     @GetMapping("/class")
-    ResponseEntity<List<ClassDto>> getAllClasses();
+    ResponseEntity<List<ClassDto>> getAllClasses(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 
     @Operation(
             summary = "Создание нового класса",
@@ -72,6 +93,8 @@ public interface AdminPanelApi {
     )
     @PostMapping("/class")
     ResponseEntity<ClassDto> createClass(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "DTO создаваемого класса")
             @RequestBody ClassDto classDto
     );
@@ -81,7 +104,12 @@ public interface AdminPanelApi {
             description = "Удаляет класс по id и возвращает пустой ответ"
     )
     @DeleteMapping("/class/{id}")
-    ResponseEntity<Void> deleteClass(@PathVariable("id") Integer id);
+    ResponseEntity<Void> deleteClass(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "id удаляемого класса")
+            @PathVariable("id") Integer id
+    );
 
 
     @Operation(
@@ -89,14 +117,18 @@ public interface AdminPanelApi {
             description = "Возвращает список уроков с указанными сроками начала и конца"
     )
     @GetMapping("/timetable")
-    ResponseEntity<List<TimetableDto>> getTimetable();
+    ResponseEntity<List<TimetableDto>> getTimetable(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 
     @Operation(
             summary = "Получение всех предметов",
             description = "Возвращает список всех предметов учебной организации"
     )
     @GetMapping("/subject")
-    ResponseEntity<List<TeacherSubjectDto>> getAllSubjects();
+    ResponseEntity<List<TeacherSubjectDto>> getAllSubjects(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 
     @Operation(
             summary = "Создание нового предмета",
@@ -104,6 +136,8 @@ public interface AdminPanelApi {
     )
     @PostMapping("/subject")
     ResponseEntity<SubjectDto> createSubject(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "DTO создаваемого предмета")
             @RequestBody SubjectCreateDto subjectDto
     );
@@ -114,6 +148,8 @@ public interface AdminPanelApi {
     )
     @PostMapping("/subject-teacher")
     ResponseEntity<TeacherSubjectDto> setTeacherToSubject(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "DTO связываемых предмета с учителем")
             @RequestBody TeacherSubjectCreateDto teacherSubjectCreateDto
     );
@@ -124,6 +160,9 @@ public interface AdminPanelApi {
     )
     @DeleteMapping("/subject-teacher/{id}")
     ResponseEntity<TeacherSubjectDto> deleteTeacherToSubject(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "id удаляемой связи предмета с учителем")
             @PathVariable(name = "id") int teacherSubjectId
     );
 }

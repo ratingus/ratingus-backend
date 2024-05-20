@@ -20,7 +20,7 @@ public interface ManagerPanelApi {
             description = "Возвращает список всех заявок на создание школы"
     )
     @GetMapping("/application")
-    ResponseEntity<List<ApplicationDto>> getAllApplications();
+    ResponseEntity<List<ApplicationDto>> getAllApplications(@AuthenticationPrincipal UserDetailsImpl userDetails);
 
     @Operation(
             summary = "Создание заявки",
@@ -40,6 +40,8 @@ public interface ManagerPanelApi {
     )
     @DeleteMapping("/application/{id}")
     ResponseEntity<Void> deleteApplication(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "Id удаляемой заявки")
             @PathVariable("id") int id
     );
@@ -50,6 +52,8 @@ public interface ManagerPanelApi {
     )
     @PostMapping("/application-approve/{id}")
     ResponseEntity<SchoolWasCreatedDto> createSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+      
             @Schema(description = "Id одобренной заявки")
             @PathVariable(name = "id") int applicationId
     );

@@ -26,13 +26,11 @@ public interface UserRoleMapper {
     @IterableMapping(elementTargetType = UserRoleDto.class)
     List<UserRoleDto> toDtoList(List<UserRole> userRoleList);
 
-    UserRoleSimpleDto toUserRoleSimpleDto(UserRole userRole);
-
     CreatorDto toCreatorDto(UserRole user);
 
-//    UserRole toEntity(UserRoleDto userRoleDto);
 
 
-//    @IterableMapping(elementTargetType = UserRole.class)
-//    List<UserRole> toEntityList(List<UserRoleDto> userRoleDtoList);
+    UserRoleSimpleDto toUserRoleSimpleDto(UserRole userRole);
+    @IterableMapping(elementTargetType = UserRoleSimpleDto.class)
+    List<UserRoleSimpleDto> toUserRoleSimpleDtoList(List<UserRole> userRoleList);
 }

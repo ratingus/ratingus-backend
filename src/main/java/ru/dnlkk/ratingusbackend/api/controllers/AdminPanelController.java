@@ -12,6 +12,9 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
+import ru.dnlkk.ratingusbackend.model.School;
+import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 
@@ -20,69 +23,80 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class AdminPanelController extends ExceptionHandlerController implements AdminPanelApi {
+
     private final AdminPanelService adminPanelService;
 
     @Override
-    public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool() {
-        List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(1);
+    public ResponseEntity<List<UserRoleDto>> getAllUserRolesForSchool(UserDetailsImpl userDetails) {
+        List<UserRoleDto> allUsersRolesForSchool = adminPanelService.getAllUsersRolesForSchool(userDetails);
         return ResponseEntity.ok(allUsersRolesForSchool);
     }
 
     @Override
-    public ResponseEntity<List<UserCodeWithClassDto>> getAllUserCodesForSchool() {
-        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(1));
+    public ResponseEntity<List<UserRoleSimpleDto>> getAllTeachersForSchool(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(adminPanelService.getAllTeachersForSchool(userDetails));
+    }
+
+    @Override
+    public ResponseEntity<List<UserCodeWithClassDto>> getAllUserCodesForSchool(UserDetailsImpl userDetails) {
+        School school = userDetails.getUserRole().getSchool();
+        return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(userDetails));
     }
 
 
     @Override
-    public ResponseEntity<UserCodeWithClassDto> createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl user) {
-        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeWithClassDto, user, 1));
+    public ResponseEntity<UserCodeWithClassDto> createUserCode(
+            UserDetailsImpl userDetails, UserCodeWithClassDto userCodeWithClassDto) {
+        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeWithClassDto, userDetails));
     }
 
     @Override
-    public ResponseEntity<UserCodeWithClassDto> updateUserCode(int id, UserCodeWithClassDto userCodeWithClassDto) {
-        return ResponseEntity.ok(adminPanelService.updateUserCode(id, userCodeWithClassDto, 1));
+    public ResponseEntity<UserCodeWithClassDto> updateUserCode(
+            UserDetailsImpl userDetails, int id, UserCodeWithClassDto userCodeWithClassDto) {
+        return ResponseEntity.ok(adminPanelService.updateUserCode(id, userCodeWithClassDto, userDetails));
     }
 
     @Override
-    public ResponseEntity<List<ClassDto>> getAllClasses() {
-        return ResponseEntity.ok(adminPanelService.getAllClassesForSchool(1));
+    public ResponseEntity<List<ClassDto>> getAllClasses(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(adminPanelService.getAllClassesForSchool(userDetails));
     }
 
     @Override
-    public ResponseEntity<ClassDto> createClass(ClassDto classDto) {
-        return ResponseEntity.ok(adminPanelService.createClass(classDto, 1));
+    public ResponseEntity<ClassDto> createClass(UserDetailsImpl userDetails, ClassDto classDto) {
+        return ResponseEntity.ok(adminPanelService.createClass(classDto, userDetails));
     }
 
     @Override
-    public ResponseEntity<Void> deleteClass(Integer id) {
-        adminPanelService.deleteClass(id);
+    public ResponseEntity<Void> deleteClass(UserDetailsImpl userDetails, Integer id) {
+        adminPanelService.deleteClass(id, userDetails);
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<List<TimetableDto>> getTimetable() {
-        return ResponseEntity.ok(adminPanelService.getTimetable(2));
+    public ResponseEntity<List<TimetableDto>> getTimetable(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(adminPanelService.getTimetable(userDetails));
     }
 
     @Override
-    public ResponseEntity<List<TeacherSubjectDto>> getAllSubjects() {
-        return ResponseEntity.ok(adminPanelService.getAllSubjects(2));
+    public ResponseEntity<List<TeacherSubjectDto>> getAllSubjects(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(adminPanelService.getAllSubjects(userDetails));
     }
 
     @Override
-    public ResponseEntity<SubjectDto> createSubject(SubjectCreateDto subjectDto) {
-        return ResponseEntity.ok(adminPanelService.createSubject(subjectDto, 2));
+    public ResponseEntity<SubjectDto> createSubject(UserDetailsImpl userDetails, SubjectCreateDto subjectDto) {
+        return ResponseEntity.ok(adminPanelService.createSubject(subjectDto, userDetails));
     }
 
     @Override
-    public ResponseEntity<TeacherSubjectDto> setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto) {
-        return ResponseEntity.ok(adminPanelService.setTeacherToSubject(teacherSubjectCreateDto, 2));
+    public ResponseEntity<TeacherSubjectDto> setTeacherToSubject(
+            UserDetailsImpl userDetails, TeacherSubjectCreateDto teacherSubjectCreateDto) {
+        return ResponseEntity.ok(adminPanelService.setTeacherToSubject(teacherSubjectCreateDto, userDetails));
     }
 
     @Override
-    public ResponseEntity<TeacherSubjectDto> deleteTeacherToSubject(int teacherSubjectId) {
-        adminPanelService.deleteTeacherToSubject(teacherSubjectId, 2);
+    public ResponseEntity<TeacherSubjectDto> deleteTeacherToSubject(
+            UserDetailsImpl userDetails, int teacherSubjectId) {
+        adminPanelService.deleteTeacherToSubject(teacherSubjectId, userDetails);
         return ResponseEntity.ok().build();
     }
 }
