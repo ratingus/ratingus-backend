@@ -16,17 +16,17 @@ public class ManagerPanelController implements ManagerPanelApi {
     private final ManagerPanelService managerPanelService;
     @Override
     public ResponseEntity<List<ApplicationDto>> getAllApplications(UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(managerPanelService.getAllApplications());
+        return ResponseEntity.ok(managerPanelService.getAllApplications(userDetails));
     }
 
     @Override
     public ResponseEntity<ApplicationDto> createApplication(UserDetailsImpl userDetails, ApplicationDto applicationDto) {
-        return ResponseEntity.ok(managerPanelService.createApplication(applicationDto, userDetails.getUser())); //todo
+        return ResponseEntity.ok(managerPanelService.createApplication(userDetails, applicationDto, userDetails.getUser())); //todo
     }
 
     @Override
     public ResponseEntity<Void> deleteApplication(UserDetailsImpl userDetails, int id) {
-        managerPanelService.deleteApplication(id);
+        managerPanelService.deleteApplication(userDetails, id);
         return ResponseEntity.ok().build();
     }
 

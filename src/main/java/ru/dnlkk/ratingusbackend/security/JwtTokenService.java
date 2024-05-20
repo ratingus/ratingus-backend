@@ -49,6 +49,7 @@ public class JwtTokenService {
             claims.put("surname", userRole.getSurname());
             claims.put("patronymic", userRole.getPatronymic());
             claims.put("role", userRole.getRole().name());
+            claims.put("school", String.valueOf(userRole.getSchool().getId()));
         } else {
             claims.put("name", user.getName());
             claims.put("surname", user.getSurname());

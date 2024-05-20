@@ -42,7 +42,7 @@ public class AdminPanelService {
     private final UserRoleRepository userRoleRepository;
 
     private void forbidAccessForNullUserRole(UserDetailsImpl userDetails) {
-        if (userDetails.getUser().getIsAdmin()) {
+        if (userDetails.getUser().getIsAdmin()) { //todo: не до конца всё проверяет и работает
             return;
         }
         if (userDetails.getUserRole() == null) {
