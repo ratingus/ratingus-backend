@@ -16,30 +16,29 @@ import java.util.List;
 public class AnnouncementController extends ExceptionHandlerController implements AnnouncementApi {
     private final AnnouncementService announcementService;
 
-    private final int schoolIdTest = 2;
-    private final int userIdTest = 2;
-
     @Override
-    public ResponseEntity<List<AnnouncementDto>> getAllAnnouncements(Integer offset, Integer limit, Integer classId) {
-        List<AnnouncementDto> announcementDtoList = announcementService.getAllAnnouncementsPagination(offset, limit, classId, schoolIdTest);
+    public ResponseEntity<List<AnnouncementDto>> getAllAnnouncements(
+            UserDetailsImpl userDetails, Integer offset, Integer limit, Integer classId) {
+        List<AnnouncementDto> announcementDtoList = announcementService.getAllAnnouncementsPagination(userDetails, offset, limit, classId);
         return ResponseEntity.ok(announcementDtoList);
     }
 
     @Override
-    public ResponseEntity<AnnouncementDto> getAnnouncementById(int id) {
-        AnnouncementDto announcementDto = announcementService.getAnnouncementById(id, schoolIdTest);
+    public ResponseEntity<AnnouncementDto> getAnnouncementById(UserDetailsImpl userDetails, int id) {
+        AnnouncementDto announcementDto = announcementService.getAnnouncementById(userDetails, id);
         return ResponseEntity.ok(announcementDto);
     }
 
     @Override
-    public ResponseEntity<AnnouncementDto> createAnnouncement(AnnouncementCreateDto announcementCreateDto, UserDetailsImpl creator) {
-        AnnouncementDto announcementDtoFromService = announcementService.createAnnouncement(announcementCreateDto, creator);
+    public ResponseEntity<AnnouncementDto> createAnnouncement(
+            UserDetailsImpl userDetails, AnnouncementCreateDto announcementCreateDto) {
+        AnnouncementDto announcementDtoFromService = announcementService.createAnnouncement(userDetails, announcementCreateDto);
         return ResponseEntity.ok(announcementDtoFromService);
     }
 
     @Override
-    public ResponseEntity<Void> deleteAnnouncement(int id) {
-        announcementService.deleteAnnouncementById(id);
+    public ResponseEntity<Void> deleteAnnouncement(UserDetailsImpl userDetails, int id) {
+        announcementService.deleteAnnouncementById(userDetails, id);
         return ResponseEntity.ok().build();
     }
 }

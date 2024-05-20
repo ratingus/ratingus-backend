@@ -6,14 +6,15 @@ import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
+import ru.dnlkk.ratingusbackend.exceptions.LogicException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.announcement.AnnouncementMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.AnnouncementRepository;
 import ru.dnlkk.ratingusbackend.repository.ClassRepository;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
-import ru.dnlkk.ratingusbackend.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +24,24 @@ import java.util.Optional;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final ClassRepository classRepository;
-    private final UserRepository userRepository;
     private final SchoolRepository schoolRepository;
 
-    public List<AnnouncementDto> getAllAnnouncementsPagination(int offset, int limit, Integer classId, int schoolId) {
+    private void checkIsUserRoleNull(UserDetailsImpl userDetails) {
+        if (userDetails.getUserRole() == null) {
+            throw new LogicException("Доступ запрещён");
+        }
+    }
+
+    private void checkUserIsTeacherOrHigher(UserDetailsImpl userDetails) {
+        Role roleOfUser = userDetails.getUserRole().getRole();
+        if (roleOfUser != Role.LOCAL_ADMIN && roleOfUser != Role.MANAGER && roleOfUser != Role.TEACHER) {
+            throw new ForbiddenException("Доступ запрещён");
+        }
+    }
+
+    public List<AnnouncementDto> getAllAnnouncementsPagination(UserDetailsImpl userDetails, int offset, int limit, Integer classId) {
+        checkIsUserRoleNull(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         if (classId != null) {
             Optional<Class> classById = classRepository.findById(classId);
             if (classById.isEmpty()) {
@@ -45,7 +60,9 @@ public class AnnouncementService {
         return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
-    public AnnouncementDto getAnnouncementById(int id, int schoolId) {
+    public AnnouncementDto getAnnouncementById(UserDetailsImpl userDetails, int id) {
+        checkIsUserRoleNull(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
         Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
         if (optionalAnnouncement.isEmpty()) {
             throw new NotFoundException("Такое объявление не найдено");
@@ -60,7 +77,16 @@ public class AnnouncementService {
         throw new ForbiddenException("Нет доступа к этому объявлению");
     }
 
-    public AnnouncementDto createAnnouncement(AnnouncementCreateDto announcementCreateDto, UserDetailsImpl creator) {
+    public void deleteAnnouncementById(UserDetailsImpl userDetails, int id) {
+        checkIsUserRoleNull(userDetails);
+        checkUserIsTeacherOrHigher(userDetails);
+        announcementRepository.deleteById(id);
+    }
+
+    public AnnouncementDto createAnnouncement(UserDetailsImpl userDetails, AnnouncementCreateDto announcementCreateDto) {
+        checkIsUserRoleNull(userDetails);
+        checkUserIsTeacherOrHigher(userDetails);
+        UserRole creator = userDetails.getUserRole();
         Announcement announcement = AnnouncementMapper.INSTANCE.toModel(announcementCreateDto);
         List<Class> classes = announcement.getClasses();
         for (Class c : classes) {
@@ -69,16 +95,12 @@ public class AnnouncementService {
                 throw new NotFoundException("Не найден класс с id=" + c.getId());
             }
             Class cc = classById.get();
-            if (cc.getSchool().getId() != creator.getUserRole().getSchool().getId()) {
+            if (cc.getSchool().getId() != creator.getSchool().getId()) {
                 throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId() );
             }
         }
-        announcement.setCreator(creator.getUserRole());
+        announcement.setCreator(creator);
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
-    }
-
-    public void deleteAnnouncementById(int id) {
-        announcementRepository.deleteById(id);
     }
 }

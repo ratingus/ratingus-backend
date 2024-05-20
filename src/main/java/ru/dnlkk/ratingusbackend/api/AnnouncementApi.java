@@ -26,6 +26,8 @@ public interface AnnouncementApi {
     )
     @GetMapping
     ResponseEntity<List<AnnouncementDto>> getAllAnnouncements(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "Номер страницы для пагинации", minimum = "0", defaultValue = defaultOffset)
             @RequestParam(name = "offset", defaultValue = defaultOffset)
             @Min(0)
@@ -48,6 +50,8 @@ public interface AnnouncementApi {
     )
     @GetMapping("/{id}")
     ResponseEntity<AnnouncementDto> getAnnouncementById(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "Id запрашиваемого объявления")
             @Min(0)
             @PathVariable int id
@@ -59,8 +63,10 @@ public interface AnnouncementApi {
     )
     @PostMapping()
     ResponseEntity<AnnouncementDto> createAnnouncement(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "DTO создаваемого объявления")
-            @RequestBody AnnouncementCreateDto announcementCreateDto, @AuthenticationPrincipal UserDetailsImpl creator
+            @RequestBody AnnouncementCreateDto announcementCreateDto
     );
 
 
@@ -70,6 +76,8 @@ public interface AnnouncementApi {
     )
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteAnnouncement(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "Id удаляемого объявления")
             @Min(0)
             @PathVariable("id") int id

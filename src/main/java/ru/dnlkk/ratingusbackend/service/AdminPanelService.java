@@ -45,7 +45,7 @@ public class AdminPanelService {
         if (userDetails.getUser().getIsAdmin() == null) {
             throw new ForbiddenException("Доступ запрещён");
         }
-        if (userDetails.getUser().getIsAdmin()) { //todo: не до конца всё проверяет и работает
+        if (userDetails.getUser().getIsAdmin()) { //todo: не до конца всё проверяет и работает (если у админа userRole=null, проблема не решена. Но такого и не должно быть)
             return;
         }
         if (userDetails.getUserRole() == null) {
