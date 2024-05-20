@@ -27,7 +27,11 @@ public interface ManagerPanelApi {
             description = "Создаёт заявку на создание школы и возвращает её"
     )
     @PostMapping("/application")
-    ResponseEntity<ApplicationDto> createApplication(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ApplicationDto applicationDto);
+    ResponseEntity<ApplicationDto> createApplication(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "DTO создаваемой заявки")
+            @RequestBody ApplicationDto applicationDto);
 
 
     @Operation(
@@ -45,5 +49,8 @@ public interface ManagerPanelApi {
             description = "Создаёт школу и возвращает её"
     )
     @PostMapping("/application-approve/{id}")
-    ResponseEntity<SchoolWasCreatedDto> createSchool(@PathVariable(name = "id") int applicationId);
+    ResponseEntity<SchoolWasCreatedDto> createSchool(
+            @Schema(description = "Id одобренной заявки")
+            @PathVariable(name = "id") int applicationId
+    );
 }
