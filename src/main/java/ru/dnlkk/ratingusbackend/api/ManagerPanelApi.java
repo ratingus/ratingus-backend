@@ -52,6 +52,8 @@ public interface ManagerPanelApi {
     )
     @PostMapping("/application-approve/{id}")
     ResponseEntity<SchoolWasCreatedDto> createSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
             @Schema(description = "Id одобренной заявки")
             @PathVariable(name = "id") int applicationId
     );
