@@ -1,11 +1,10 @@
 package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
-import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationIdDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.ApplicationMapper;
 import ru.dnlkk.ratingusbackend.mapper.SchoolMapper;
 import ru.dnlkk.ratingusbackend.model.Application;
@@ -38,20 +37,21 @@ public class ManagerPanelService {
         applicationRepository.deleteById(id);
     }
 
-    public SchoolWasCreatedDto createSchool(ApplicationIdDto applicationIdDto) {
-        Optional<Application> applicationOptional = applicationRepository.findById(applicationIdDto.getId());
+    public SchoolWasCreatedDto createSchool(int applicationId) {
+        Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if (applicationOptional.isEmpty()) {
-            return null; //todo ошибка 404?
+            throw new NotFoundException("Не существует заявки с id=" + applicationId);
         }
+
         School school = new School();
         Application application = applicationOptional.get();
-        school.setName(application.getOrganisationName()); //todo: вынести в маппер (в SchoolMapper)
+        school.setName(application.getOrganisationName());
         school.setEmail(application.getOrganisationMail());
         school.setAddress(application.getOrganisationAddress());
         school.setPhone(application.getOrganisationPhone());
         School schoolAfterSaving = schoolRepository.saveAndFlush(school);
 
-        deleteApplication(applicationIdDto.getId());
+        deleteApplication(applicationId);
 
         return SchoolMapper.INSTANCE.toSchoolWasCreatedDto(schoolAfterSaving);
     }
