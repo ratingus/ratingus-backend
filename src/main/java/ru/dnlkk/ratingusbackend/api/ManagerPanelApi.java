@@ -22,7 +22,6 @@ public interface ManagerPanelApi {
     @GetMapping("/application")
     ResponseEntity<List<ApplicationDto>> getAllApplications();
 
-    //todo: мб этот метод не тут должен быть
     @Operation(
             summary = "Создание заявки",
             description = "Создаёт заявку на создание школы и возвращает её"
