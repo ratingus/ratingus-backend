@@ -112,6 +112,45 @@ public class ScheduleService {
         return new ScheduleDTO(dayLessons);
     }
 
+    public void changeSubjectInSchedule(UserRole userRole, ScheduleChangeDTO changeSubjectInScheduleRequestDTO, int classId) {
+        Class clazz = new Class();
+        clazz.setId(classId);
+        Schedule schedulesFrom = scheduleRepository.findByScheduleForClassAndDayOfWeekAndTimetableLessonNumber(
+                clazz,
+                changeSubjectInScheduleRequestDTO.getFrom().getDayOfWeek(),
+                changeSubjectInScheduleRequestDTO.getFrom().getLessonNumber()
+        );
+        Schedule schedulesTo = scheduleRepository.findByScheduleForClassAndDayOfWeekAndTimetableLessonNumber(
+                clazz,
+                changeSubjectInScheduleRequestDTO.getTo().getDayOfWeek(),
+                changeSubjectInScheduleRequestDTO.getTo().getLessonNumber()
+        );
+        List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(userRole.getSchool().getId());
+
+        if (schedulesFrom != null) {
+            schedulesFrom.setDayOfWeek(changeSubjectInScheduleRequestDTO.getTo().getDayOfWeek());
+            schedulesTo.setTimetable(timetables.get(changeSubjectInScheduleRequestDTO.getTo().getLessonNumber() - 1));
+            scheduleRepository.save(schedulesFrom);
+        }
+        if (schedulesTo != null) {
+            schedulesTo.setDayOfWeek(changeSubjectInScheduleRequestDTO.getFrom().getDayOfWeek());
+            schedulesTo.setTimetable(timetables.get(changeSubjectInScheduleRequestDTO.getFrom().getLessonNumber() - 1));
+            scheduleRepository.save(schedulesTo);
+        }
+    }
+
+    public void removeSubjectFromSchedule(UserRole userRole, ScheduleActionDTO removeSubjectFromScheduleRequestDTO, int classId) {
+        Class clazz = new Class();
+        clazz.setId(classId);
+        Schedule schedule = scheduleRepository.findByScheduleForClassAndDayOfWeekAndTimetableLessonNumber(
+                clazz,
+                removeSubjectFromScheduleRequestDTO.getDayOfWeek(),
+                removeSubjectFromScheduleRequestDTO.getLessonNumber()
+        );
+
+        scheduleRepository.delete(schedule);
+    }
+
     public void addSubjectInSchedule(UserRole userRole, ScheduleActionDTO addSubjectInScheduleRequestDTO, int classId) {
         Class clazz = new Class();
         clazz.setId(classId);
@@ -128,13 +167,6 @@ public class ScheduleService {
         newSchedule.setSubject(teacherSubject);
         newSchedule.setScheduleForClass(clazz);
         newSchedule.setDayOfWeek(addSubjectInScheduleRequestDTO.getDayOfWeek());
-
-        schedules.forEach(sch -> {
-            System.out.println(sch.getLessonNumber());
-        });
-        timetables.forEach(sch -> {
-            System.out.println(sch.getLessonNumber());
-        });
 
         for (int i = 0; i < schedules.size(); i++) {
             Schedule schedule = schedules.get(i);
