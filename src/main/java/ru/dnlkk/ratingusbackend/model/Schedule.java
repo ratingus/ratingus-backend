@@ -39,4 +39,8 @@ public class Schedule implements IdGettable {
 
     @OneToMany(mappedBy = "schedule")
     private List<Lesson> lessons;
+
+    public int getLessonNumber() {
+        return timetable.getLessonNumber();
+    }
 }
