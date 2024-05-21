@@ -30,11 +30,9 @@ public class StudentLesson {
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id")
-    private  UserRole student;
+    private UserRole student;
 
     @ManyToOne
     @JoinColumn(name = "lesson_id", referencedColumnName = "id")
     private Lesson lesson;
-
-
 }

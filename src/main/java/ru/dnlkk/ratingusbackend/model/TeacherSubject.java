@@ -8,6 +8,7 @@ import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Setter
 @Getter
@@ -28,4 +29,7 @@ public class TeacherSubject implements IdGettable {
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
+
+    @OneToMany(mappedBy = "subject")
+    private List<Schedule> schedules;
 }
