@@ -3,11 +3,12 @@ package ru.dnlkk.ratingusbackend.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.dtos.AttendanceDto;
 import ru.dnlkk.ratingusbackend.api.dtos.GradeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.LessonDto;
 import ru.dnlkk.ratingusbackend.api.dtos.MagazineDto;
+import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
 
@@ -15,38 +16,31 @@ import java.util.List;
 @RequestMapping("/magazine")
 public interface MagazineApi {
     @Operation(
-            summary = "Получение пользователей",
-            description = "Возвращает список пользователей для указанных в query-параметрах класса и предмета"
+            summary = "Журнал учеников",
+            description = "Возвращает список учеников, schedule, lesson и lessonStudent для указанных в query-параметрах класса и предмета"
     )
     @GetMapping("/users")
-    ResponseEntity<List<MagazineDto>> getMagazineWithUsers(
-            @RequestParam(required = true) String className,
-            @RequestParam(required = true) String subjectName
+    ResponseEntity<MagazineDto> getMagazineWithUsers(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @RequestParam(required = true) Integer classId,
+            @RequestParam(required = true) Integer teacherSubjectId
     );
 
 
     @Operation(
-            summary = "Создание оценки",
-            description = "Создаёт оценку для пользователя и возвращает её"
+            summary = "Поставить оценку/посещаемость",
+            description = "Поставить оценку или посещаемость ученику"
     )
-    @PostMapping("/users-grade")
+    @PostMapping("/grade")
+    /*
+        Получаем ученика, дату, scheduleId, lessonId, lessonStudentId
+        Проверяем есть ли lesson:
+            если есть, то проверяем есть ли lessonStudent:
+                если есть, то обновляем его
+                если нет, то создаём новый
+            если нет, то создаём новый lesson и lessonStudent
+     */
     ResponseEntity<GradeDto> createUserGrade(@RequestBody GradeDto gradeDto);
-
-
-    @Operation(
-            summary = "Обновление оценки",
-            description = "Обновляет оценку для пользователя и возвращает её"
-    )
-    @PutMapping("/users-grade")
-    ResponseEntity<GradeDto> updateUserGrade(@RequestBody GradeDto gradeDto);
-
-
-    @Operation(
-            summary = "Обновление посещаемости",
-            description = "Обновляет посещаемость для пользователя и возвращает её"
-    )
-    @PutMapping("/users-attendance")
-    ResponseEntity<GradeDto> updateUserAttendance(@RequestBody AttendanceDto attendanceDto);
 
 
 
@@ -55,6 +49,9 @@ public interface MagazineApi {
             description = "Возвращает список уроков для указанных в query-параметрах класса и предмета"
     )
     @GetMapping("/lessons")
+    /*
+        Получаем список lesson
+     */
     ResponseEntity<List<LessonDto>> getMagazineWithLessons(
             @RequestParam(required = true) String className,
             @RequestParam(required = true) String subjectName
@@ -66,6 +63,9 @@ public interface MagazineApi {
             description = "Создаёт и возвращает урок"
     )
     @PostMapping("/lessons")
+    /*
+          Создаём новый lesson
+     */
     ResponseEntity<List<LessonDto>> createLesson(@RequestBody LessonDto lessonDto);
 
 
