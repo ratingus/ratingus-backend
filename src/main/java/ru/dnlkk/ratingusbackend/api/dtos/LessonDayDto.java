@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-public class MagazineDto {
-    private List<StudentDto> students;
-   private List<MonthLessonDayDto> monthLessonDays;
+public class LessonDayDto {
+    private int day;
+    private List<Integer> lessonId;
 }
