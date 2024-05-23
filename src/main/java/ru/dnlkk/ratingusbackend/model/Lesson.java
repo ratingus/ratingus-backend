@@ -29,7 +29,7 @@ public class Lesson implements IdGettable {
     private String theme;
 
     @Column(name = "finished")
-    private boolean finished;
+    private Boolean finished;
 
     @Column(name = "date_of_lesson")
     private Timestamp date;

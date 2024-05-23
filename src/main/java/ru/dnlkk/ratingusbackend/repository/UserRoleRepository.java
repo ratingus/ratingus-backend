@@ -17,4 +17,6 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
     UserRole findUserRoleByUserAndSchool(User user, School school);
 
     UserRole findUserRoleByUserIdAndSchool(int teacherId, School school);
+
+    List<UserRole> findUserRolesBySchoolIdAndRoleClassId(int id, Integer classId);
 }
