@@ -5,9 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.dnlkk.ratingusbackend.api.dtos.GradeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.LessonDto;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.GradeDto;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.MagazineDto;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonUpdateDto;
+import ru.dnlkk.ratingusbackend.model.Lesson;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
@@ -40,8 +43,9 @@ public interface MagazineApi {
                 если нет, то создаём новый
             если нет, то создаём новый lesson и lessonStudent
      */
-    ResponseEntity<GradeDto> createUserGrade(@RequestBody GradeDto gradeDto);
-
+    ResponseEntity<GradeDto> createUserGrade(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @RequestBody GradeDto gradeDto);
 
 
     @Operation(
@@ -53,8 +57,9 @@ public interface MagazineApi {
         Получаем список lesson
      */
     ResponseEntity<List<LessonDto>> getMagazineWithLessons(
-            @RequestParam(required = true) String className,
-            @RequestParam(required = true) String subjectName
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @RequestParam(required = true) Integer classId,
+            @RequestParam(required = true) Integer teacherSubjectId
     );
 
 
@@ -66,7 +71,9 @@ public interface MagazineApi {
     /*
           Создаём новый lesson
      */
-    ResponseEntity<List<LessonDto>> createLesson(@RequestBody LessonDto lessonDto);
+    ResponseEntity<List<LessonCreateDto>> createLesson(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @RequestBody LessonCreateDto lessonCreateDto);
 
 
     @Operation(
@@ -74,5 +81,7 @@ public interface MagazineApi {
             description = "Обновляет и возвращает урок"
     )
     @PutMapping("/lessons")
-    ResponseEntity<List<LessonDto>> updateLesson(@RequestBody LessonDto lessonDto);
+    ResponseEntity<List<LessonCreateDto>> updateLesson(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @RequestBody LessonUpdateDto lessonCreateDto);
 }
