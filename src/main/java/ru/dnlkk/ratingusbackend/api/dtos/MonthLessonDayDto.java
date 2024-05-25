@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @Data
 public class MonthLessonDayDto {
-    private String month;
+    private int month;
     private List<LessonDayDto> lessonDays;
 }
 

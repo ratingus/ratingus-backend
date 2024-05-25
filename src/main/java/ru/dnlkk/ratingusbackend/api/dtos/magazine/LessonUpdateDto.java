@@ -1,6 +1,5 @@
-package ru.dnlkk.ratingusbackend.api.dtos;
+package ru.dnlkk.ratingusbackend.api.dtos.magazine;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +11,10 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Data
-public class LessonDto {
-    private int id;
-    private String homework;
-    private String theme;
-    private Boolean finished;
+public class LessonUpdateDto {
+    private Integer lessonId;
     private Timestamp date;
-    private Integer lessonNumber;
+    private String theme;
+    private String homework;
+    private Boolean finished;
 }
