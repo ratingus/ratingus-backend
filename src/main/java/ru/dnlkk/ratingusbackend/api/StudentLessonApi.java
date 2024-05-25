@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.DateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.LessonDto;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.NoteDto;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface StudentLessonApi {
             description = "Возвращает список всех уроков за неделю по указанной дате"
     )
     @GetMapping("/week")
-    ResponseEntity<List<LessonDto>> getWeekLessons(@RequestBody DateDto dateDto);
+    ResponseEntity<List<LessonCreateDto>> getWeekLessons(@RequestBody DateDto dateDto);
 
 
     @Operation(
@@ -26,7 +26,7 @@ public interface StudentLessonApi {
             description = "Возвращает список всех уроков за день по указанной дате"
     )
     @GetMapping("/day")
-    ResponseEntity<List<LessonDto>> getDayLessons(@RequestBody DateDto dateDto);
+    ResponseEntity<List<LessonCreateDto>> getDayLessons(@RequestBody DateDto dateDto);
 
     //todo: нет работы с заметками
 
@@ -35,7 +35,7 @@ public interface StudentLessonApi {
             description = "Возвращает информацию об уроке по его id"
     )
     @GetMapping("/lesson/{lessonId}")
-    ResponseEntity<List<LessonDto>> getLesson(@PathVariable int lessonId);
+    ResponseEntity<List<LessonCreateDto>> getLesson(@PathVariable int lessonId);
 
 
     @Operation(
