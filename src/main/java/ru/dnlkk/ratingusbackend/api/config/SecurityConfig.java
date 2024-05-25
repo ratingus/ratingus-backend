@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,10 +19,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.dnlkk.ratingusbackend.security.JwtRequestFilter;
 import ru.dnlkk.ratingusbackend.service.UserService;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -46,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
