@@ -3,12 +3,14 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.MagazineLessonDto;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.repository.*;
 
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -59,7 +61,8 @@ public class MagazineService {
                 .entrySet().stream()
                 .map(entry -> {
                     var dto = new MonthLessonDayDto();
-                    dto.setMonth(entry.getKey());
+                    var month = entry.getKey();
+                    dto.setMonth(month);
                     var monthMarks = new ArrayList<MarkDto>();
 
                     List<LessonDayDto> lessonDays = new ArrayList<>();
@@ -68,7 +71,10 @@ public class MagazineService {
                     for (int index = 0; index < days.size(); index++) {
                         int day  = daysList.get(index);
                         List<Lesson> lessonsForDay = lessons.stream().filter(
-                                l -> l.getDate().toLocalDateTime().getDayOfMonth() == day && l.getDate().toLocalDateTime().getMonth().name().equals(entry.getKey())
+                                l -> l.getDate().toLocalDateTime().getDayOfMonth() == day && l.getDate().toLocalDateTime().getMonth().name().equals(month)
+                        ).toList();
+                        List<Schedule> schedulesForDay = schedules.stream().filter(
+                                l -> l.getDayOfWeek() == LocalDate.of(LocalDate.now().getYear(), Month.valueOf(month).getValue(), day).getDayOfWeek().getValue() - 1
                         ).toList();
 
                         if (index == 0) {
@@ -89,7 +95,16 @@ public class MagazineService {
                             });
                         });
 
-                        List<Integer> lessonsDays = lessonsForDay.stream().map(Lesson::getId).toList();
+
+                        List<MagazineLessonDto> lessonsDays = schedulesForDay.stream().map(schedule -> {
+                            List<Lesson> lessonForDay = schedule.getLessons().stream().filter(l ->  l.getDate().toLocalDateTime().getDayOfMonth() == day && l.getDate().toLocalDateTime().getMonth().name().equals(month)).toList();
+
+                            return new MagazineLessonDto(
+                                    schedule.getId(),
+                                    schedule.getLessonNumber(),
+                                    !lessonForDay.isEmpty() ? lessonForDay.getFirst().getId() : null
+                            );
+                        }).toList();
                         lessonDays.add(new LessonDayDto(day, lessonsDays));
                     }
 
@@ -119,5 +134,9 @@ public class MagazineService {
         }
 
         return dates;
+    }
+
+    public void createUserGrade(GradeDto gradeDto, Integer classId, Integer teacherSubjectId) {
+//        Lesson lesson = lessonRepository.findLessonById(gradeDto.getLessonId());
     }
 }
