@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.MagazineLessonDto;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-public class MagazineDto {
-    private List<StudentDto> students;
-   private List<MonthLessonDayDto> monthLessonDays;
+public class LessonDayDto {
+    private int day;
+    private List<MagazineLessonDto> lessonId;
 }
