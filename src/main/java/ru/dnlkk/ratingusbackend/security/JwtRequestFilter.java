@@ -1,6 +1,10 @@
 package ru.dnlkk.ratingusbackend.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.service.UserService;
+
 import java.io.IOException;
 
 @Component
@@ -20,9 +25,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final UserService userService;
 
     @Override
-    protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         final String requestTokenHeader = request.getHeader("Authorization");
-        System.out.println(requestTokenHeader);
 
         String username = null;
         String school = null;
@@ -30,7 +34,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
-            System.out.println(jwtToken);
             try {
                 username = jwtTokenService.getName(jwtToken);
                 school = jwtTokenService.getSchool(jwtToken);
@@ -49,14 +52,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetailsImpl userDetails = userService.loadUserByUsername(username + "-" + school);
-            System.out.println(userDetails.getUsername());
-            System.out.println(jwtTokenService.validateToken(jwtToken, userDetails));
             if (jwtTokenService.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+                userService.saveUserRole(userDetails.getUserRole());
+
+                String token = jwtTokenService.generateToken(userDetails);
+                response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
             }
         }
         filterChain.doFilter(request, response);

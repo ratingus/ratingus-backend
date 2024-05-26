@@ -35,8 +35,6 @@ public class DiaryService {
         calendar.setTime(startDate);
         calendar.add(Calendar.DAY_OF_WEEK, 6);
         Timestamp endDate = new Timestamp(calendar.getTimeInMillis());
-        System.out.println("startDate = " + startDate);
-        System.out.println("endDate = " + endDate);
 
         var userClass = userRole.getRoleClass();
 

@@ -54,4 +54,7 @@ public class UserCode implements IdGettable {
     @ManyToOne
     @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
+
+    @OneToOne(mappedBy = "code")
+    private Application application;
 }

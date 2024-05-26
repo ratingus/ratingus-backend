@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.dnlkk.ratingusbackend.api.model.*;
 import ru.dnlkk.ratingusbackend.api.dtos.JWTRequest;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Tag(name = "Контроллер авторизации", description = "Авторизация, регистрация")
 @RequestMapping("/auth")
 public interface AuthApi {
@@ -26,7 +28,7 @@ public interface AuthApi {
             description = "Возвращает JWT-токен для переданных логина и пароля"
     )
     @PostMapping("/login")
-    ResponseEntity<JWTResponseDto> login(@RequestBody JWTRequest jwtRequest);
+    ResponseEntity<JWTResponseDto> login(HttpServletResponse response, @RequestBody JWTRequest jwtRequest);
 
 
     @Operation(
@@ -34,5 +36,5 @@ public interface AuthApi {
             description = "Создаёт пользователя и возвращает JWT-токен"
     )
     @PostMapping ("/register")
-    ResponseEntity<JWTResponseDto> register(@RequestBody JWTRegistrationDto jwtRegistrationDto);
+    ResponseEntity<JWTResponseDto> register(HttpServletResponse response, @RequestBody JWTRegistrationDto jwtRegistrationDto);
 }

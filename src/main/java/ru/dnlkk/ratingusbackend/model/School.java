@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.util.List;

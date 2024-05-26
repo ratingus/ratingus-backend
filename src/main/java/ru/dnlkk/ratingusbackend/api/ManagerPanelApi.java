@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;
@@ -47,6 +48,14 @@ public interface ManagerPanelApi {
     );
 
     @Operation(
+            summary = "Отклонение заявки",
+            description = "Отклоняет заявку на создание школы и ничего не возвращает"
+    )
+    @PostMapping("/application-reject/{id}")
+    ResponseEntity<Void> rejectApplication(@AuthenticationPrincipal UserDetailsImpl userDetails, @Schema(description = "Id отклоняемой заявки")
+    @PathVariable("id") int id);
+
+    @Operation(
             summary = "Создание новой школы (одобрение заявки)",
             description = "Создаёт школу и возвращает её"
     )
@@ -55,6 +64,7 @@ public interface ManagerPanelApi {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
       
             @Schema(description = "Id одобренной заявки")
-            @PathVariable(name = "id") int applicationId
+            @PathVariable(name = "id") int applicationId,
+            @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
 }

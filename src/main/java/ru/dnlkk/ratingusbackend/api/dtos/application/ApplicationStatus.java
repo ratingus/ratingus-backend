@@ -9,12 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class ApplicationDto {
-    private int id;
-    private String email;
-    private String name;
-    private String address;
-    private String phone;
-    private String status;
-    private int creatorId;
+public class ApplicationStatus {
+    private ApplicationStatusType type;
+    private String code;
 }

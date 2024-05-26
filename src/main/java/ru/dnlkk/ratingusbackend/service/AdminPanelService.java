@@ -87,10 +87,10 @@ public class AdminPanelService {
         }
     }
 
-    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl userDetails) {
+    public UserCodeWithClassDto createUserCode(UserCodeWithClassDto userCodeWithClassDto, UserDetailsImpl userDetails, Integer school) {
         forbidAccessForNullUserRole(userDetails);
         UserCode userCode = UserCodeMapper.INSTANCE.toUserCode(userCodeWithClassDto);
-        int schoolId = userDetails.getUserRole().getSchool().getId();
+        int schoolId = school != null ? school : userDetails.getUserRole().getSchool().getId();
 
         userCode.setCreator(userDetails.getUser());
         userCode.getSchool().setId(schoolId);
