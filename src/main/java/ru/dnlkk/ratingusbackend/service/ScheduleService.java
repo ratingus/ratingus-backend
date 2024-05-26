@@ -2,7 +2,7 @@ package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.dnlkk.ratingusbackend.api.dtos.TeacherDTO;
+import ru.dnlkk.ratingusbackend.api.dtos.TeacherDto;
 import ru.dnlkk.ratingusbackend.api.dtos.schedule.*;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.Class;
@@ -43,7 +43,7 @@ public class ScheduleService {
                 scheduleTeachersDTO.setTeachers(new ArrayList<>());
                 scheduleTeachersDTOS.put(teacherSubject.getSubject().getId(), scheduleTeachersDTO);
             }
-            var teacherDTO = new TeacherDTO();
+            var teacherDTO = new TeacherDto();
             teacherDTO.setId(teacherSubject.getTeacher().getId());
             teacherDTO.setName(teacherSubject.getTeacher().getName());
             teacherDTO.setSurname(teacherSubject.getTeacher().getSurname());
@@ -80,7 +80,7 @@ public class ScheduleService {
                         .orElse(null);
 
                 if (schedule != null) {
-                    TeacherDTO teacherDTO = new TeacherDTO();
+                    TeacherDto teacherDTO = new TeacherDto();
                     teacherDTO.setId(schedule.getSubject().getTeacher().getId());
                     teacherDTO.setName(schedule.getSubject().getTeacher().getName());
                     teacherDTO.setSurname(schedule.getSubject().getTeacher().getSurname());
