@@ -8,6 +8,7 @@ import lombok.Setter;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Setter
@@ -59,4 +60,7 @@ public class UserRole implements IdGettable {
 
     @OneToMany(mappedBy = "teacher")
     private List<TeacherSubject> teacherSubjects;
+
+    @Column(name = "last_login")
+    private Timestamp lastLogin;
 }
