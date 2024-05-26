@@ -18,6 +18,8 @@ import ru.dnlkk.ratingusbackend.security.JwtTokenService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.sql.Timestamp;
+
 @RestController
 @AllArgsConstructor
 public class ProfileController implements ProfileApi {
@@ -52,12 +54,14 @@ public class ProfileController implements ProfileApi {
         userRole.setPatronymic(code.getPatronymic());
         userRole.setRole(code.getRole());
         userRole.setRoleClass(code.getUserClass());
+        userRole.setLastLogin(new Timestamp(System.currentTimeMillis()));
 
         userDetails.setUserRole(userRole);
         String token = jwtTokenService.generateToken(userDetails);
 
         userRoleRepository.save(userRole);
         code.setActivated(true);
+        userCodeRepository.save(code);
         response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
 
         return ResponseEntity.noContent().build();
