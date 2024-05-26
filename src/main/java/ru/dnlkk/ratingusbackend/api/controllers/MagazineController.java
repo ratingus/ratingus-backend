@@ -9,7 +9,6 @@ import ru.dnlkk.ratingusbackend.api.dtos.magazine.GradeDto;
 import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.MagazineDto;
 import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonUpdateDto;
-import ru.dnlkk.ratingusbackend.model.Lesson;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.service.MagazineService;
 
