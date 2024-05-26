@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.ProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.ChangeSchoolDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.SetUserCodeDto;
 import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
@@ -21,8 +22,8 @@ public interface ProfileApi {
             summary = "Получение пользователя",
             description = "Возвращает информацию о пользователе"
     )
-    @GetMapping
-    ResponseEntity<UserDto> getUser();
+    @GetMapping("/{id}")
+    ResponseEntity<ProfileDto> getUser(@PathVariable("id") Integer id);
 
 
     @Operation(
