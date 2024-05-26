@@ -77,7 +77,6 @@ public class UserService implements UserDetailsService{
     @Override
     @Transactional
     public UserDetailsImpl loadUserByUsername(String login) throws UsernameNotFoundException {
-        System.out.println(login);
         String[] loginSplit = login.split("-");
         String username = loginSplit[0];
         String schoolId = loginSplit.length > 1 ? loginSplit[1] : "null";

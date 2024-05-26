@@ -62,7 +62,6 @@ public class MagazineService {
                 .map(entry -> {
                     var dto = new MonthLessonDayDto();
                     var month = entry.getKey();
-                    System.out.println(month.getValue());
                     dto.setMonth(month.getValue());
                     var monthMarks = new ArrayList<MarkDto>();
 
