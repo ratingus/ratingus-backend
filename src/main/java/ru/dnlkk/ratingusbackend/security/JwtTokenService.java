@@ -44,7 +44,10 @@ public class JwtTokenService {
 
     private static Map<String, Object> getStringObjectMap(UserRole userRole, User user) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getId());
+        claims.put("login", user.getLogin());
         if (userRole != null){
+            claims.put("userRoleId", userRole.getId());
             claims.put("name", userRole.getName());
             claims.put("surname", userRole.getSurname());
             claims.put("patronymic", userRole.getPatronymic());
@@ -56,7 +59,6 @@ public class JwtTokenService {
             claims.put("patronymic", user.getPatronymic());
             claims.put("role", Role.GUEST.name());
         }
-        claims.put("login", user.getLogin());
         return claims;
     }
 

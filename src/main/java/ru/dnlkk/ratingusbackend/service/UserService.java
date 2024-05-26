@@ -12,6 +12,9 @@ import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 
+import java.sql.Timestamp;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -81,13 +84,23 @@ public class UserService implements UserDetailsService{
         User user = getByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь '%s' не найден", username)
         ));
-        UserRole userRole = null;
-        if (!schoolId.isBlank() && schoolId != null && !schoolId.equals("null")) {
+        UserRole userRole;
+        if (!schoolId.isBlank() && !schoolId.equals("null")) {
             // TODO: пока норм, но только если у пользователя не более одной роли в школе
             School school = schoolRepository.findSchoolById(Integer.parseInt(schoolId));
             userRole = userRoleRepository.findUserRoleByUserAndSchool(user, school);
+        } else {
+            List<UserRole> userRoles = userRoleRepository.findAllByUser(user);
+            userRole = userRoles.isEmpty() ? null : userRoles.stream().max(Comparator.comparing(UserRole::getLastLogin)).get();
         }
         return new UserDetailsImpl(user, userRole);
+    }
+
+    public void saveUserRole(UserRole userRole) {
+        if (userRole != null) {
+            userRole.setLastLogin(new Timestamp(System.currentTimeMillis()));
+            userRoleRepository.save(userRole);
+        }
     }
 
 }
