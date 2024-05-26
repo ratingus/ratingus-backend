@@ -7,7 +7,6 @@ import ru.dnlkk.ratingusbackend.api.ProfileApi;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.ChangeSchoolDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.SetUserCodeDto;
-import ru.dnlkk.ratingusbackend.api.model.JWTResponseDto;
 import ru.dnlkk.ratingusbackend.model.School;
 import ru.dnlkk.ratingusbackend.model.UserCode;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
@@ -16,6 +15,8 @@ import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 import ru.dnlkk.ratingusbackend.security.JwtTokenService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @AllArgsConstructor
@@ -31,12 +32,12 @@ public class ProfileController implements ProfileApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> updateUser(UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(HttpServletResponse response, UserDto userDto) {
         return null;
     }
 
     @Override
-    public ResponseEntity setUserCode(UserDetailsImpl userDetails, SetUserCodeDto userCodeDto) {
+    public ResponseEntity setUserCode(HttpServletResponse response, UserDetailsImpl userDetails, SetUserCodeDto userCodeDto) {
         UserCode code = userCodeRepository.findUserCodesByCode(userCodeDto.getCode());
 
         if (code.isActivated()) {
@@ -57,12 +58,13 @@ public class ProfileController implements ProfileApi {
 
         userRoleRepository.save(userRole);
         code.setActivated(true);
+        response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
 
-        return ResponseEntity.ok(new JWTResponseDto(token));
+        return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity changeSchool(UserDetailsImpl userDetails, ChangeSchoolDto schoolDto) {
+    public ResponseEntity changeSchool(HttpServletResponse response, UserDetailsImpl userDetails, ChangeSchoolDto schoolDto) {
         School school = schoolRepository.findById(schoolDto.getId()).orElse(null);
         if (school == null) {
             return ResponseEntity.badRequest().body("Школа не найдена");
@@ -73,6 +75,7 @@ public class ProfileController implements ProfileApi {
         }
         userDetails.setUserRole(userRole);
         String token = jwtTokenService.generateToken(userDetails);
-        return ResponseEntity.ok(new JWTResponseDto(token));
+        response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
+        return ResponseEntity.noContent().build();
     }
 }

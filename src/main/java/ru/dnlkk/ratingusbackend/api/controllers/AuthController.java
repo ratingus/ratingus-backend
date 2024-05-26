@@ -8,6 +8,8 @@ import ru.dnlkk.ratingusbackend.api.model.JWTRegistrationDto;
 import ru.dnlkk.ratingusbackend.service.AuthService;
 import ru.dnlkk.ratingusbackend.api.dtos.JWTRequest;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController implements AuthApi {
@@ -19,18 +21,22 @@ public class AuthController implements AuthApi {
     }
 
     @Override
-    public ResponseEntity login(JWTRequest jwtRequest) {
+    public ResponseEntity login(HttpServletResponse response, JWTRequest jwtRequest) {
         try {
-            return ResponseEntity.ok(authService.signIn(jwtRequest));
+            var token = authService.signIn(jwtRequest);
+            response.addHeader("Set-Cookie", "token=" + token.getToken() + "; HttpOnly; Secure; SameSite=Strict");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @Override
-    public ResponseEntity register(JWTRegistrationDto jwtRegistrationDto) {
+    public ResponseEntity register(HttpServletResponse response, JWTRegistrationDto jwtRegistrationDto) {
         try {
-            return ResponseEntity.ok(authService.signUp(jwtRegistrationDto));
+            var token = authService.signUp(jwtRegistrationDto);
+            response.addHeader("Set-Cookie", "token=" + token.getToken() + "; HttpOnly; Secure; SameSite=Strict");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
