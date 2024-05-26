@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.dnlkk.ratingusbackend.api.dtos.TeacherDTO;
+import ru.dnlkk.ratingusbackend.api.dtos.TeacherDto;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ import java.util.List;
 public class ScheduleTeachersDTO {
     private int id;
     private String name;
-    private List<TeacherDTO> teachers;
+    private List<TeacherDto> teachers;
 }

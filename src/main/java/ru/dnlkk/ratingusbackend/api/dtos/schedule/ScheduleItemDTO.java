@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.dnlkk.ratingusbackend.api.dtos.TeacherDTO;
+import ru.dnlkk.ratingusbackend.api.dtos.TeacherDto;
 
 import java.sql.Timestamp;
 
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class ScheduleItemDTO {
     private int timetableNumber;
     private int studyId;
-    private TeacherDTO teacher;
+    private TeacherDto teacher;
     private String subject;
     private Timestamp startTime;
     private Timestamp endTime;

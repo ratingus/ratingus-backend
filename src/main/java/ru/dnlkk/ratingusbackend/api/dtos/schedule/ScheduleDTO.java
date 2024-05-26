@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.dnlkk.ratingusbackend.api.dtos.TeacherDTO;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @AllArgsConstructor
