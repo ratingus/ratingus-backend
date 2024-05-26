@@ -47,7 +47,7 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     @Override
     public ResponseEntity<UserCodeWithClassDto> createUserCode(
             UserDetailsImpl userDetails, UserCodeWithClassDto userCodeWithClassDto) {
-        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeWithClassDto, userDetails));
+        return ResponseEntity.ok(adminPanelService.createUserCode(userCodeWithClassDto, userDetails, null));
     }
 
     @Override

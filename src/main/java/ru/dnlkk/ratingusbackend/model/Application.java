@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 @Setter
@@ -20,21 +21,28 @@ public class Application implements IdGettable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "organisation_mail")
+    @Column(name = "email")
     @NotNull
-    private String organisationMail;
+    private String email;
 
-    @Column(name = "organisation_name")
+    @Column(name = "name")
     @NotNull
-    private String organisationName;
+    private String name;
 
-    @Column(name = "organisation_address")
+    @Column(name = "address")
     @NotNull
-    private String organisationAddress;
+    private String address;
 
-    @Column(name = "organisation_phone")
+    @Column(name = "phone")
     @NotNull
-    private String organisationPhone;
+    private String phone;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatusType status;
+
+    @OneToOne
+    private UserCode code;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "id")
