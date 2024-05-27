@@ -67,4 +67,13 @@ public interface ManagerPanelApi {
             @PathVariable(name = "id") int applicationId,
             @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
+
+    @Operation(
+            summary = "Получение всех школ",
+            description = "Возвращает список всех школ, которые есть в базе данных"
+    )
+    @GetMapping("/school")
+    ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 }
