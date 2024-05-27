@@ -53,6 +53,25 @@ public class ProfileController implements ProfileApi {
     }
 
     @Override
+    public ResponseEntity<ProfileDto> getUser(UserDetailsImpl userDetails) {
+        ProfileDto profileDto = new ProfileDto();
+
+        var user = userRepository.findById(userDetails.getUser().getId()).orElseThrow();
+        profileDto.setId(user.getId());
+        profileDto.setLogin(user.getLogin());
+        profileDto.setName(user.getName());
+        profileDto.setSurname(user.getSurname());
+        profileDto.setPatronymic(user.getPatronymic());
+        profileDto.setBirthdate(user.getBirthDate());
+        profileDto.setSchools(user.getUsersRoles().stream().map(userRole -> {
+            School school = userRole.getSchool();
+            return new SchoolDto(school.getId(), school.getName(), userRole.getRole(), userRole.getRoleClass() == null ? null : new ClassDto(userRole.getRoleClass().getId(), userRole.getRoleClass().getName()));
+        }).toList());
+
+        return ResponseEntity.ok(profileDto);
+    }
+
+    @Override
     public ResponseEntity<UserDto> updateUser(HttpServletResponse response, UserDto userDto) {
         return null;
     }
