@@ -42,16 +42,10 @@ public class AdminPanelService {
     private final UserRoleRepository userRoleRepository;
 
     private void forbidAccessForNullUserRole(UserDetailsImpl userDetails) {
-        if (userDetails.getUser().getIsAdmin() == null) {
-            throw new ForbiddenException("Доступ запрещён");
-        }
-        if (userDetails.getUser().getIsAdmin()) { //todo: не до конца всё проверяет и работает (если у админа userRole=null, проблема не решена. Но такого и не должно быть)
+        if (Boolean.TRUE.equals(userDetails.getUser().getIsAdmin())) { //todo: не до конца всё проверяет и работает (если у админа userRole=null, проблема не решена. Но такого и не должно быть)
             return;
         }
-        if (userDetails.getUserRole() == null) {
-            throw new ForbiddenException("Доступ запрещён");
-        }
-        if (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN) {
+        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN)) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
@@ -137,7 +131,6 @@ public class AdminPanelService {
     }
 
     public List<ClassDto> getAllClassesForSchool(UserDetailsImpl userDetails) {
-        forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Class> classesBySchoolId = classRepository.findClassesBySchoolId(schoolId);
         return ClassMapper.INSTANCE.toClassDtoList(classesBySchoolId);

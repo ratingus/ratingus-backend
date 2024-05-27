@@ -61,6 +61,10 @@ public class ProfileController implements ProfileApi {
     public ResponseEntity setUserCode(HttpServletResponse response, UserDetailsImpl userDetails, SetUserCodeDto userCodeDto) {
         UserCode code = userCodeRepository.findUserCodesByCode(userCodeDto.getCode());
 
+        if (code == null) {
+            return ResponseEntity.badRequest().body("Код не найден");
+        }
+
         if (code.isActivated()) {
             return ResponseEntity.badRequest().body("Код уже активирован");
         }
@@ -97,8 +101,10 @@ public class ProfileController implements ProfileApi {
             return ResponseEntity.badRequest().body("Пользователь не состоит в этой школе");
         }
         userDetails.setUserRole(userRole);
+        userRole.setLastLogin(new Timestamp(System.currentTimeMillis() + 1000));
+        userRoleRepository.save(userRole);
         String token = jwtTokenService.generateToken(userDetails);
-        response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
+        response.setHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
         return ResponseEntity.noContent().build();
     }
 }
