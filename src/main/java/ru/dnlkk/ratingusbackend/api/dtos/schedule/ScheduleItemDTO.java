@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Data
 public class ScheduleItemDTO {
     private int timetableNumber;
-    private int studyId;
+    private int teacherSubjectId;
     private TeacherDto teacher;
     private String subject;
     private Timestamp startTime;
