@@ -60,21 +60,14 @@ public class AnnouncementService {
         return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
-    public AnnouncementDto getAnnouncementById(UserDetailsImpl userDetails, int id) {
-        checkIsUserRoleNull(userDetails);
-        int schoolId = userDetails.getUserRole().getSchool().getId();
-        Optional<Announcement> optionalAnnouncement = announcementRepository.findById(id);
-        if (optionalAnnouncement.isEmpty()) {
-            throw new NotFoundException("Такое объявление не найдено");
+    public List<AnnouncementDto> getAnnouncementsByClassId(UserDetailsImpl userDetails, Integer classId) {
+        Optional<Class> optionalClass = classRepository.findById(classId);
+        if (optionalClass.isEmpty()) {
+            throw new NotFoundException("Класс не найден");
         }
-        Announcement announcement = optionalAnnouncement.get();
-        List<Class> classes = announcement.getClasses();
-        for (Class c : classes) {
-            if (c.getSchool().getId() == schoolId) {
-                return AnnouncementMapper.INSTANCE.toDto(announcement);
-            }
-        }
-        throw new ForbiddenException("Нет доступа к этому объявлению");
+        Class clazz = optionalClass.get();
+        List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
+        return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
     public void deleteAnnouncementById(UserDetailsImpl userDetails, int id) {
