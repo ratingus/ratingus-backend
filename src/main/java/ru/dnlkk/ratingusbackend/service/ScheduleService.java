@@ -61,6 +61,10 @@ public class ScheduleService {
         Map<Integer, List<Schedule>> groupedByDayOfWeek = schedules.stream()
                 .collect(Collectors.groupingBy(Schedule::getDayOfWeek));
 
+        List<Timetable> timetables = !schedules.isEmpty() ? timetableRepository.findTimetablesBySchoolId(schedules.getFirst().getScheduleForClass().getSchool().getId()).stream()
+                .sorted(Comparator.comparingInt(Timetable::getLessonNumber))
+                .toList() : null;
+
         List<ScheduleDayDTO> dayLessons = new ArrayList<>();
 
         for (Map.Entry<Integer, List<Schedule>> entry : groupedByDayOfWeek.entrySet()) {
@@ -88,7 +92,7 @@ public class ScheduleService {
 
                     lessons.add(new ScheduleItemDTO(
                             schedule.getLessonNumber(),
-                            schedule.getSubject().getSubject().getId(),
+                            schedule.getSubject().getId(),
                             teacherDTO,
                             schedule.getSubject().getSubject().getName(),
                             schedule.getTimetable().getStartTime(),
@@ -100,8 +104,8 @@ public class ScheduleService {
                             -1,
                             null,
                             "Окно",
-                            null,
-                            null
+                            timetables.get(i - 1).getStartTime(),
+                            timetables.get(i - 1).getEndTime()
                     ));
                 }
             }
@@ -161,7 +165,9 @@ public class ScheduleService {
         int lessonNumber = addSubjectInScheduleRequestDTO.getLessonNumber();
 
         TeacherSubject teacherSubject = teacherSubjectRepository.findById(addSubjectInScheduleRequestDTO.getStudyWithTeacherId()).orElseThrow();
-        List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(userRole.getSchool().getId());
+        List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(userRole.getSchool().getId()).stream()
+                .sorted(Comparator.comparingInt(Timetable::getLessonNumber))
+                .toList();
 
         Schedule newSchedule = new Schedule();
         newSchedule.setSubject(teacherSubject);
