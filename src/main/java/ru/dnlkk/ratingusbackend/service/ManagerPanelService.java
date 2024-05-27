@@ -27,26 +27,26 @@ public class ManagerPanelService {
     private final ApplicationRepository applicationRepository;
     private final UserRoleRepository userRoleRepository;
 
-    private final String[] startTimes = {
+    private final String[] endTimes = {
             "2024-05-21 08:40:00.000000",
             "2024-05-21 09:30:00.000000",
             "2024-05-21 10:25:00.000000",
-            "2024-05-21 10:45:00.000000",
-            "2024-05-21 11:40:00.000000",
-            "2024-05-21 12:35:00.000000",
-            "2024-05-21 13:25:00.000000",
-            "2024-05-21 14:15:00.000000"
-    };
-
-    private final String[] endTimes = {
-            "2024-05-21 08:00:00.000000",
-            "2024-05-21 08:50:00.000000",
-            "2024-05-21 09:45:00.000000",
             "2024-05-21 11:25:00.000000",
             "2024-05-21 12:20:00.000000",
             "2024-05-21 13:15:00.000000",
             "2024-05-21 14:05:00.000000",
             "2024-05-21 14:55:00.000000"
+    };
+
+    private final String[] startTimes = {
+            "2024-05-21 08:00:00.000000",
+            "2024-05-21 08:50:00.000000",
+            "2024-05-21 09:45:00.000000",
+            "2024-05-21 10:45:00.000000",
+            "2024-05-21 11:40:00.000000",
+            "2024-05-21 12:35:00.000000",
+            "2024-05-21 13:25:00.000000",
+            "2024-05-21 14:15:00.000000"
     };
     private final TimetableRepository timetableRepository;
     private final UserCodeRepository userCodeRepository;

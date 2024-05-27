@@ -23,4 +23,4 @@ server:
 
 jwt:
   secret: ${TOKEN_KEY}
-  expiration: 1800000
+  expiration: 2592000000

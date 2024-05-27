@@ -81,7 +81,7 @@ public class MagazineService {
                         }).toList();
 
                         List<Schedule> schedulesForDay = schedules.stream().filter(
-                                l -> l.getDayOfWeek() == LocalDate.of(LocalDate.now().getYear(), month.getValue(), day).getDayOfWeek().getValue() - 1
+                                l -> l.getDayOfWeek() == LocalDate.of(LocalDate.now().getYear(), month.getValue(), day).getDayOfWeek().getValue()
                         ).sorted(Comparator.comparing(Schedule::getLessonNumber)).toList();
 
                         if (index == 0) {

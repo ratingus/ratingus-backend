@@ -90,7 +90,8 @@ public class UserService implements UserDetailsService{
             userRole = userRoleRepository.findUserRoleByUserAndSchool(user, school);
         } else {
             List<UserRole> userRoles = userRoleRepository.findAllByUser(user);
-            userRole = userRoles.isEmpty() ? null : userRoles.stream().max(Comparator.comparing(UserRole::getLastLogin)).get();
+            // TODO: как будто всё равно возвращает не по последнему логину
+            userRole = userRoles.isEmpty() ? null : userRoles.stream().sorted(Comparator.comparing(UserRole::getLastLogin)).findFirst().orElse(null);
         }
         return new UserDetailsImpl(user, userRole);
     }

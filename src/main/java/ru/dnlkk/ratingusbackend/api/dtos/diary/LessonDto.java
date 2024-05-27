@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import ru.dnlkk.ratingusbackend.api.dtos.TeacherDto;
 import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 
+import java.sql.Timestamp;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,4 +25,6 @@ public class LessonDto {
     private Attendance attendance;
     private String homework;
     private String note;
+    private Timestamp startTime;
+    private Timestamp endTime;
 }

@@ -6,10 +6,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.NoteDto;
 import ru.dnlkk.ratingusbackend.api.dtos.TeacherDto;
 import ru.dnlkk.ratingusbackend.api.dtos.diary.LessonDto;
 import ru.dnlkk.ratingusbackend.api.dtos.diary.DayLessonsDto;
-import ru.dnlkk.ratingusbackend.model.Lesson;
-import ru.dnlkk.ratingusbackend.model.Schedule;
-import ru.dnlkk.ratingusbackend.model.StudentLesson;
-import ru.dnlkk.ratingusbackend.model.UserRole;
+import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.repository.LessonRepository;
 import ru.dnlkk.ratingusbackend.repository.ScheduleRepository;
 import ru.dnlkk.ratingusbackend.repository.StudentLessonRepository;
@@ -56,6 +53,25 @@ public class DiaryService {
                     schedule.getSubject().getTeacher().getSurname(),
                     schedule.getSubject().getTeacher().getPatronymic()
             ));
+            var timetableStartTime = startDate.toLocalDateTime()
+                    .plusHours(
+                                    schedule.getTimetable().getStartTime().toLocalDateTime().getHour() -
+                                            startDate.toLocalDateTime().getHour())
+                    .plusMinutes(
+                            schedule.getTimetable().getStartTime().toLocalDateTime().getMinute() -
+                                    startDate.toLocalDateTime().getMinute())
+                    .plusDays(
+                            schedule.getDayOfWeek() -
+                                    startDate.toLocalDateTime().getDayOfWeek().getValue());
+            var timetableEndTime = timetableStartTime
+                    .plusHours(
+                            schedule.getTimetable().getEndTime().toLocalDateTime().getHour() -
+                                    timetableStartTime.getHour())
+                            .plusMinutes(
+                                    schedule.getTimetable().getEndTime().toLocalDateTime().getMinute() -
+                                            timetableStartTime.getMinute());
+            lessonDto.setStartTime(new Timestamp(timetableStartTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
+            lessonDto.setEndTime(new Timestamp(timetableEndTime.toInstant(ZoneOffset.UTC).toEpochMilli()));
 
             Lesson matchingLesson = lessons.stream()
                     .filter(lesson -> lesson.getSchedule().equals(schedule))
@@ -80,14 +96,14 @@ public class DiaryService {
             }
 
             DayLessonsDto dayLessonsDto = dayLessonsDtoList.stream()
-                    .filter(dayLessons -> dayLessons.getDateTime().toLocalDateTime().toLocalDate().getDayOfWeek().getValue() == schedule.getDayOfWeek() + 1)
+                    .filter(dayLessons -> dayLessons.getDayOfWeek() == schedule.getDayOfWeek())
                     .findFirst()
                     .orElse(null);
 
             if (dayLessonsDto == null) {
                 dayLessonsDto = new DayLessonsDto();
                 dayLessonsDto.setDayOfWeek(schedule.getDayOfWeek());
-                dayLessonsDto.setDateTime(new Timestamp(startDate.toLocalDateTime().plusDays(schedule.getDayOfWeek()).toInstant(ZoneOffset.UTC).toEpochMilli()));
+                dayLessonsDto.setDateTime(new Timestamp(startDate.toLocalDateTime().plusDays(schedule.getDayOfWeek() - 1).toInstant(ZoneOffset.UTC).toEpochMilli()));
                 dayLessonsDto.setStudies(new ArrayList<>());
                 dayLessonsDtoList.add(dayLessonsDto);
             }

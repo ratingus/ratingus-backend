@@ -25,19 +25,19 @@ public class ScheduleController implements ScheduleApi {
     @Override
     public ResponseEntity addSubjectInSchedule(UserDetailsImpl user, ScheduleActionDTO request, int classId) {
         scheduleService.addSubjectInSchedule(user.getUserRole(), request, classId);
-        return ResponseEntity.ok(scheduleService.getSchedule(classId));
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity changeSubjectInSchedule(UserDetailsImpl user, ScheduleChangeDTO request, int classId) {
         scheduleService.changeSubjectInSchedule(user.getUserRole(), request, classId);
-        return ResponseEntity.ok(scheduleService.getSchedule(classId));
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity removeSubjectInSchedule(UserDetailsImpl user, ScheduleActionDTO request, int classId) {
         scheduleService.removeSubjectFromSchedule(user.getUserRole(), request, classId);
-        return ResponseEntity.ok(scheduleService.getSchedule(classId));
+        return ResponseEntity.noContent().build();
     }
 
     @Override

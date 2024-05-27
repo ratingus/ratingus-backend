@@ -45,16 +45,16 @@ public interface AnnouncementApi {
     );
 
     @Operation(
-            summary = "Получение объявления по id",
-            description = "Возвращает объявление по указанному id"
+            summary = "Получение объявлений по id класса",
+            description = "Возвращает объявления по указанному id класса"
     )
-    @GetMapping("/{id}")
-    ResponseEntity<AnnouncementDto> getAnnouncementById(
+    @GetMapping("/{classId}")
+    ResponseEntity<List<AnnouncementDto>> getAnnouncementById(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
 
             @Schema(description = "Id запрашиваемого объявления")
             @Min(0)
-            @PathVariable int id
+            @PathVariable int classId
     );
 
     @Operation(

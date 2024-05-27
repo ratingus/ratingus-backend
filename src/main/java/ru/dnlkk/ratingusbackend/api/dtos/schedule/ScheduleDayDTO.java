@@ -13,5 +13,5 @@ import java.util.List;
 @Data
 public class ScheduleDayDTO {
     private int dayOfWeek;
-    private List<ScheduleItemDTO> lessons;
+    private List<ScheduleItemDTO> studies;
 }

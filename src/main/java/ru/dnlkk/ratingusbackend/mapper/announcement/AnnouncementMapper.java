@@ -7,13 +7,11 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.announcement.AnnouncementDto;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.CreatorDto;
-import ru.dnlkk.ratingusbackend.mapper.user.UserMapper;
-import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_role.UserRoleMapper;
 import ru.dnlkk.ratingusbackend.model.Announcement;
 import ru.dnlkk.ratingusbackend.model.Class;
-import ru.dnlkk.ratingusbackend.model.User;
 import ru.dnlkk.ratingusbackend.model.UserRole;
 
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public interface AnnouncementMapper {
     List<AnnouncementDto> toDtoList(List<Announcement> announcementList);
 
     @Mapping(target = "creator", source = "creator", qualifiedByName = "createCreatorDtoFromUser")
-    @Mapping(target = "classesId", source = "classes", qualifiedByName = "idFromClasses")
+    @Mapping(target = "classes", source = "classes", qualifiedByName = "idFromClasses")
     AnnouncementDto toDto(Announcement announcement);
 
     @Named("createCreatorDtoFromUser")
@@ -56,10 +54,10 @@ public interface AnnouncementMapper {
     }
 
     @Named("idFromClasses")
-    static List<Integer> idFromClasses(List<Class> classes) {
-        List<Integer> ids = new ArrayList<>(classes.size());
+    static List<ClassDto> dtoFromClasses(List<Class> classes) {
+        List<ClassDto> ids = new ArrayList<>(classes.size());
         for (Class c : classes) {
-            ids.add(c.getId());
+            ids.add(new ClassDto(c.getId(), c.getName()));
         }
         return ids;
     }
