@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.ManagerPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForAdminPanelDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
@@ -45,5 +47,10 @@ public class ManagerPanelController implements ManagerPanelApi {
         userCodeWithClassDto.setRole(Role.LOCAL_ADMIN);
         managerPanelService.createSchool(userDetails, userCodeWithClassDto, applicationId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
     }
 }

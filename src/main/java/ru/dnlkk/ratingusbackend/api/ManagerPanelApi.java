@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForAdminPanelDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
@@ -66,5 +68,14 @@ public interface ManagerPanelApi {
             @Schema(description = "Id одобренной заявки")
             @PathVariable(name = "id") int applicationId,
             @RequestBody UserCodeWithClassDto userCodeWithClassDto
+    );
+
+    @Operation(
+            summary = "Получение всех школ",
+            description = "Возвращает список всех школ, которые есть в базе данных"
+    )
+    @GetMapping("/users")
+    ResponseEntity<List<UserForManagerDto>> getAllUsers(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 }
