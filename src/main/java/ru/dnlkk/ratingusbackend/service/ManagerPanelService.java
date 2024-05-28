@@ -139,4 +139,10 @@ public class ManagerPanelService {
         application.setStatus(ApplicationStatusType.REJECTED);
         applicationRepository.saveAndFlush(application);
     }
+
+    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
+        checkIsUserManager(userDetails);
+        List<School> schools = schoolRepository.findAll();
+        return SchoolMapper.INSTANCE.toSchoolDtoList(schools);
+    }
 }

@@ -46,4 +46,9 @@ public class ManagerPanelController implements ManagerPanelApi {
         managerPanelService.createSchool(userDetails, userCodeWithClassDto, applicationId);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
+    }
 }
