@@ -25,6 +25,12 @@ public interface ProfileApi {
     @GetMapping("/{id}")
     ResponseEntity<ProfileDto> getUser(@PathVariable("id") Integer id);
 
+    @Operation(
+            summary = "Получение пользователя",
+            description = "Возвращает информацию о пользователе"
+    )
+    @GetMapping
+    ResponseEntity<ProfileDto> getUser(@AuthenticationPrincipal UserDetailsImpl userDetails);
 
     @Operation(
             summary = "Обновление пользователя",
