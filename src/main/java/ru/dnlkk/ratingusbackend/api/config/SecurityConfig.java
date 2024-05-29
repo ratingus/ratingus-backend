@@ -20,6 +20,8 @@ import ru.dnlkk.ratingusbackend.security.JwtRequestFilter;
 import ru.dnlkk.ratingusbackend.service.UserService;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -72,7 +74,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        configuration.addAllowedOrigin("*");
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://ratingus.fun"));
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

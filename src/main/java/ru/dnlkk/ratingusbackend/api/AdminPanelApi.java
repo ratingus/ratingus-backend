@@ -11,6 +11,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectsDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -126,7 +127,7 @@ public interface AdminPanelApi {
             description = "Возвращает список всех предметов учебной организации"
     )
     @GetMapping("/subject")
-    ResponseEntity<List<TeacherSubjectDto>> getAllSubjects(
+    ResponseEntity<List<TeacherSubjectsDto>> getAllSubjects(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 

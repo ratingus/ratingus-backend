@@ -54,12 +54,17 @@ public class ScheduleService {
         return new ArrayList<>(scheduleTeachersDTOS.values());
     }
 
-    public ScheduleDTO getSchedule(int classId) {
+    public ScheduleDTO getSchedule(int classId, boolean isAllDay) {
         Class clazz = new Class();
         clazz.setId(classId);
         List<Schedule> schedules = scheduleRepository.findByScheduleForClass(clazz);
         Map<Integer, List<Schedule>> groupedByDayOfWeek = schedules.stream()
                 .collect(Collectors.groupingBy(Schedule::getDayOfWeek));
+        if (groupedByDayOfWeek.size() < 6) {
+            for (int i = 1; i < 7; i++)  {
+                groupedByDayOfWeek.computeIfAbsent(i, k -> new ArrayList<>());
+            }
+        }
 
         List<Timetable> timetables = !schedules.isEmpty() ? timetableRepository.findTimetablesBySchoolId(schedules.getFirst().getScheduleForClass().getSchool().getId()).stream()
                 .sorted(Comparator.comparingInt(Timetable::getLessonNumber))
@@ -74,7 +79,7 @@ public class ScheduleService {
             schedulesForDay.sort(Comparator.comparingInt(Schedule::getLessonNumber));
 
             List<ScheduleItemDTO> lessons = new ArrayList<>();
-            int maxLessonNumber = schedulesForDay.getLast().getLessonNumber();
+            int maxLessonNumber = isAllDay ? 8 : schedulesForDay.isEmpty() ? 0 : schedulesForDay.getLast().getLessonNumber();
 
             for (int i = 1; i <= maxLessonNumber; i++) {
                 int finalI = i;
@@ -124,22 +129,51 @@ public class ScheduleService {
                 changeSubjectInScheduleRequestDTO.getFrom().getDayOfWeek(),
                 changeSubjectInScheduleRequestDTO.getFrom().getLessonNumber()
         );
-        Schedule schedulesTo = scheduleRepository.findByScheduleForClassAndDayOfWeekAndTimetableLessonNumber(
-                clazz,
-                changeSubjectInScheduleRequestDTO.getTo().getDayOfWeek(),
-                changeSubjectInScheduleRequestDTO.getTo().getLessonNumber()
-        );
-        List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(userRole.getSchool().getId());
+        List<Schedule> schedules = scheduleRepository.findByScheduleForClassAndDayOfWeek(clazz, changeSubjectInScheduleRequestDTO.getTo().getDayOfWeek());
+        List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(userRole.getSchool().getId()).stream()
+                .sorted(Comparator.comparingInt(Timetable::getLessonNumber))
+                .toList();
+
+        int lessonNumber = Math.max(changeSubjectInScheduleRequestDTO.getTo().getLessonNumber(), 1);
+
+        for (int i = 0; i < schedules.size(); i++) {
+            Schedule schedule = schedules.get(i);
+
+            if (schedule.getLessonNumber() == lessonNumber) {
+                int diff = -1;
+                boolean safeFlag = true;
+
+                for (int j = i; j < schedules.size(); j++) {
+                    if (schedules.size() - 1 == j) {
+                        if (safeFlag) {
+                            Schedule schedule1 = schedules.get(j);
+                            Timetable timetable = timetables.get(schedule1.getLessonNumber());
+                            schedule1.setTimetable(timetable);
+                            scheduleRepository.save(schedule1);
+                        }
+                        break;
+                    }
+                    Schedule schedule1 = schedules.get(j);
+                    Schedule schedule2 = schedules.get(j + 1);
+                    if (safeFlag) {
+                        if (schedule1.getLessonNumber() - schedule2.getLessonNumber() != diff) {
+                            safeFlag = false;
+                        }
+                        Timetable timetable = timetables.get(schedule1.getLessonNumber());
+                        schedule1.setTimetable(timetable);
+                        scheduleRepository.save(schedule1);
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            }
+        }
 
         if (schedulesFrom != null) {
             schedulesFrom.setDayOfWeek(changeSubjectInScheduleRequestDTO.getTo().getDayOfWeek());
-            schedulesTo.setTimetable(timetables.get(changeSubjectInScheduleRequestDTO.getTo().getLessonNumber() - 1));
+            schedulesFrom.setTimetable(timetables.get(lessonNumber - 1));
             scheduleRepository.save(schedulesFrom);
-        }
-        if (schedulesTo != null) {
-            schedulesTo.setDayOfWeek(changeSubjectInScheduleRequestDTO.getFrom().getDayOfWeek());
-            schedulesTo.setTimetable(timetables.get(changeSubjectInScheduleRequestDTO.getFrom().getLessonNumber() - 1));
-            scheduleRepository.save(schedulesTo);
         }
     }
 
@@ -162,7 +196,7 @@ public class ScheduleService {
 
         schedules.sort(Comparator.comparingInt(Schedule::getLessonNumber));
 
-        int lessonNumber = addSubjectInScheduleRequestDTO.getLessonNumber();
+        int lessonNumber = Math.max(addSubjectInScheduleRequestDTO.getLessonNumber(), 1);
 
         TeacherSubject teacherSubject = teacherSubjectRepository.findById(addSubjectInScheduleRequestDTO.getStudyWithTeacherId()).orElseThrow();
         List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(userRole.getSchool().getId()).stream()
