@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.ProfileApi;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.EditProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.profile.ProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.profile.SchoolDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.ChangeSchoolDto;
@@ -21,6 +22,7 @@ import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 import ru.dnlkk.ratingusbackend.security.JwtTokenService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import ru.dnlkk.ratingusbackend.service.UserService;
 
 import java.sql.Timestamp;
 
@@ -32,6 +34,7 @@ public class ProfileController implements ProfileApi {
     private final UserRoleRepository userRoleRepository;
     private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<ProfileDto> getUser(Integer id) {
@@ -72,8 +75,9 @@ public class ProfileController implements ProfileApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> updateUser(HttpServletResponse response, UserDto userDto) {
-        return null;
+    public ResponseEntity<UserDto> updateUser(HttpServletResponse response, UserDetailsImpl userDetails, EditProfileDto userDto) {
+        userService.updateUser(userDetails, userDto);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
@@ -103,6 +107,7 @@ public class ProfileController implements ProfileApi {
 
         userRoleRepository.save(userRole);
         code.setActivated(true);
+        code.setUser(userRole);
         userCodeRepository.save(code);
         response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
 

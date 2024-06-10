@@ -46,6 +46,7 @@ public class JwtTokenService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", user.getId());
         claims.put("login", user.getLogin());
+        claims.put("is_admin", user.getIsAdmin());
         if (userRole != null){
             claims.put("userRoleId", userRole.getId());
             claims.put("name", userRole.getName());

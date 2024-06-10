@@ -21,7 +21,10 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 
     List<Lesson> findByDateBetween(Timestamp startDate, Timestamp endDate);
 
-    List<Lesson> findByScheduleScheduleForClassIdAndDateBetween(int id, Timestamp startDate, Timestamp endDate);
+    @Query("SELECT l FROM Lesson l WHERE l.schedule.scheduleForClass.id = :classId AND DATE(l.date) BETWEEN DATE(:startDate) AND DATE(:endDate)")
+    List<Lesson> findByScheduleScheduleForClassIdAndDateBetween(Integer classId, Timestamp startDate, Timestamp endDate);
 
     List<Schedule> findByScheduleScheduleForClassId(int id);
+
+    List<Lesson> findByScheduleIdInAndDateIn(List<Integer> schedulesIds, List<Timestamp> timestamps);
 }

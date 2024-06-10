@@ -77,7 +77,7 @@ public class ManagerPanelService {
         applicationRepository.deleteById(id);
     }
 
-    public School createSchool(UserDetailsImpl userDetails, UserCodeWithClassDto userCodeWithClassDto, int applicationId) {
+    public Application createSchool(UserDetailsImpl userDetails, UserCodeWithClassDto userCodeWithClassDto, int applicationId) {
         checkIsUserManager(userDetails);
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if (applicationOptional.isEmpty()) {
@@ -131,7 +131,7 @@ public class ManagerPanelService {
         application.setStatus(ApplicationStatusType.APPROVED);
         applicationRepository.saveAndFlush(application);
 
-        return school;
+        return application;
     }
 
     public void rejectApplication(UserDetailsImpl userDetails, int id) {
