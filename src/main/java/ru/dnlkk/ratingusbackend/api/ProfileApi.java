@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.EditProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.profile.ProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.ChangeSchoolDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.SetUserCodeDto;
@@ -37,7 +38,7 @@ public interface ProfileApi {
             description = "Обновляет пользователя и возвращает его"
     )
     @PutMapping
-    ResponseEntity<UserDto> updateUser(HttpServletResponse response, @RequestBody UserDto userDto);
+    ResponseEntity<UserDto> updateUser(HttpServletResponse response,@AuthenticationPrincipal UserDetailsImpl userDetails,  @RequestBody EditProfileDto userDto);
 
 
     @Operation(

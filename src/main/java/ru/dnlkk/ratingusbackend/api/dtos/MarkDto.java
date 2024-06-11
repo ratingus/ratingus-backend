@@ -11,6 +11,8 @@ import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 @Builder
 @Data
 public class MarkDto {
+    private Integer studentLessonId;
+    private Integer lessonId;
     private String mark;
     private Attendance attendance;
 }

@@ -60,9 +60,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
                 userService.saveUserRole(userDetails.getUserRole());
-
-                String token = jwtTokenService.generateToken(userDetails);
-                response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
             }
         }
         filterChain.doFilter(request, response);

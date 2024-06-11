@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.EditProfileDto;
 import ru.dnlkk.ratingusbackend.api.model.UserDto;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
@@ -39,14 +40,24 @@ public class UserService implements UserDetailsService{
         throw new RuntimeException("User already exists");
     }
 
-    public User updateUser(UserDto updatedUser) {
-        User existingUser = userRepository.findUserById(updatedUser.getId());
+    public User updateUser(UserDetailsImpl userDetails, EditProfileDto updatedUser) {
+        User existingUser = userDetails.getUser();
 
         if (existingUser != null) {
-            existingUser.setName(updatedUser.getName());
-            existingUser.setSurname(updatedUser.getSurname());
-            existingUser.setPatronymic(updatedUser.getPatronymic());
-            existingUser.setBirthDate(updatedUser.getBirthDate());
+            System.out.println(existingUser.getId());
+            System.out.println(updatedUser);
+            if (updatedUser.getBirthDate() != null) {
+                existingUser.setBirthDate(updatedUser.getBirthDate());
+            }
+            if (updatedUser.getName() != null) {
+                existingUser.setName(updatedUser.getName());
+            }
+            if (updatedUser.getSurname() != null) {
+                existingUser.setSurname(updatedUser.getSurname());
+            }
+            if (updatedUser.getPatronymic() != null) {
+                existingUser.setPatronymic(updatedUser.getPatronymic());
+            }
             return userRepository.save(existingUser);
         } else {
             return null;

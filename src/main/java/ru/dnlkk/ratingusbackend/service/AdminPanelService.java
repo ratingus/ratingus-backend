@@ -46,7 +46,7 @@ public class AdminPanelService {
         if (Boolean.TRUE.equals(userDetails.getUser().getIsAdmin())) { //todo: не до конца всё проверяет и работает (если у админа userRole=null, проблема не решена. Но такого и не должно быть)
             return;
         }
-        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN)) {
+        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN && userDetails.getUserRole().getRole() != Role.TEACHER)) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
@@ -179,13 +179,7 @@ public class AdminPanelService {
         Map<Integer, List<TeacherWithSubjectIdDto>> subjectTeachersMap = new HashMap<>();
         for (TeacherSubject teacherSubject : teacherSubjects) {
             int subjectId = teacherSubject.getSubject().getId();
-            TeacherWithSubjectIdDto teacherDto = new TeacherWithSubjectIdDto(
-                    teacherSubject.getId(),
-                    teacherSubject.getTeacher().getId(),
-                    teacherSubject.getTeacher().getName(),
-                    teacherSubject.getTeacher().getSurname(),
-                    teacherSubject.getTeacher().getPatronymic()
-            );
+            TeacherWithSubjectIdDto teacherDto = new TeacherWithSubjectIdDto(teacherSubject.getId(), teacherSubject.getTeacher().getId(), teacherSubject.getTeacher().getName(), teacherSubject.getTeacher().getSurname(), teacherSubject.getTeacher().getPatronymic());
             subjectTeachersMap.computeIfAbsent(subjectId, k -> new ArrayList<>()).add(teacherDto);
         }
 
@@ -231,8 +225,7 @@ public class AdminPanelService {
             throw new ForbiddenException("Нет доступа к учителю с id=" + teacherId);
         }
 
-        Optional<TeacherSubject> teacherSubjectsBySubjectId = teacherSubjectRepository
-                .findTeacherSubjectsBySubjectIdAndTeacherId(subjectId, teacherId);
+        Optional<TeacherSubject> teacherSubjectsBySubjectId = teacherSubjectRepository.findTeacherSubjectsBySubjectIdAndTeacherId(subjectId, teacherId);
 
         if (teacherSubjectsBySubjectId.isPresent()) {
             throw new LogicException("Связь предмета с id=" + subjectId + " с учителем с id=" + teacherId + " уже существует");
@@ -255,11 +248,7 @@ public class AdminPanelService {
             throw new NotFoundException("Нет связи учителя с классом с id=" + teacherSubjectId);
         }
         TeacherSubject teacherSubject = byId.get();
-        int teacherSchoolId = userRoleRepository.findById(
-                teacherSubject.getTeacher().getId())
-                .get()
-                .getSchool()
-                .getId();
+        int teacherSchoolId = userRoleRepository.findById(teacherSubject.getTeacher().getId()).get().getSchool().getId();
         if (teacherSchoolId != schoolId) {
             throw new ForbiddenException("Нет доступа к связи предмет-учитель с id=" + teacherSchoolId);
         }

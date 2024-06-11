@@ -16,5 +16,6 @@ public class ApplicationDto {
     private String address;
     private String phone;
     private String status;
+    private String code;
     private int creatorId;
 }
