@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
@@ -21,7 +22,7 @@ public interface ManagerPanelApi {
             description = "Возвращает список всех заявок на создание школы"
     )
     @GetMapping("/application")
-    ResponseEntity<List<ApplicationDto>> getAllApplications(@AuthenticationPrincipal UserDetailsImpl userDetails);
+    ResponseEntity<List<ApplicationResponseDto>> getAllApplications(@AuthenticationPrincipal UserDetailsImpl userDetails);
 
     @Operation(
             summary = "Создание заявки",
