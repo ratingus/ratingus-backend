@@ -3,6 +3,7 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
@@ -58,10 +59,19 @@ public class ManagerPanelService {
     }
 
     private final SchoolRepository schoolRepository;
-    public List<ApplicationDto> getAllApplications(UserDetailsImpl userDetails) {
+    public List<ApplicationResponseDto> getAllApplications(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<Application> applicationList = applicationRepository.findAll();
-        return ApplicationMapper.INSTANCE.toDtoList(applicationList);
+        return applicationList.stream().map(
+                application -> ApplicationResponseDto.builder()
+                        .id(application.getId())
+                        .email(application.getEmail())
+                        .address(application.getName())
+                        .phone(application.getPhone())
+                        .status(application.getStatus().name())
+                        .code(application.getCode().getCode())
+                        .build()
+        ).toList();
     }
 
     public ApplicationDto createApplication(UserDetailsImpl userDetails, ApplicationDto applicationDto, User user) {
