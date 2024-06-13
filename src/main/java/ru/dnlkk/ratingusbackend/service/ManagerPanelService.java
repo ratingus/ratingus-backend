@@ -53,7 +53,7 @@ public class ManagerPanelService {
     private final UserCodeRepository userCodeRepository;
 
     private void checkIsUserManager(UserDetailsImpl userDetails) {
-        if (Boolean.FALSE.equals(userDetails.getUser().getIsAdmin())) {
+        if (userDetails.getUser().getIsAdmin() == null || !userDetails.getUser().getIsAdmin()) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
@@ -75,11 +75,14 @@ public class ManagerPanelService {
     }
 
     public ApplicationDto createApplication(UserDetailsImpl userDetails, ApplicationDto applicationDto, User user) {
-        checkIsUserManager(userDetails);
+        if (userDetails.getUser() == null) {
+            throw new ForbiddenException("Пользователь не авторизован");
+        } else {
         Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
         application.setCreator(user);
         Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
         return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
+        }
     }
 
     public void deleteApplication(UserDetailsImpl userDetails, int id) {
