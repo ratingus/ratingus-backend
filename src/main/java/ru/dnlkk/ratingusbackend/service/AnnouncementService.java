@@ -33,6 +33,12 @@ public class AnnouncementService {
         }
     }
 
+    @Transactional
+    public  void incrementViews(Announcement announcement){
+        announcement.setViews(announcement.getViews() + 1);
+        announcementRepository.save(announcement);
+    }
+
     private void checkUserIsTeacherOrHigher(UserDetailsImpl userDetails) {
         Role roleOfUser = userDetails.getUserRole().getRole();
         if (roleOfUser != Role.LOCAL_ADMIN && roleOfUser != Role.MANAGER && roleOfUser != Role.TEACHER) {
@@ -100,9 +106,4 @@ public class AnnouncementService {
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }
 
-    @Transactional
-    public  void incrementViews(Announcement announcement){
-        announcement.setViews(announcement.getViews() + 1);
-        announcementRepository.save(announcement);
-    }
 }
