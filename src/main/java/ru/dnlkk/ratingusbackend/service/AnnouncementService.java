@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,7 @@ public class AnnouncementService {
         School school = schoolRepository.findById(schoolId).get();
         List<Class> classes = school.getClasses();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(classes, PageRequest.of(offset, limit)).stream().toList();
+        announcements.forEach(this::incrementViews);
         return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
@@ -67,6 +69,7 @@ public class AnnouncementService {
         }
         Class clazz = optionalClass.get();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
+        announcements.forEach(this::incrementViews);
         return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
@@ -95,5 +98,11 @@ public class AnnouncementService {
         announcement.setCreator(creator);
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
+    }
+
+    @Transactional
+    public  void incrementViews(Announcement announcement){
+        announcement.setViews(announcement.getViews() + 1);
+        announcementRepository.save(announcement);
     }
 }
