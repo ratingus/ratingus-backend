@@ -22,7 +22,7 @@ public class StudentLesson {
     @Column(name = "mark")
     private String mark;
 
-    @Column(name = "note")
+    @Column(name = "note", columnDefinition = "varchar(500)")
     private String note;
 
     @Column(name = "attendance")
