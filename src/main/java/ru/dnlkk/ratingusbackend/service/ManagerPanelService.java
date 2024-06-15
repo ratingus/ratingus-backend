@@ -6,11 +6,13 @@ import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.ApplicationMapper;
 import ru.dnlkk.ratingusbackend.mapper.SchoolMapper;
+import ru.dnlkk.ratingusbackend.mapper.user.UserMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class ManagerPanelService {
     private final ApplicationRepository applicationRepository;
     private final UserRoleRepository userRoleRepository;
+    private final UserRepository userRepository;
 
     private final String[] endTimes = {
             "2024-05-21 08:40:00.000000",
@@ -53,12 +56,13 @@ public class ManagerPanelService {
     private final UserCodeRepository userCodeRepository;
 
     private void checkIsUserManager(UserDetailsImpl userDetails) {
-        if (Boolean.FALSE.equals(userDetails.getUser().getIsAdmin())) {
+        if (userDetails.getUser().getIsAdmin() == null || !userDetails.getUser().getIsAdmin()) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
 
     private final SchoolRepository schoolRepository;
+
     public List<ApplicationResponseDto> getAllApplications(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<Application> applicationList = applicationRepository.findAll();
@@ -68,18 +72,21 @@ public class ManagerPanelService {
                         .email(application.getEmail())
                         .address(application.getName())
                         .phone(application.getPhone())
-                        .status(application.getStatus().name())
-                        .code(application.getCode().getCode())
+                        .status(application.getStatus() == null ? null : application.getStatus().name())
+                        .code(application.getCode() == null ? null : application.getCode().getCode())
                         .build()
         ).toList();
     }
 
     public ApplicationDto createApplication(UserDetailsImpl userDetails, ApplicationDto applicationDto, User user) {
-        checkIsUserManager(userDetails);
-        Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
-        application.setCreator(user);
-        Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
-        return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
+        if (userDetails.getUser() == null) {
+            throw new ForbiddenException("Пользователь не авторизован");
+        } else {
+            Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
+            application.setCreator(user);
+            Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
+            return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
+        }
     }
 
     public void deleteApplication(UserDetailsImpl userDetails, int id) {
@@ -150,9 +157,16 @@ public class ManagerPanelService {
         applicationRepository.saveAndFlush(application);
     }
 
-    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
+    public List<UserForManagerDto> getAllUsers(UserDetailsImpl userDetails) {
+        checkIsUserManager(userDetails);
+        List<User> users = userRepository.findAll();
+        return UserMapper.INSTANCE.toUserForManagerDtoList(users);
+    }
+
+    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<School> schools = schoolRepository.findAll();
         return SchoolMapper.INSTANCE.toSchoolDtoList(schools);
     }
+
 }

@@ -17,8 +17,10 @@ import ru.dnlkk.ratingusbackend.repository.AnnouncementRepository;
 import ru.dnlkk.ratingusbackend.repository.ClassRepository;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,13 @@ public class AnnouncementService {
         if (userDetails.getUserRole() == null) {
             throw new LogicException("Доступ запрещён");
         }
+    }
+
+    public void incrementViews(List<Announcement> announcements){
+        for (Announcement announcement : announcements) {
+            announcement.setViews(announcement.getViews() + 1);
+        }
+        announcementRepository.saveAll(announcements);
     }
 
     private void checkUserIsTeacherOrHigher(UserDetailsImpl userDetails) {
@@ -53,13 +62,14 @@ public class AnnouncementService {
                 throw new ForbiddenException("Нет доступа к этому классу");
             }
             List<Announcement> announcements = announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+            incrementViews(announcements);
             return AnnouncementMapper.INSTANCE.toDtoList(announcements);
         }
         School school = schoolRepository.findById(schoolId).get();
         List<Class> classes = school.getClasses();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(classes, PageRequest.of(offset, limit)).stream().toList();
-        announcements.forEach(this::incrementViews);
-        return AnnouncementMapper.INSTANCE.toDtoList(announcements);
+        incrementViews(announcements);
+        return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }
 
     public List<AnnouncementDto> getAnnouncementsByClassId(UserDetailsImpl userDetails, Integer classId) {
@@ -69,8 +79,15 @@ public class AnnouncementService {
         }
         Class clazz = optionalClass.get();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
-        announcements.forEach(this::incrementViews);
-        return AnnouncementMapper.INSTANCE.toDtoList(announcements);
+
+        incrementViews(announcements);
+        return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
+    }
+
+    public List<Announcement> sortAnnouncementsByDateDesc(List<Announcement> announcements) {
+        return announcements.stream()
+                .sorted(Comparator.comparing(Announcement::getCreateDate).reversed())
+                .collect(Collectors.toList());
     }
 
     public void deleteAnnouncementById(UserDetailsImpl userDetails, int id) {
@@ -92,17 +109,11 @@ public class AnnouncementService {
             }
             Class cc = classById.get();
             if (cc.getSchool().getId() != creator.getSchool().getId()) {
-                throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId() );
+                throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId());
             }
         }
         announcement.setCreator(creator);
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
-    }
-
-    @Transactional
-    public  void incrementViews(Announcement announcement){
-        announcement.setViews(announcement.getViews() + 1);
-        announcementRepository.save(announcement);
     }
 }
