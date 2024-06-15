@@ -3,6 +3,7 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
@@ -55,24 +56,36 @@ public class ManagerPanelService {
     private final UserCodeRepository userCodeRepository;
 
     private void checkIsUserManager(UserDetailsImpl userDetails) {
-        if (Boolean.FALSE.equals(userDetails.getUser().getIsAdmin())) {
+        if (userDetails.getUser().getIsAdmin() == null || !userDetails.getUser().getIsAdmin()) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
 
     private final SchoolRepository schoolRepository;
-    public List<ApplicationDto> getAllApplications(UserDetailsImpl userDetails) {
+    public List<ApplicationResponseDto> getAllApplications(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<Application> applicationList = applicationRepository.findAll();
-        return ApplicationMapper.INSTANCE.toDtoList(applicationList);
+        return applicationList.stream().map(
+                application -> ApplicationResponseDto.builder()
+                        .id(application.getId())
+                        .email(application.getEmail())
+                        .address(application.getName())
+                        .phone(application.getPhone())
+                        .status(application.getStatus() == null ? null : application.getStatus().name())
+                        .code(application.getCode() == null ? null : application.getCode().getCode())
+                        .build()
+        ).toList();
     }
 
     public ApplicationDto createApplication(UserDetailsImpl userDetails, ApplicationDto applicationDto, User user) {
-        checkIsUserManager(userDetails);
+        if (userDetails.getUser() == null) {
+            throw new ForbiddenException("Пользователь не авторизован");
+        } else {
         Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
         application.setCreator(user);
         Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
         return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
+        }
     }
 
     public void deleteApplication(UserDetailsImpl userDetails, int id) {
@@ -80,7 +93,7 @@ public class ManagerPanelService {
         applicationRepository.deleteById(id);
     }
 
-    public School createSchool(UserDetailsImpl userDetails, UserCodeWithClassDto userCodeWithClassDto, int applicationId) {
+    public Application createSchool(UserDetailsImpl userDetails, UserCodeWithClassDto userCodeWithClassDto, int applicationId) {
         checkIsUserManager(userDetails);
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if (applicationOptional.isEmpty()) {
@@ -134,7 +147,7 @@ public class ManagerPanelService {
         application.setStatus(ApplicationStatusType.APPROVED);
         applicationRepository.saveAndFlush(application);
 
-        return school;
+        return application;
     }
 
     public void rejectApplication(UserDetailsImpl userDetails, int id) {
@@ -147,5 +160,10 @@ public class ManagerPanelService {
         checkIsUserManager(userDetails);
         List<User> users = userRepository.findAll();
         return UserMapper.INSTANCE.toUserForManagerDtoList(users);
+
+    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
+        checkIsUserManager(userDetails);
+        List<School> schools = schoolRepository.findAll();
+        return SchoolMapper.INSTANCE.toSchoolDtoList(schools);
     }
 }

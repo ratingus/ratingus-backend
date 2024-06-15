@@ -103,7 +103,8 @@ public class DiaryService {
             if (dayLessonsDto == null) {
                 dayLessonsDto = new DayLessonsDto();
                 dayLessonsDto.setDayOfWeek(schedule.getDayOfWeek());
-                dayLessonsDto.setDateTime(new Timestamp(startDate.toLocalDateTime().plusDays(schedule.getDayOfWeek() - 1).toInstant(ZoneOffset.UTC).toEpochMilli()));
+                dayLessonsDto.setDateTime(new Timestamp(startDate.toLocalDateTime().plusDays(schedule.getDayOfWeek() - 1)
+                        .toInstant(ZoneOffset.UTC).toEpochMilli()));
                 dayLessonsDto.setStudies(new ArrayList<>());
                 dayLessonsDtoList.add(dayLessonsDto);
             }

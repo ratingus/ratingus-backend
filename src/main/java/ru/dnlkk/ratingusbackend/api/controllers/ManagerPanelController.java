@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.ManagerPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForAdminPanelDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
@@ -17,11 +18,11 @@ import ru.dnlkk.ratingusbackend.service.ManagerPanelService;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
-public class ManagerPanelController implements ManagerPanelApi {
+public class ManagerPanelController extends ExceptionHandlerController implements ManagerPanelApi {
     private final ManagerPanelService managerPanelService;
     private final AdminPanelService adminPanelService;
     @Override
-    public ResponseEntity<List<ApplicationDto>> getAllApplications(UserDetailsImpl userDetails) {
+    public ResponseEntity<List<ApplicationResponseDto>> getAllApplications(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllApplications(userDetails));
     }
 
@@ -52,5 +53,10 @@ public class ManagerPanelController implements ManagerPanelApi {
     @Override
     public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
+
+    @Override
+    public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
+
     }
 }

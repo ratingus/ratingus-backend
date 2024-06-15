@@ -1,4 +1,4 @@
-package ru.dnlkk.ratingusbackend.api.dtos.application;
+package ru.dnlkk.ratingusbackend.api.dtos.teacher_subject;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class ApplicationDto {
+public class TeacherWithSubjectIdDto {
+    private int teacherSubjectId;
     private int id;
-    private String email;
     private String name;
-    private String address;
-    private String phone;
-    private int creatorId;
+    private String surname;
+    private String patronymic;
 }

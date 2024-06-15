@@ -3,10 +3,7 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.GradeDto;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonCreateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonUpdateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.MagazineLessonDto;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.*;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 import ru.dnlkk.ratingusbackend.repository.*;
@@ -34,6 +31,7 @@ public class MagazineService {
 
         List<Schedule> schedules = scheduleRepository.findByScheduleForClassIdAndSubjectId(classId, teacherSubjectId);
 
+        List<Integer> schedulesIds = schedules.stream().map(Schedule::getId).distinct().toList();
         List<Integer> daysOfWeek = schedules.stream().map(Schedule::getDayOfWeek).distinct().toList();
         List<LocalDate> dates = generateDates(daysOfWeek);
 
@@ -41,12 +39,12 @@ public class MagazineService {
         for (LocalDate date : dates) {
             timestamps.add(Timestamp.valueOf(date.atStartOfDay()));
         }
-        List<Lesson> lessons = lessonRepository.findByDateIn(timestamps);
+        List<Lesson> lessons = lessonRepository.findByScheduleIdInAndDateIn(schedulesIds, timestamps);
 
         MagazineDto magazineDto = new MagazineDto();
         magazineDto.setStudents(userRoles.stream().map(userRole -> {
             var studentDto = new StudentDto();
-            studentDto.setId(userRole.getUser().getId());
+            studentDto.setId(userRole.getId());
             studentDto.setName(userRole.getName());
             studentDto.setSurname(userRole.getSurname());
             studentDto.setPatronymic(userRole.getPatronymic());
@@ -63,7 +61,6 @@ public class MagazineService {
                     var dto = new MonthLessonDayDto();
                     var month = entry.getKey();
                     dto.setMonth(month.getValue());
-                    var monthMarks = new ArrayList<MarkDto>();
 
                     List<LessonDayDto> lessonDays = new ArrayList<>();
                     Set<Integer> days = new HashSet<>(entry.getValue());
@@ -79,7 +76,6 @@ public class MagazineService {
                             }
                             return dateDiff;
                         }).toList();
-
                         List<Schedule> schedulesForDay = schedules.stream().filter(
                                 l -> l.getDayOfWeek() == LocalDate.of(LocalDate.now().getYear(), month.getValue(), day).getDayOfWeek().getValue()
                         ).sorted(Comparator.comparing(Schedule::getLessonNumber)).toList();
@@ -92,9 +88,10 @@ public class MagazineService {
                             List<StudentLesson> lessonStudents = lessonForDay.getStudentLessons();
                             magazineDto.getStudents().forEach(studentDto -> {
                                 var marksDto = new MarkDto();
-                                monthMarks.add(marksDto);
                                 StudentLesson lessonStudent = lessonStudents.stream().filter(ls -> ls.getStudent().getId() == studentDto.getId()).findFirst().orElse(null);
                                 if (lessonStudent != null) {
+                                    marksDto.setStudentLessonId(lessonStudent.getId());
+                                    marksDto.setLessonId(lessonStudent.getLesson().getId());
                                     marksDto.setMark(lessonStudent.getMark());
                                     marksDto.setAttendance(lessonStudent.getAttendance());
                                     studentDto.getMarks().getLast().add(marksDto);
@@ -131,28 +128,28 @@ public class MagazineService {
         LocalDate end = LocalDate.of(LocalDate.now().getYear(), 5, 31);
 
         for (int dayOfWeek : daysOfWeek) {
-            LocalDate next = start.with(TemporalAdjusters.nextOrSame(DayOfWeek.of(dayOfWeek + 1)));
+            LocalDate next = start.with(TemporalAdjusters.nextOrSame(DayOfWeek.of(dayOfWeek)));
 
             while (!next.isAfter(end)) {
                 dates.add(next);
-                next = next.with(TemporalAdjusters.next(DayOfWeek.of(dayOfWeek + 1)));
+                next = next.with(TemporalAdjusters.next(DayOfWeek.of(dayOfWeek)));
             }
         }
 
         return dates;
     }
 
-    public void createUserGrade(GradeDto gradeDto) {
+    public CreatedGradeDto createUserGrade(GradeDto gradeDto) {
         StudentLesson studentLesson;
         if (gradeDto.getLessonStudentId() != null) {
             studentLesson = studentLessonRepository.findById(gradeDto.getLessonStudentId()).orElseThrow();
-            placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
+            studentLesson = placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
         } else if (gradeDto.getLessonId() != null) {
             Lesson lesson = lessonRepository.findById(gradeDto.getLessonId()).orElseThrow();
             studentLesson = new StudentLesson();
             studentLesson.setLesson(lesson);
             studentLesson.setStudent(userRoleRepository.findById(gradeDto.getStudentId()).orElseThrow());
-            placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
+            studentLesson = placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
         } else {
             Schedule schedule = scheduleRepository.findById(gradeDto.getScheduleId()).orElseThrow();
             Lesson lesson = new Lesson();
@@ -164,14 +161,18 @@ public class MagazineService {
             studentLesson = new StudentLesson();
             studentLesson.setLesson(lesson);
             studentLesson.setStudent(userRoleRepository.findById(gradeDto.getStudentId()).orElseThrow());
-            placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
+            studentLesson = placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
         }
+        return CreatedGradeDto.builder()
+                .studentLessonId(studentLesson.getId())
+                .lessonId(studentLesson.getLesson().getId())
+                .build();
     }
 
-    public void placeMark(StudentLesson studentLesson, String mark, Attendance attendance) {
+    public StudentLesson placeMark(StudentLesson studentLesson, String mark, Attendance attendance) {
         studentLesson.setMark(mark);
         studentLesson.setAttendance(attendance);
-        studentLessonRepository.save(studentLesson);
+        return studentLessonRepository.save(studentLesson);
     }
 
     public void createLesson(LessonCreateDto lessonCreateDto) {

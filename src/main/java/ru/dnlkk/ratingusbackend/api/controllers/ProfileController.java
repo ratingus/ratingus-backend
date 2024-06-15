@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.ProfileApi;
 import ru.dnlkk.ratingusbackend.api.dtos.UserDto;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.EditProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.profile.ProfileDto;
 import ru.dnlkk.ratingusbackend.api.dtos.profile.SchoolDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.ChangeSchoolDto;
@@ -14,6 +15,7 @@ import ru.dnlkk.ratingusbackend.model.School;
 import ru.dnlkk.ratingusbackend.model.UserCode;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.model.UserRole;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
@@ -21,17 +23,20 @@ import ru.dnlkk.ratingusbackend.repository.UserRoleRepository;
 import ru.dnlkk.ratingusbackend.security.JwtTokenService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import ru.dnlkk.ratingusbackend.service.UserService;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-public class ProfileController implements ProfileApi {
+public class ProfileController extends ExceptionHandlerController implements ProfileApi {
     private final JwtTokenService jwtTokenService;
     private final SchoolRepository schoolRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserCodeRepository userCodeRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<ProfileDto> getUser(Integer id) {
@@ -53,8 +58,28 @@ public class ProfileController implements ProfileApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> updateUser(HttpServletResponse response, UserDto userDto) {
-        return null;
+    public ResponseEntity<ProfileDto> getUser(UserDetailsImpl userDetails) {
+        ProfileDto profileDto = new ProfileDto();
+
+        var user = userRepository.findById(userDetails.getUser().getId()).orElseThrow();
+        profileDto.setId(user.getId());
+        profileDto.setLogin(user.getLogin());
+        profileDto.setName(user.getName());
+        profileDto.setSurname(user.getSurname());
+        profileDto.setPatronymic(user.getPatronymic());
+        profileDto.setBirthdate(user.getBirthDate());
+        profileDto.setSchools(user.getUsersRoles().stream().map(userRole -> {
+            School school = userRole.getSchool();
+            return new SchoolDto(school.getId(), school.getName(), userRole.getRole(), userRole.getRoleClass() == null ? null : new ClassDto(userRole.getRoleClass().getId(), userRole.getRoleClass().getName()));
+        }).toList());
+
+        return ResponseEntity.ok(profileDto);
+    }
+
+    @Override
+    public ResponseEntity<UserDto> updateUser(HttpServletResponse response, UserDetailsImpl userDetails, EditProfileDto userDto) {
+        userService.updateUser(userDetails, userDto);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
@@ -67,6 +92,11 @@ public class ProfileController implements ProfileApi {
 
         if (code.isActivated()) {
             return ResponseEntity.badRequest().body("Код уже активирован");
+        }
+
+        Optional<UserRole> checkUserRole = userRoleRepository.findByUserAndRoleAndSchoolId(userDetails.getUser(), Role.STUDENT, code.getSchool().getId());
+        if (checkUserRole.isPresent()) {
+            return ResponseEntity.badRequest().body("Ученик не может иметь больше 1 класса в одной учебной организации");
         }
 
         UserRole userRole = new UserRole();
@@ -84,6 +114,7 @@ public class ProfileController implements ProfileApi {
 
         userRoleRepository.save(userRole);
         code.setActivated(true);
+        code.setUser(userRole);
         userCodeRepository.save(code);
         response.addHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; SameSite=Strict");
 

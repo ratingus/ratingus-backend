@@ -29,13 +29,13 @@ public interface ScheduleApi {
     @Operation(
             summary = "Изменить порядок расписания"
     )
-    @PatchMapping("/{classId}")
+    @PostMapping("/change/{classId}")
     ResponseEntity changeSubjectInSchedule(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody ScheduleChangeDTO request, @PathVariable(name = "classId") int classId);
 
     @Operation(
             summary = "Удалить предмет из расписания"
     )
-    @DeleteMapping("/{classId}")
+    @PostMapping("/delete/{classId}")
     ResponseEntity removeSubjectInSchedule(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody ScheduleActionDTO request, @PathVariable(name = "classId") int classId);
 
     @Operation(
@@ -43,7 +43,7 @@ public interface ScheduleApi {
             description = "Возвращает расписание по заданному в query-параметре названию класса"
     )
     @GetMapping("/{classId}")
-    ResponseEntity<ScheduleDTO> getSchedule(@AuthenticationPrincipal UserDetailsImpl user, @PathVariable(name = "classId") int classId);
+    ResponseEntity<ScheduleDTO> getSchedule(@AuthenticationPrincipal UserDetailsImpl user, @PathVariable(name = "classId") int classId, @RequestParam(name  =  "isAllDay", required = false) boolean isAllDay);
 
     @Operation(
             summary = "Получение предметов с учителями по классу"

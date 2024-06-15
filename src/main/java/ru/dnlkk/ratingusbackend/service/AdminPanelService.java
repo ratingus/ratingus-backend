@@ -1,13 +1,14 @@
 package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectsDto;
+import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherWithSubjectIdDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
@@ -45,7 +46,7 @@ public class AdminPanelService {
         if (Boolean.TRUE.equals(userDetails.getUser().getIsAdmin())) { //todo: не до конца всё проверяет и работает (если у админа userRole=null, проблема не решена. Но такого и не должно быть)
             return;
         }
-        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN)) {
+        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN && userDetails.getUserRole().getRole() != Role.TEACHER)) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
@@ -167,16 +168,30 @@ public class AdminPanelService {
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
-    public List<TeacherSubjectDto> getAllSubjects(UserDetailsImpl userDetails) {
+    public List<TeacherSubjectsDto> getAllSubjects(UserDetailsImpl userDetails) {
         forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
         List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();
         List<TeacherSubject> teacherSubjects = teacherSubjectRepository.findBySubjectIds(subjectIds);
-        List<TeacherSubjectDto> res = TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoList(teacherSubjects);
-        res.addAll(
-                TeacherSubjectMapper.INSTANCE.toTeacherSubjectDtoListFromSubjectList(subjects)
-        );
+
+        // Создаем мапу, где ключ - это ID предмета, а значение - список учителей этого предмета
+        Map<Integer, List<TeacherWithSubjectIdDto>> subjectTeachersMap = new HashMap<>();
+        for (TeacherSubject teacherSubject : teacherSubjects) {
+            int subjectId = teacherSubject.getSubject().getId();
+            TeacherWithSubjectIdDto teacherDto = new TeacherWithSubjectIdDto(teacherSubject.getId(), teacherSubject.getTeacher().getId(), teacherSubject.getTeacher().getName(), teacherSubject.getTeacher().getSurname(), teacherSubject.getTeacher().getPatronymic());
+            subjectTeachersMap.computeIfAbsent(subjectId, k -> new ArrayList<>()).add(teacherDto);
+        }
+
+        List<TeacherSubjectsDto> res = new ArrayList<>();
+        for (Subject subject : subjects) {
+            SubjectDto subjectDto = SubjectMapper.INSTANCE.toDto(subject);
+            TeacherSubjectsDto teacherSubjectsDto = new TeacherSubjectsDto();
+            teacherSubjectsDto.setSubject(subjectDto);
+            teacherSubjectsDto.setTeachers(subjectTeachersMap.getOrDefault(subject.getId(), null));
+            res.add(teacherSubjectsDto);
+        }
+
         return res;
     }
 
@@ -210,8 +225,7 @@ public class AdminPanelService {
             throw new ForbiddenException("Нет доступа к учителю с id=" + teacherId);
         }
 
-        Optional<TeacherSubject> teacherSubjectsBySubjectId = teacherSubjectRepository
-                .findTeacherSubjectsBySubjectIdAndTeacherId(subjectId, teacherId);
+        Optional<TeacherSubject> teacherSubjectsBySubjectId = teacherSubjectRepository.findTeacherSubjectsBySubjectIdAndTeacherId(subjectId, teacherId);
 
         if (teacherSubjectsBySubjectId.isPresent()) {
             throw new LogicException("Связь предмета с id=" + subjectId + " с учителем с id=" + teacherId + " уже существует");
@@ -234,11 +248,7 @@ public class AdminPanelService {
             throw new NotFoundException("Нет связи учителя с классом с id=" + teacherSubjectId);
         }
         TeacherSubject teacherSubject = byId.get();
-        int teacherSchoolId = userRoleRepository.findById(
-                teacherSubject.getTeacher().getId())
-                .get()
-                .getSchool()
-                .getId();
+        int teacherSchoolId = userRoleRepository.findById(teacherSubject.getTeacher().getId()).get().getSchool().getId();
         if (teacherSchoolId != schoolId) {
             throw new ForbiddenException("Нет доступа к связи предмет-учитель с id=" + teacherSchoolId);
         }
