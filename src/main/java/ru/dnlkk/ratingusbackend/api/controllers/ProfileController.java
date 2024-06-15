@@ -15,6 +15,7 @@ import ru.dnlkk.ratingusbackend.model.School;
 import ru.dnlkk.ratingusbackend.model.UserCode;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.model.UserRole;
+import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.SchoolRepository;
 import ru.dnlkk.ratingusbackend.repository.UserCodeRepository;
 import ru.dnlkk.ratingusbackend.repository.UserRepository;
@@ -25,10 +26,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.dnlkk.ratingusbackend.service.UserService;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-public class ProfileController implements ProfileApi {
+public class ProfileController extends ExceptionHandlerController implements ProfileApi {
     private final JwtTokenService jwtTokenService;
     private final SchoolRepository schoolRepository;
     private final UserRoleRepository userRoleRepository;
@@ -90,6 +92,11 @@ public class ProfileController implements ProfileApi {
 
         if (code.isActivated()) {
             return ResponseEntity.badRequest().body("Код уже активирован");
+        }
+
+        Optional<UserRole> checkUserRole = userRoleRepository.findByUserAndRoleAndSchoolId(userDetails.getUser(), Role.STUDENT, code.getSchool().getId());
+        if (checkUserRole.isPresent()) {
+            return ResponseEntity.badRequest().body("Ученик не может иметь больше 1 класса в одной учебной организации");
         }
 
         UserRole userRole = new UserRole();
