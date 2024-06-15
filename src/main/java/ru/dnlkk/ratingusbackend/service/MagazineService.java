@@ -3,10 +3,7 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.*;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.GradeDto;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonCreateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.LessonUpdateDto;
-import ru.dnlkk.ratingusbackend.api.dtos.magazine.MagazineLessonDto;
+import ru.dnlkk.ratingusbackend.api.dtos.magazine.*;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.enums.Attendance;
 import ru.dnlkk.ratingusbackend.repository.*;
@@ -142,17 +139,17 @@ public class MagazineService {
         return dates;
     }
 
-    public void createUserGrade(GradeDto gradeDto) {
+    public CreatedGradeDto createUserGrade(GradeDto gradeDto) {
         StudentLesson studentLesson;
         if (gradeDto.getLessonStudentId() != null) {
             studentLesson = studentLessonRepository.findById(gradeDto.getLessonStudentId()).orElseThrow();
-            placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
+            studentLesson = placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
         } else if (gradeDto.getLessonId() != null) {
             Lesson lesson = lessonRepository.findById(gradeDto.getLessonId()).orElseThrow();
             studentLesson = new StudentLesson();
             studentLesson.setLesson(lesson);
             studentLesson.setStudent(userRoleRepository.findById(gradeDto.getStudentId()).orElseThrow());
-            placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
+            studentLesson = placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
         } else {
             Schedule schedule = scheduleRepository.findById(gradeDto.getScheduleId()).orElseThrow();
             Lesson lesson = new Lesson();
@@ -164,14 +161,18 @@ public class MagazineService {
             studentLesson = new StudentLesson();
             studentLesson.setLesson(lesson);
             studentLesson.setStudent(userRoleRepository.findById(gradeDto.getStudentId()).orElseThrow());
-            placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
+            studentLesson = placeMark(studentLesson, gradeDto.getMark(), gradeDto.getAttendance());
         }
+        return CreatedGradeDto.builder()
+                .studentLessonId(studentLesson.getId())
+                .lessonId(studentLesson.getLesson().getId())
+                .build();
     }
 
-    public void placeMark(StudentLesson studentLesson, String mark, Attendance attendance) {
+    public StudentLesson placeMark(StudentLesson studentLesson, String mark, Attendance attendance) {
         studentLesson.setMark(mark);
         studentLesson.setAttendance(attendance);
-        studentLessonRepository.save(studentLesson);
+        return studentLessonRepository.save(studentLesson);
     }
 
     public void createLesson(LessonCreateDto lessonCreateDto) {
