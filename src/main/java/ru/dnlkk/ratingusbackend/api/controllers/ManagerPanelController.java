@@ -16,7 +16,7 @@ import ru.dnlkk.ratingusbackend.service.ManagerPanelService;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
-public class ManagerPanelController implements ManagerPanelApi {
+public class ManagerPanelController extends ExceptionHandlerController implements ManagerPanelApi {
     private final ManagerPanelService managerPanelService;
     private final AdminPanelService adminPanelService;
     @Override
