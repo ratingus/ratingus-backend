@@ -94,9 +94,11 @@ public class ProfileController extends ExceptionHandlerController implements Pro
             return ResponseEntity.badRequest().body("Код уже активирован");
         }
 
-        Optional<UserRole> checkUserRole = userRoleRepository.findByUserAndRoleAndSchoolId(userDetails.getUser(), Role.STUDENT, code.getSchool().getId());
-        if (checkUserRole.isPresent()) {
-            return ResponseEntity.badRequest().body("Ученик не может иметь больше 1 класса в одной учебной организации");
+        if (code.getRole() == Role.STUDENT){
+            Optional<UserRole> checkUserRole = userRoleRepository.findByUserAndRoleAndSchoolId(userDetails.getUser(), Role.STUDENT, code.getSchool().getId());
+            if (checkUserRole.isPresent()) {
+                return ResponseEntity.badRequest().body("Ученик не может иметь больше 1 класса в одной учебной организации");
+            }
         }
 
         UserRole userRole = new UserRole();
