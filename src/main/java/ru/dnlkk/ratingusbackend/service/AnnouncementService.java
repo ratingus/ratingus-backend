@@ -68,7 +68,6 @@ public class AnnouncementService {
         School school = schoolRepository.findById(schoolId).get();
         List<Class> classes = school.getClasses();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(classes, PageRequest.of(offset, limit)).stream().toList();
-
         incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }
@@ -80,6 +79,7 @@ public class AnnouncementService {
         }
         Class clazz = optionalClass.get();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
+
         incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }
@@ -116,5 +116,4 @@ public class AnnouncementService {
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }
-
 }
