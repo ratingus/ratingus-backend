@@ -6,11 +6,13 @@ import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.ApplicationMapper;
 import ru.dnlkk.ratingusbackend.mapper.SchoolMapper;
+import ru.dnlkk.ratingusbackend.mapper.user.UserMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.model.*;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class ManagerPanelService {
     private final ApplicationRepository applicationRepository;
     private final UserRoleRepository userRoleRepository;
+    private final UserRepository userRepository;
 
     private final String[] endTimes = {
             "2024-05-21 08:40:00.000000",
@@ -152,6 +155,11 @@ public class ManagerPanelService {
         application.setStatus(ApplicationStatusType.REJECTED);
         applicationRepository.saveAndFlush(application);
     }
+
+    public List<UserForManagerDto> getAllUsers(UserDetailsImpl userDetails){
+        checkIsUserManager(userDetails);
+        List<User> users = userRepository.findAll();
+        return UserMapper.INSTANCE.toUserForManagerDtoList(users);
 
     public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
         checkIsUserManager(userDetails);

@@ -7,6 +7,8 @@ import ru.dnlkk.ratingusbackend.api.ManagerPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationDto;
 import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationResponseDto;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForAdminPanelDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
@@ -49,7 +51,12 @@ public class ManagerPanelController extends ExceptionHandlerController implement
     }
 
     @Override
+    public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
+
+    @Override
     public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
+
     }
 }
