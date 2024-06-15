@@ -62,6 +62,7 @@ public class ManagerPanelService {
     }
 
     private final SchoolRepository schoolRepository;
+
     public List<ApplicationResponseDto> getAllApplications(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<Application> applicationList = applicationRepository.findAll();
@@ -81,10 +82,10 @@ public class ManagerPanelService {
         if (userDetails.getUser() == null) {
             throw new ForbiddenException("Пользователь не авторизован");
         } else {
-        Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
-        application.setCreator(user);
-        Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
-        return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
+            Application application = ApplicationMapper.INSTANCE.toEntity(applicationDto);
+            application.setCreator(user);
+            Application applicationAfterSaving = applicationRepository.saveAndFlush(application);
+            return ApplicationMapper.INSTANCE.toDto(applicationAfterSaving);
         }
     }
 
@@ -156,14 +157,16 @@ public class ManagerPanelService {
         applicationRepository.saveAndFlush(application);
     }
 
-    public List<UserForManagerDto> getAllUsers(UserDetailsImpl userDetails){
+    public List<UserForManagerDto> getAllUsers(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<User> users = userRepository.findAll();
         return UserMapper.INSTANCE.toUserForManagerDtoList(users);
+    }
 
-    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
+    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<School> schools = schoolRepository.findAll();
         return SchoolMapper.INSTANCE.toSchoolDtoList(schools);
     }
+
 }
