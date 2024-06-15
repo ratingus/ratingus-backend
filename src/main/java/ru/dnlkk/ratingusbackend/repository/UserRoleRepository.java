@@ -8,6 +8,7 @@ import ru.dnlkk.ratingusbackend.model.UserRole;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
@@ -19,6 +20,10 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
     UserRole findUserRoleByUserIdAndSchool(int teacherId, School school);
 
     List<UserRole> findUserRolesBySchoolIdAndRoleClassId(int id, Integer classId);
+
+    Optional<UserRole> findByUserAndRoleAndSchoolId(User user, Role role, int schoolId);
+
+    Optional<UserRole> findByUserAndRole(User user, Role role);
 
     List<UserRole> findAllByUser(User user);
 }
