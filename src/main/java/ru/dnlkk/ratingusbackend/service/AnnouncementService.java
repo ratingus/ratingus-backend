@@ -60,6 +60,7 @@ public class AnnouncementService {
                 throw new ForbiddenException("Нет доступа к этому классу");
             }
             List<Announcement> announcements = announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+            incrementViews(announcements);
             return AnnouncementMapper.INSTANCE.toDtoList(announcements);
         }
         School school = schoolRepository.findById(schoolId).get();
