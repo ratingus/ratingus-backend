@@ -46,7 +46,7 @@ public class AdminPanelService {
         if (Boolean.TRUE.equals(userDetails.getUser().getIsAdmin())) { //todo: не до конца всё проверяет и работает (если у админа userRole=null, проблема не решена. Но такого и не должно быть)
             return;
         }
-        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN && userDetails.getUserRole().getRole() != Role.TEACHER)) {
+        if (userDetails.getUserRole() == null || (userDetails.getUserRole().getRole() != Role.LOCAL_ADMIN)) {
             throw new ForbiddenException("Доступ запрещён");
         }
     }
