@@ -2,7 +2,7 @@ package ru.dnlkk.ratingusbackend.service.util;
 import java.util.Random;
 
 public class RandomSequenceGenerator {
-    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!_()[]";
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int LENGTH = 11;
 
     public static String generateRandomSequence() {
