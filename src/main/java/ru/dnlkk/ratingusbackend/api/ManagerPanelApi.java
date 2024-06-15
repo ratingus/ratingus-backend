@@ -71,8 +71,8 @@ public interface ManagerPanelApi {
     );
 
     @Operation(
-            summary = "Получение всех школ",
-            description = "Возвращает список всех школ, которые есть в базе данных"
+            summary = "Получение всех пользователей",
+            description = "Возвращает список всех польхователей, которые есть в базе данных"
     )
     @GetMapping("/users")
     ResponseEntity<List<UserForManagerDto>> getAllUsers(
