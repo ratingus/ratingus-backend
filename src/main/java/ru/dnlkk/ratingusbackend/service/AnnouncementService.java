@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,13 @@ public class AnnouncementService {
         }
     }
 
+    public void incrementViews(List<Announcement> announcements){
+        for (Announcement announcement : announcements) {
+            announcement.setViews(announcement.getViews() + 1);
+        }
+        announcementRepository.saveAll(announcements);
+    }
+
     private void checkUserIsTeacherOrHigher(UserDetailsImpl userDetails) {
         Role roleOfUser = userDetails.getUserRole().getRole();
         if (roleOfUser != Role.LOCAL_ADMIN && roleOfUser != Role.MANAGER && roleOfUser != Role.TEACHER) {
@@ -54,11 +62,14 @@ public class AnnouncementService {
                 throw new ForbiddenException("Нет доступа к этому классу");
             }
             List<Announcement> announcements = announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+            incrementViews(announcements);
             return AnnouncementMapper.INSTANCE.toDtoList(announcements);
         }
         School school = schoolRepository.findById(schoolId).get();
         List<Class> classes = school.getClasses();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(classes, PageRequest.of(offset, limit)).stream().toList();
+
+        incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }
 
@@ -69,6 +80,7 @@ public class AnnouncementService {
         }
         Class clazz = optionalClass.get();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
+        incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }
 
@@ -104,4 +116,5 @@ public class AnnouncementService {
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }
+
 }
