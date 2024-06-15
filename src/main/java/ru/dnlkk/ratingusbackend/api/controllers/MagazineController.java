@@ -26,8 +26,7 @@ public class MagazineController implements MagazineApi {
 
     @Override
     public ResponseEntity createUserGrade(UserDetailsImpl user, GradeDto gradeDto) {
-        magazineService.createUserGrade(gradeDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(magazineService.createUserGrade(gradeDto));
     }
 
     @Override
