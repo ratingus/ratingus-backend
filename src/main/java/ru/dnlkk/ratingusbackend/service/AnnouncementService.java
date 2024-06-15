@@ -33,10 +33,11 @@ public class AnnouncementService {
         }
     }
 
-    @Transactional
-    public  void incrementViews(Announcement announcement){
-        announcement.setViews(announcement.getViews() + 1);
-        announcementRepository.save(announcement);
+    public void incrementViews(List<Announcement> announcements){
+        for (Announcement announcement : announcements) {
+            announcement.setViews(announcement.getViews() + 1);
+        }
+        announcementRepository.saveAll(announcements);
     }
 
     private void checkUserIsTeacherOrHigher(UserDetailsImpl userDetails) {
@@ -64,7 +65,7 @@ public class AnnouncementService {
         School school = schoolRepository.findById(schoolId).get();
         List<Class> classes = school.getClasses();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(classes, PageRequest.of(offset, limit)).stream().toList();
-        announcements.forEach(this::incrementViews);
+        incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
@@ -75,7 +76,7 @@ public class AnnouncementService {
         }
         Class clazz = optionalClass.get();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
-        announcements.forEach(this::incrementViews);
+        incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(announcements);
     }
 
