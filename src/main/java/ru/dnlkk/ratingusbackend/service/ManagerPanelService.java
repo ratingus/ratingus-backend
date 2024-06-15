@@ -68,8 +68,8 @@ public class ManagerPanelService {
                         .email(application.getEmail())
                         .address(application.getName())
                         .phone(application.getPhone())
-                        .status(application.getStatus().name())
-                        .code(application.getCode().getCode())
+                        .status(application.getStatus() == null ? null : application.getStatus().name())
+                        .code(application.getCode() == null ? null : application.getCode().getCode())
                         .build()
         ).toList();
     }
