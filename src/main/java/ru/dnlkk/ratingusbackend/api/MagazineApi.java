@@ -73,7 +73,23 @@ public interface MagazineApi {
      */
     ResponseEntity<List<LessonCreateDto>> createLesson(
             @AuthenticationPrincipal UserDetailsImpl user,
+            @RequestParam(required = true) Integer classId,
+            @RequestParam(required = true) Integer teacherSubjectId,
             @RequestBody LessonCreateDto lessonCreateDto);
+
+
+
+    @Operation(
+            summary = "Удаление урока",
+            description = "Удаляет урок"
+    )
+    @DeleteMapping("/lessons/{id}")
+    /*
+          Создаём новый lesson
+     */
+    ResponseEntity deleteLesson(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @PathVariable("id") Integer lessonId);
 
 
     @Operation(

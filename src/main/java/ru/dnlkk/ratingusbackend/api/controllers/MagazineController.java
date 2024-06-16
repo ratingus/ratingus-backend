@@ -35,8 +35,14 @@ public class MagazineController implements MagazineApi {
     }
 
     @Override
-    public ResponseEntity createLesson(UserDetailsImpl user, LessonCreateDto lessonCreateDto) {
-        magazineService.createLesson(lessonCreateDto);
+    public ResponseEntity createLesson(UserDetailsImpl user, Integer classId, Integer teacherSubjectId, LessonCreateDto lessonCreateDto) {
+        magazineService.createLesson(classId,teacherSubjectId, lessonCreateDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity deleteLesson(UserDetailsImpl user, Integer lessonId) {
+        magazineService.deleteLesson(lessonId);
         return ResponseEntity.noContent().build();
     }
 

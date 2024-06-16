@@ -175,8 +175,14 @@ public class MagazineService {
         return studentLessonRepository.save(studentLesson);
     }
 
-    public void createLesson(LessonCreateDto lessonCreateDto) {
-        Schedule schedule = scheduleRepository.findById(lessonCreateDto.getScheduleId()).orElseThrow();
+    public void createLesson(Integer classId, Integer teacherSubjectId,LessonCreateDto lessonCreateDto) {
+        Schedule schedule = scheduleRepository.findById(lessonCreateDto.getScheduleId()).orElse(null);
+        List<Schedule> schedules  = scheduleRepository.findByScheduleForClassIdAndSubjectId(classId, teacherSubjectId);
+
+        if (schedule == null) {
+            if (schedules.isEmpty()) throw new RuntimeException("Schedule not found");
+            schedule = schedules.getFirst();
+        }
 
         Lesson lesson = new Lesson();
         lesson.setDate(lessonCreateDto.getDate());
@@ -186,6 +192,10 @@ public class MagazineService {
         lesson.setHomework(lessonCreateDto.getHomework());
 
         lessonRepository.save(lesson);
+    }
+
+    public void deleteLesson(Integer lessonId) {
+        lessonRepository.deleteById(lessonId);
     }
 
     public void updateLesson(LessonUpdateDto lessonUpdateDto) {
