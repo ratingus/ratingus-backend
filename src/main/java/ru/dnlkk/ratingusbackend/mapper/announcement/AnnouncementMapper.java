@@ -16,12 +16,13 @@ import ru.dnlkk.ratingusbackend.model.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper
 public interface AnnouncementMapper {
     AnnouncementMapper INSTANCE = Mappers.getMapper(AnnouncementMapper.class);
 
-    @Mapping(target = "classes", source = "classesId", qualifiedByName = "getClassListFromIdsList")
+    @Mapping(target = "classes", source = "classes", qualifiedByName = "getClassListFromIdsList")
     @Mapping(target = "creator", expression = "java(createCreator())")
     Announcement toModel(AnnouncementCreateDto announcementDto);
 
@@ -31,14 +32,13 @@ public interface AnnouncementMapper {
     }
 
     @Named("getClassListFromIdsList")
-    static List<Class> getClassListFromIdsList(List<Integer> classesId) {
-        List<Class> classes = new ArrayList<>(classesId.size());
-        for (Integer integer : classesId) {
+    static List<Class> getClassListFromIdsList(List<ClassDto> classes) {
+        return classes.stream().map((classDto) -> {
             Class c = new Class();
-            c.setId(integer);
-            classes.add(c);
-        }
-        return classes;
+            c.setId(classDto.getId());
+            c.setName(classDto.getName());
+            return c;
+        }).toList();
     }
 
     @IterableMapping(elementTargetType = AnnouncementDto.class)
@@ -55,10 +55,6 @@ public interface AnnouncementMapper {
 
     @Named("idFromClasses")
     static List<ClassDto> dtoFromClasses(List<Class> classes) {
-        List<ClassDto> ids = new ArrayList<>(classes.size());
-        for (Class c : classes) {
-            ids.add(new ClassDto(c.getId(), c.getName()));
-        }
-        return ids;
+        return classes.stream().map((class1) -> new ClassDto(class1.getId(), class1.getName())).toList();
     }
 }
