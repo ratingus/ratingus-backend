@@ -162,14 +162,12 @@ public class AdminPanelService {
     }
 
     public List<TimetableDto> getTimetable(UserDetailsImpl userDetails) {
-        forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Timetable> timetablesBySchoolId = timetableRepository.findTimetablesBySchoolId(schoolId);
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
     public List<TeacherSubjectsDto> getAllSubjects(UserDetailsImpl userDetails) {
-        forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
         List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();
