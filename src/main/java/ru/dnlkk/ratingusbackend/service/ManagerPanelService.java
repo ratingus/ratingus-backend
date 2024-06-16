@@ -70,10 +70,19 @@ public class ManagerPanelService {
                 application -> ApplicationResponseDto.builder()
                         .id(application.getId())
                         .email(application.getEmail())
-                        .address(application.getName())
+                        .name(application.getName())
+                        .address(application.getAddress())
                         .phone(application.getPhone())
                         .status(application.getStatus() == null ? null : application.getStatus().name())
-                        .code(application.getCode() == null ? null : application.getCode().getCode())
+                        .code(application.getCode() == null ? null :
+                                UserCodeWithClassDto.builder()
+                                        .id(application.getCode().getId())
+                                        .name(application.getCode().getName())
+                                        .surname(application.getCode().getSurname())
+                                        .patronymic(application.getCode().getPatronymic())
+                                        .code(application.getCode().getCode())
+                                        .build())
+                        .isActivated(application.getCode() == null ? null : application.getCode().isActivated())
                         .build()
         ).toList();
     }
@@ -120,8 +129,6 @@ public class ManagerPanelService {
         }
         timetableRepository.saveAll(timetables);
         school.setTimetables(timetables);
-
-        deleteApplication(userDetails, applicationId);
 
         User manager = userDetails.getUser();
 
