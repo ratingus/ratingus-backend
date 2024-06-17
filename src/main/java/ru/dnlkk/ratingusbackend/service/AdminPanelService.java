@@ -168,6 +168,22 @@ public class AdminPanelService {
         return ClassMapper.INSTANCE.toClassDto(classFromSaving);
     }
 
+    public ClassDto updateClass(int id, ClassDto classDto, UserDetailsImpl userDetails)  {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
+        Optional<Class> byId = classRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Не найден класс с id=" + id);
+        }
+        Class classEntity = byId.get();
+        if (classEntity.getSchool().getId() != schoolId) {
+            throw new ForbiddenException("Нет доступа к классу с id=" + id);
+        }
+        classEntity.setName(classDto.getName());
+        Class classAfterSaving = classRepository.saveAndFlush(classEntity);
+        return ClassMapper.INSTANCE.toClassDto(classAfterSaving);
+    }
+
     public void deleteClass(int id, UserDetailsImpl userDetails) {
         forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
