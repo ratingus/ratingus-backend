@@ -1,14 +1,12 @@
 package ru.dnlkk.ratingusbackend.api.dtos.user_role;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.dnlkk.ratingusbackend.model.enums.Role;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.SchoolDto;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +19,5 @@ public class UserRoleDto {
     private String patronymic;
     private String login;
     private Timestamp birthdate;
-    private String schoolName;
-    private Role userRole;
+    private SchoolDto school;
 }

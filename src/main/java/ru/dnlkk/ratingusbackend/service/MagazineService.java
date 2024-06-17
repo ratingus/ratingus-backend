@@ -227,6 +227,6 @@ public class MagazineService {
             lessonDto.setHomework(lesson.getHomework());
             lessonDto.setTheme(lesson.getTheme());
             return lessonDto;
-        }).toList();
+        }).sorted(Comparator.comparing(LessonDto::getDate, Comparator.reverseOrder())).toList();
     }
 }

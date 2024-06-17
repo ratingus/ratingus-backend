@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,5 +17,5 @@ public class AnnouncementCreateDto {
     private String name;
     private String content;
     private int views;
-    private List<Integer> classesId;
+    private List<ClassDto> classes;
 }

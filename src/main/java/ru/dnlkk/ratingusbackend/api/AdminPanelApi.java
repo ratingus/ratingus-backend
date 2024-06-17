@@ -101,6 +101,19 @@ public interface AdminPanelApi {
     );
 
     @Operation(
+            summary = "Обновить название класса",
+            description = "Обновляет класс"
+    )
+    @PutMapping("/class/{id}")
+    ResponseEntity<ClassDto> updateClass(
+            @PathVariable("id") int id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "DTO обновляемого класса")
+            @RequestBody ClassDto classDto
+    );
+
+    @Operation(
             summary = "Удаление класса",
             description = "Удаляет класс по id и возвращает пустой ответ"
     )

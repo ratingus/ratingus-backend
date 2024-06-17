@@ -112,6 +112,7 @@ public class AnnouncementService {
                 throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId());
             }
         }
+        announcement.setClasses(classes);
         announcement.setCreator(creator);
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);

@@ -3,6 +3,7 @@ package ru.dnlkk.ratingusbackend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.profile.SchoolDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
@@ -59,7 +60,27 @@ public class AdminPanelService {
             return new ArrayList<>();
         } else {
             List<UserRole> userRoles = school.get().getUserRoles();
-            return UserRoleMapper.INSTANCE.toDtoList(userRoles);
+            return userRoles.stream().map((userRole) ->
+                    UserRoleDto.builder()
+                            .id(userRole.getId())
+                            .school(userRole.getSchool() == null ? null :
+                                    SchoolDto.builder()
+                                            .id(userRole.getSchool().getId())
+                                            .name(userRole.getSchool().getName())
+                                            .role(userRole.getRole())
+                                            .classDto(userRole.getRoleClass() == null ? null :
+                                                    ClassDto.builder()
+                                                            .id(userRole.getRoleClass().getId())
+                                                            .name(userRole.getRoleClass().getName())
+                                                            .build())
+                                            .build()
+                            )
+                            .name(userRole.getName())
+                            .surname(userRole.getSurname())
+                            .patronymic(userRole.getPatronymic())
+                            .birthdate(userRole.getUser().getBirthDate())
+                            .login(userRole.getUser().getLogin())
+                            .build()).toList();
         }
     }
 
@@ -77,7 +98,7 @@ public class AdminPanelService {
         if (school.isEmpty()) {
             return new ArrayList<>();
         } else {
-            List<UserCode> userCodes = school.get().getUserCodes();
+            List<UserCode> userCodes = school.get().getUserCodes().stream().filter(userCode -> !userCode.isActivated()).toList();
             return UserCodeMapper.INSTANCE.toUserCodeWithClassDtoList(userCodes);
         }
     }
@@ -147,6 +168,22 @@ public class AdminPanelService {
         return ClassMapper.INSTANCE.toClassDto(classFromSaving);
     }
 
+    public ClassDto updateClass(int id, ClassDto classDto, UserDetailsImpl userDetails)  {
+        forbidAccessForNullUserRole(userDetails);
+        int schoolId = userDetails.getUserRole().getSchool().getId();
+        Optional<Class> byId = classRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("Не найден класс с id=" + id);
+        }
+        Class classEntity = byId.get();
+        if (classEntity.getSchool().getId() != schoolId) {
+            throw new ForbiddenException("Нет доступа к классу с id=" + id);
+        }
+        classEntity.setName(classDto.getName());
+        Class classAfterSaving = classRepository.saveAndFlush(classEntity);
+        return ClassMapper.INSTANCE.toClassDto(classAfterSaving);
+    }
+
     public void deleteClass(int id, UserDetailsImpl userDetails) {
         forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
@@ -162,14 +199,12 @@ public class AdminPanelService {
     }
 
     public List<TimetableDto> getTimetable(UserDetailsImpl userDetails) {
-        forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Timetable> timetablesBySchoolId = timetableRepository.findTimetablesBySchoolId(schoolId);
         return TimetableMapper.INSTANCE.toDtoList(timetablesBySchoolId);
     }
 
     public List<TeacherSubjectsDto> getAllSubjects(UserDetailsImpl userDetails) {
-        forbidAccessForNullUserRole(userDetails);
         int schoolId = userDetails.getUserRole().getSchool().getId();
         List<Subject> subjects = subjectRepository.findAllBySchool_Id(schoolId);
         List<Integer> subjectIds = subjects.stream().map(Subject::getId).toList();

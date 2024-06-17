@@ -1,6 +1,7 @@
 package ru.dnlkk.ratingusbackend.api.dtos.application;
 
 import lombok.*;
+import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +15,6 @@ public class ApplicationResponseDto {
     private String phone;
     private int creatorId;
     private String status;
-    private String code;
+    private UserCodeWithClassDto code;
+    private Boolean isActivated;
 }
