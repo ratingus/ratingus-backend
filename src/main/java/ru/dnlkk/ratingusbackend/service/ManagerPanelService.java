@@ -156,11 +156,11 @@ public class ManagerPanelService {
         applicationRepository.saveAndFlush(application);
     }
 
-    public List<UserForManagerDto> getAllUsers(UserDetailsImpl userDetails){
+    public List<UserForManagerDto> getAllUsers(UserDetailsImpl userDetails) {
         checkIsUserManager(userDetails);
         List<User> users = userRepository.findAll();
         return UserMapper.INSTANCE.toUserForManagerDtoList(users);
-
+    }
     public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
         checkIsUserManager(userDetails);
         List<School> schools = schoolRepository.findAll();

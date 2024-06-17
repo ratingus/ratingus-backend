@@ -53,7 +53,7 @@ public class ManagerPanelController extends ExceptionHandlerController implement
     @Override
     public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
-
+    }
     @Override
     public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
