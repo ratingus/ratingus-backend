@@ -65,9 +65,7 @@ public class AnnouncementService {
             incrementViews(announcements);
             return AnnouncementMapper.INSTANCE.toDtoList(announcements);
         }
-        School school = schoolRepository.findById(schoolId).get();
-        List<Class> classes = school.getClasses();
-        List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(classes, PageRequest.of(offset, limit)).stream().toList();
+        List<Announcement> announcements = announcementRepository.findByCreatorSchoolId(schoolId, PageRequest.of(offset, limit));
         incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }

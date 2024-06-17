@@ -24,12 +24,6 @@ public class AnnouncementController extends ExceptionHandlerController implement
     }
 
     @Override
-    public ResponseEntity<List<AnnouncementDto>> getAnnouncementById(UserDetailsImpl userDetails, int classId) {
-        List<AnnouncementDto> announcementDto = announcementService.getAnnouncementsByClassId(userDetails, classId);
-        return ResponseEntity.ok(announcementDto);
-    }
-
-    @Override
     public ResponseEntity<AnnouncementDto> createAnnouncement(
             UserDetailsImpl userDetails, AnnouncementCreateDto announcementCreateDto) {
         AnnouncementDto announcementDtoFromService = announcementService.createAnnouncement(userDetails, announcementCreateDto);

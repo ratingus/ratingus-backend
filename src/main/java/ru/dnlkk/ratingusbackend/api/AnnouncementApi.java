@@ -45,19 +45,6 @@ public interface AnnouncementApi {
     );
 
     @Operation(
-            summary = "Получение объявлений по id класса",
-            description = "Возвращает объявления по указанному id класса"
-    )
-    @GetMapping("/{classId}")
-    ResponseEntity<List<AnnouncementDto>> getAnnouncementById(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-
-            @Schema(description = "Id запрашиваемого объявления")
-            @Min(0)
-            @PathVariable int classId
-    );
-
-    @Operation(
             summary = "Создание объявления",
             description = "Создаёт и возвращает объявление"
     )
