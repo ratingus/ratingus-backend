@@ -157,6 +157,19 @@ public interface AdminPanelApi {
     );
 
     @Operation(
+            summary = "Обновить название предмета",
+            description = "Обновляет предмет"
+    )
+    @PutMapping("/subject/{id}")
+    ResponseEntity<SubjectDto> updateSubject(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable("id") int id,
+
+            @Schema(description = "DTO создаваемого предмета")
+            @RequestBody SubjectCreateDto subjectDto
+    );
+
+    @Operation(
             summary = "Привязка к предмету учителя",
             description = "Обновляет предмет, добавляя к нему учителя, и возвращает его"
     )

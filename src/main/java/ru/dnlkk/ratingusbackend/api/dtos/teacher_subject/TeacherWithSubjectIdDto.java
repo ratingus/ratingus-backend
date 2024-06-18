@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class TeacherWithSubjectIdDto {
-    private int teacherSubjectId;
+    private Integer teacherSubjectId;
     private int id;
     private String name;
     private String surname;
