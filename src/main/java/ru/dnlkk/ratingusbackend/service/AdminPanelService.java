@@ -214,7 +214,15 @@ public class AdminPanelService {
         Map<Integer, List<TeacherWithSubjectIdDto>> subjectTeachersMap = new HashMap<>();
         for (TeacherSubject teacherSubject : teacherSubjects) {
             int subjectId = teacherSubject.getSubject().getId();
-            TeacherWithSubjectIdDto teacherDto = new TeacherWithSubjectIdDto(teacherSubject.getId(), teacherSubject.getTeacher().getId(), teacherSubject.getTeacher().getName(), teacherSubject.getTeacher().getSurname(), teacherSubject.getTeacher().getPatronymic());
+            var hasTeacher = teacherSubject.getTeacher() != null;
+            if (!hasTeacher) continue;
+            TeacherWithSubjectIdDto teacherDto = new TeacherWithSubjectIdDto(
+                    teacherSubject.getId(),
+                    teacherSubject.getTeacher().getId(),
+                    teacherSubject.getTeacher().getName(),
+                    teacherSubject.getTeacher().getSurname(),
+                    teacherSubject.getTeacher().getPatronymic()
+            );
             subjectTeachersMap.computeIfAbsent(subjectId, k -> new ArrayList<>()).add(teacherDto);
         }
 
@@ -239,6 +247,15 @@ public class AdminPanelService {
         Subject subjectAfterSaving = subjectRepository.saveAndFlush(subject);
         return SubjectMapper.INSTANCE.toDto(subjectAfterSaving);
     }
+
+    public SubjectDto updateSubject(int id, SubjectCreateDto subjectDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        Subject subject = subjectRepository.findById(id).orElseThrow();
+        subject.setName(subjectDto.getName());
+        Subject subjectAfterSaving = subjectRepository.saveAndFlush(subject);
+        return SubjectMapper.INSTANCE.toDto(subjectAfterSaving);
+    }
+
 
     public TeacherSubjectDto setTeacherToSubject(TeacherSubjectCreateDto teacherSubjectCreateDto, UserDetailsImpl userDetails) {
         forbidAccessForNullUserRole(userDetails);

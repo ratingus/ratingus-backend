@@ -93,6 +93,11 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     }
 
     @Override
+    public ResponseEntity<SubjectDto> updateSubject(UserDetailsImpl userDetails, int id, SubjectCreateDto subjectDto) {
+        return ResponseEntity.ok(adminPanelService.updateSubject(id, subjectDto, userDetails));
+    }
+
+    @Override
     public ResponseEntity<TeacherSubjectDto> setTeacherToSubject(
             UserDetailsImpl userDetails, TeacherSubjectCreateDto teacherSubjectCreateDto) {
         return ResponseEntity.ok(adminPanelService.setTeacherToSubject(teacherSubjectCreateDto, userDetails));

@@ -19,6 +19,7 @@ public class ScheduleService {
     private final UserRoleRepository teacherRepository;
     private final TeacherSubjectRepository teacherSubjectRepository;
     private final TimetableRepository timetableRepository;
+    private final SchoolRepository schoolRepository;
 
     public void mergeSubjectWithTeacher(UserRole userRole, MergeSubjectWithTeacherRequestDTO mergeSubjectWithTeacherRequestDTO) {
         UserRole teacher = teacherRepository.findUserRoleByUserIdAndSchool(mergeSubjectWithTeacherRequestDTO.getTeacherId(), userRole.getSchool());
@@ -54,7 +55,7 @@ public class ScheduleService {
         return new ArrayList<>(scheduleTeachersDTOS.values());
     }
 
-    public ScheduleDTO getSchedule(int classId, boolean isAllDay) {
+    public ScheduleDTO getSchedule(UserDetailsImpl user, int classId, boolean isAllDay) {
         Class clazz = new Class();
         clazz.setId(classId);
         List<Schedule> schedules = scheduleRepository.findByScheduleForClass(clazz);
@@ -65,10 +66,11 @@ public class ScheduleService {
                 groupedByDayOfWeek.computeIfAbsent(i, k -> new ArrayList<>());
             }
         }
+        School school = user.getUserRole().getSchool();
 
-        List<Timetable> timetables = !schedules.isEmpty() ? timetableRepository.findTimetablesBySchoolId(schedules.getFirst().getScheduleForClass().getSchool().getId()).stream()
+        List<Timetable> timetables = timetableRepository.findTimetablesBySchoolId(school.getId()).stream()
                 .sorted(Comparator.comparingInt(Timetable::getLessonNumber))
-                .toList() : null;
+                .toList();
 
         List<ScheduleDayDTO> dayLessons = new ArrayList<>();
 

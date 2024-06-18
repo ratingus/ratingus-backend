@@ -42,7 +42,7 @@ public class ScheduleController implements ScheduleApi {
 
     @Override
     public ResponseEntity<ScheduleDTO> getSchedule(UserDetailsImpl user, int classId, boolean isAllDay) {
-        return ResponseEntity.ok(scheduleService.getSchedule(classId, isAllDay));
+        return ResponseEntity.ok(scheduleService.getSchedule(user, classId, isAllDay));
     }
 
     @Override
