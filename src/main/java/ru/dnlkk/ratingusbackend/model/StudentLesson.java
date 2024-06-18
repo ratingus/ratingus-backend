@@ -1,6 +1,7 @@
 package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,8 @@ public class StudentLesson {
     @Column(name = "mark")
     private String mark;
 
-    @Column(name = "note")
+    @Size(max = 1000)
+    @Column(name = "note", length = 1000, columnDefinition = "varchar(1000)")
     private String note;
 
     @Column(name = "attendance")

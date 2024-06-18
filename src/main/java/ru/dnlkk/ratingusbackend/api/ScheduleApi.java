@@ -29,13 +29,13 @@ public interface ScheduleApi {
     @Operation(
             summary = "Изменить порядок расписания"
     )
-    @PostMapping("/change/{classId}")
+    @PatchMapping("/{classId}")
     ResponseEntity changeSubjectInSchedule(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody ScheduleChangeDTO request, @PathVariable(name = "classId") int classId);
 
     @Operation(
             summary = "Удалить предмет из расписания"
     )
-    @PostMapping("/delete/{classId}")
+    @DeleteMapping("/{classId}")
     ResponseEntity removeSubjectInSchedule(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody ScheduleActionDTO request, @PathVariable(name = "classId") int classId);
 
     @Operation(

@@ -101,6 +101,19 @@ public interface AdminPanelApi {
     );
 
     @Operation(
+            summary = "Обновить название класса",
+            description = "Обновляет класс"
+    )
+    @PutMapping("/class/{id}")
+    ResponseEntity<ClassDto> updateClass(
+            @PathVariable("id") int id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "DTO обновляемого класса")
+            @RequestBody ClassDto classDto
+    );
+
+    @Operation(
             summary = "Удаление класса",
             description = "Удаляет класс по id и возвращает пустой ответ"
     )
@@ -138,6 +151,19 @@ public interface AdminPanelApi {
     @PostMapping("/subject")
     ResponseEntity<SubjectDto> createSubject(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
+
+            @Schema(description = "DTO создаваемого предмета")
+            @RequestBody SubjectCreateDto subjectDto
+    );
+
+    @Operation(
+            summary = "Обновить название предмета",
+            description = "Обновляет предмет"
+    )
+    @PutMapping("/subject/{id}")
+    ResponseEntity<SubjectDto> updateSubject(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable("id") int id,
 
             @Schema(description = "DTO создаваемого предмета")
             @RequestBody SubjectCreateDto subjectDto

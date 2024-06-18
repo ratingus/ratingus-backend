@@ -16,11 +16,13 @@ import ru.dnlkk.ratingusbackend.service.AdminPanelService;
 import ru.dnlkk.ratingusbackend.service.ManagerPanelService;
 
 import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class ManagerPanelController extends ExceptionHandlerController implements ManagerPanelApi {
     private final ManagerPanelService managerPanelService;
     private final AdminPanelService adminPanelService;
+
     @Override
     public ResponseEntity<List<ApplicationResponseDto>> getAllApplications(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllApplications(userDetails));
@@ -54,9 +56,11 @@ public class ManagerPanelController extends ExceptionHandlerController implement
     public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
     }
+
     @Override
     public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
         return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
 
     }
+
 }

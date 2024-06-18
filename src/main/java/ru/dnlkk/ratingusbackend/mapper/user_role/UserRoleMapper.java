@@ -18,8 +18,7 @@ public interface UserRoleMapper {
     @Mappings({
             @Mapping(target = "login", source = "user.login"),
             @Mapping(target = "birthdate", source = "user.birthDate"),
-            @Mapping(target = "schoolName", source = "school.name"),
-            @Mapping(target = "userRole", source = "role"),
+            @Mapping(target = "school", source = "school"),
     })
     UserRoleDto toDto(UserRole userRole);
 

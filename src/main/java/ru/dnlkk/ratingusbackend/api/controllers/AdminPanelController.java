@@ -40,7 +40,6 @@ public class AdminPanelController extends ExceptionHandlerController implements 
 
     @Override
     public ResponseEntity<List<UserCodeWithClassDto>> getAllUserCodesForSchool(UserDetailsImpl userDetails) {
-        School school = userDetails.getUserRole().getSchool();
         return ResponseEntity.ok(adminPanelService.getAllUsersCodesForSchool(userDetails));
     }
 
@@ -68,6 +67,11 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     }
 
     @Override
+    public ResponseEntity<ClassDto> updateClass(int id, UserDetailsImpl userDetails, ClassDto classDto) {
+        return ResponseEntity.ok(adminPanelService.updateClass(id, classDto, userDetails));
+    }
+
+    @Override
     public ResponseEntity<Void> deleteClass(UserDetailsImpl userDetails, Integer id) {
         adminPanelService.deleteClass(id, userDetails);
         return ResponseEntity.ok().build();
@@ -86,6 +90,11 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     @Override
     public ResponseEntity<SubjectDto> createSubject(UserDetailsImpl userDetails, SubjectCreateDto subjectDto) {
         return ResponseEntity.ok(adminPanelService.createSubject(subjectDto, userDetails));
+    }
+
+    @Override
+    public ResponseEntity<SubjectDto> updateSubject(UserDetailsImpl userDetails, int id, SubjectCreateDto subjectDto) {
+        return ResponseEntity.ok(adminPanelService.updateSubject(id, subjectDto, userDetails));
     }
 
     @Override

@@ -94,7 +94,6 @@ public class ProfileController extends ExceptionHandlerController implements Pro
             return ResponseEntity.badRequest().body("Код уже активирован");
         }
 
-
         Optional<UserRole> checkUserRole = userRoleRepository.findByUserAndSchoolId(userDetails.getUser(), code.getSchool().getId());
         if (checkUserRole.isPresent()) {
             return ResponseEntity.badRequest().body("Вы уже имеете личный кабинет в данной учебной организации");
