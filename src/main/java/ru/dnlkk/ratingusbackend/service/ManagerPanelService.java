@@ -170,7 +170,7 @@ public class ManagerPanelService {
         return UserMapper.INSTANCE.toUserForManagerDtoList(users);
     }
 
-    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails) {
+    public List<SchoolWasCreatedDto> getAllSchools(UserDetailsImpl userDetails){
         checkIsUserManager(userDetails);
         List<School> schools = schoolRepository.findAll();
         return SchoolMapper.INSTANCE.toSchoolDtoList(schools);
