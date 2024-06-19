@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolProfileDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
@@ -192,4 +194,21 @@ public interface AdminPanelApi {
             @Schema(description = "id удаляемой связи предмета с учителем")
             @PathVariable(name = "id") int teacherSubjectId
     );
+
+
+    @Operation(
+            summary = "Получить школу",
+            description = "Получает школу, в которой сейчас находится (только для локального админа)"
+    )
+    @GetMapping("/school")
+    ResponseEntity<SchoolProfileDto> getSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails);
+
+    @Operation(
+            summary = "Обновить школу",
+            description = "Обновляет школу, в которой сейчас находится (только для локального админа)"
+    )
+    @PatchMapping("/school")
+    ResponseEntity<SchoolProfileDto> updateSchool(
+            @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody SchoolWasCreatedDto schoolWasCreatedDto);
 }

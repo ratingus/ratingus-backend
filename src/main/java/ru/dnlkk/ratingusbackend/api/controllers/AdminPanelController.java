@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dnlkk.ratingusbackend.api.AdminPanelApi;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolProfileDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
@@ -108,5 +110,17 @@ public class AdminPanelController extends ExceptionHandlerController implements 
             UserDetailsImpl userDetails, int teacherSubjectId) {
         adminPanelService.deleteTeacherToSubject(teacherSubjectId, userDetails);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<SchoolProfileDto> getSchool(
+            UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(adminPanelService.getSchool(userDetails));
+    }
+
+    @Override
+    public ResponseEntity<SchoolProfileDto> updateSchool(
+            UserDetailsImpl userDetails, SchoolWasCreatedDto schoolWasCreatedDto)  {
+        return ResponseEntity.ok(adminPanelService.updateSchool(schoolWasCreatedDto, userDetails));
     }
 }
