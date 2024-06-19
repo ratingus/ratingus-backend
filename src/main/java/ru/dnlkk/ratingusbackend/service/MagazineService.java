@@ -27,7 +27,7 @@ public class MagazineService {
     public MagazineDto getMagazineWithUsers(UserDetailsImpl user, Integer classId, Integer teacherSubjectId) {
         School school = schoolRepository.findSchoolById(user.getUserRole().getSchool().getId());
 
-        List<UserRole> userRoles = userRoleRepository.findUserRolesBySchoolIdAndRoleClassId(school.getId(), classId);
+        List<UserRole> userRoles = userRoleRepository.findUserRolesBySchoolIdAndRoleClassIdOrderBySurnameAscNameAscPatronymicAsc(school.getId(), classId);
 
         List<Schedule> schedules = scheduleRepository.findByScheduleForClassIdAndSubjectId(classId, teacherSubjectId);
 
