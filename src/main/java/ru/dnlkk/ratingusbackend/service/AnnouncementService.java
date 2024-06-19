@@ -63,7 +63,7 @@ public class AnnouncementService {
             }
             List<Announcement> announcements = announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
             incrementViews(announcements);
-            return AnnouncementMapper.INSTANCE.toDtoList(announcements);
+            return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
         }
         List<Announcement> announcements = announcementRepository.findByCreatorSchoolId(schoolId, PageRequest.of(offset, limit));
         incrementViews(announcements);
@@ -77,7 +77,6 @@ public class AnnouncementService {
         }
         Class clazz = optionalClass.get();
         List<Announcement> announcements = announcementRepository.getAnnouncementsByClassesIn(List.of(clazz), null).stream().toList();
-
         incrementViews(announcements);
         return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
     }
@@ -110,9 +109,9 @@ public class AnnouncementService {
                 throw new ForbiddenException("Нет прав, чтобы создать объявление класса c id=" + c.getId());
             }
         }
-        announcement.setClasses(classes);
         announcement.setCreator(creator);
         Announcement announcementAfterSaving = announcementRepository.saveAndFlush(announcement);
         return AnnouncementMapper.INSTANCE.toDto(announcementAfterSaving);
     }
+
 }
