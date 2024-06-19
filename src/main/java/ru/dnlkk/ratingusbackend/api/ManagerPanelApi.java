@@ -12,6 +12,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForAdminPanelDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.EditUserRoleDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 
 import java.util.List;

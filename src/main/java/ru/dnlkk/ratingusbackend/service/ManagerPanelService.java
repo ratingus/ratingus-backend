@@ -8,6 +8,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
 import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user.UserForManagerDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.EditUserRoleDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
 import ru.dnlkk.ratingusbackend.exceptions.NotFoundException;
 import ru.dnlkk.ratingusbackend.mapper.ApplicationMapper;
@@ -15,6 +16,7 @@ import ru.dnlkk.ratingusbackend.mapper.SchoolMapper;
 import ru.dnlkk.ratingusbackend.mapper.user.UserMapper;
 import ru.dnlkk.ratingusbackend.mapper.user_code.UserCodeMapper;
 import ru.dnlkk.ratingusbackend.model.*;
+import ru.dnlkk.ratingusbackend.model.Class;
 import ru.dnlkk.ratingusbackend.model.enums.Role;
 import ru.dnlkk.ratingusbackend.repository.*;
 import ru.dnlkk.ratingusbackend.service.util.RandomSequenceGenerator;
@@ -54,6 +56,7 @@ public class ManagerPanelService {
     };
     private final TimetableRepository timetableRepository;
     private final UserCodeRepository userCodeRepository;
+    private final ClassRepository classRepository;
 
     private void checkIsUserManager(UserDetailsImpl userDetails) {
         if (userDetails.getUser().getIsAdmin() == null || !userDetails.getUser().getIsAdmin()) {
@@ -175,5 +178,4 @@ public class ManagerPanelService {
         List<School> schools = schoolRepository.findAll();
         return SchoolMapper.INSTANCE.toSchoolDtoList(schools);
     }
-
 }
