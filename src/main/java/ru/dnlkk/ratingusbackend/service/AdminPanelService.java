@@ -15,6 +15,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectsDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherWithSubjectIdDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.EditUserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
 import ru.dnlkk.ratingusbackend.exceptions.ForbiddenException;
@@ -390,5 +391,30 @@ public class AdminPanelService {
                 .totalStudents(userRoles.stream().filter((userRole) -> userRole.getRole() == Role.STUDENT).toList().size())
                 .totalTeachers(userRoles.stream().filter((userRole) -> userRole.getRole() == Role.TEACHER).toList().size())
                 .build();
+    }
+
+    public void editUser(UserDetailsImpl userDetails, int id, EditUserRoleDto editUserRoleDto) {
+        forbidAccessForNullUserRole(userDetails);
+        UserRole userRole  = userRoleRepository.findById(id).orElseThrow();
+        if (userRole.getSchool().getId() != userDetails.getUserRole().getSchool().getId())  {
+            throw new ForbiddenException("Нет доступа к пользователю с id=" + id);
+        }
+
+        userRole.setName(editUserRoleDto.getName());
+        userRole.setSurname(editUserRoleDto.getSurname());
+        userRole.setPatronymic(editUserRoleDto.getPatronymic());
+
+        Role role  = editUserRoleDto.getRole();
+        if (role == Role.STUDENT)  {
+            if (editUserRoleDto.getClassDto() == null) {
+                throw new NotFoundException("Не указан класс");
+            }
+            Class roleClass = classRepository.findById(editUserRoleDto.getClassDto().getId()).orElseThrow();
+            userRole.setRoleClass(roleClass);
+        } else {
+            userRole.setRoleClass(null);
+        }
+        userRole.setRole(role);
+        userRoleRepository.save(userRole);
     }
 }

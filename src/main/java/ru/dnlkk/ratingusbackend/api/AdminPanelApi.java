@@ -16,6 +16,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectsDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.EditUserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
 import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
@@ -211,4 +212,15 @@ public interface AdminPanelApi {
     @PatchMapping("/school")
     ResponseEntity<SchoolProfileDto> updateSchool(
             @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody SchoolWasCreatedDto schoolWasCreatedDto);
+
+    @Operation(
+            summary = "Изменить профиль пользователя",
+            description = "Изменяет профиль пользователя по id (фио и роль)"
+    )
+    @PatchMapping("/user/{id}")
+    ResponseEntity editUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable("id") int id,
+            @RequestBody EditUserRoleDto editUserRoleDto
+    );
 }

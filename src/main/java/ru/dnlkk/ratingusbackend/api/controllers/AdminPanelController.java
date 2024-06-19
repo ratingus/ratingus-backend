@@ -14,6 +14,7 @@ import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectsDto;
 import ru.dnlkk.ratingusbackend.api.dtos.timetable.TimetableDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_code.UserCodeWithClassDto;
+import ru.dnlkk.ratingusbackend.api.dtos.user_role.EditUserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleDto;
 import ru.dnlkk.ratingusbackend.api.dtos.user_role.UserRoleSimpleDto;
 import ru.dnlkk.ratingusbackend.model.School;
@@ -122,5 +123,11 @@ public class AdminPanelController extends ExceptionHandlerController implements 
     public ResponseEntity<SchoolProfileDto> updateSchool(
             UserDetailsImpl userDetails, SchoolWasCreatedDto schoolWasCreatedDto)  {
         return ResponseEntity.ok(adminPanelService.updateSchool(schoolWasCreatedDto, userDetails));
+    }
+
+    @Override
+    public ResponseEntity editUser(UserDetailsImpl userDetails, int id, EditUserRoleDto editUserRoleDto) {
+        adminPanelService.editUser(userDetails, id, editUserRoleDto);
+        return ResponseEntity.noContent().build();
     }
 }
