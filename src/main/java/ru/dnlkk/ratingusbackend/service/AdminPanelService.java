@@ -2,8 +2,11 @@ package ru.dnlkk.ratingusbackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dnlkk.ratingusbackend.api.dtos.clazz.ClassDto;
 import ru.dnlkk.ratingusbackend.api.dtos.profile.SchoolDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolProfileDto;
+import ru.dnlkk.ratingusbackend.api.dtos.school.SchoolWasCreatedDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectCreateDto;
 import ru.dnlkk.ratingusbackend.api.dtos.subject.SubjectDto;
 import ru.dnlkk.ratingusbackend.api.dtos.teacher_subject.TeacherSubjectCreateDto;
@@ -132,11 +135,7 @@ public class AdminPanelService {
             throw new NotFoundException("Нет пользователя с id " + userCodeId);
         } else {
             UserCode userCodeFromRepo = userCodeById.get();
-            if (userCodeFromRepo.getSchool().getId() != schoolId) {
-                throw new ForbiddenException("Нет доступа к пользователю с id " + userCodeId);
-            } else {
                 userCode.getCreator().setId(userCodeFromRepo.getCreator().getId());
-            }
         }
 
         if (userCode.getCode() == null) {
@@ -346,5 +345,50 @@ public class AdminPanelService {
     private String generateUniqueCodeById(int id) {
 //        return Generators.nameBasedGenerator().generate(str).toString();
         return RandomSequenceGenerator.generateRandomSequence() + id;
+    }
+
+    public SchoolProfileDto updateSchool(SchoolWasCreatedDto schoolWasCreatedDto, UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        School schoolFromUser = userDetails.getUserRole().getSchool();
+        School school = schoolRepository.findById(schoolFromUser.getId()).orElseThrow();
+
+        school.setName(schoolWasCreatedDto.getName());
+        school.setPhone(schoolWasCreatedDto.getPhone());
+        school.setAddress(schoolWasCreatedDto.getAddress());
+        school.setEmail(schoolWasCreatedDto.getEmail());
+
+        schoolRepository.save(school);
+        userDetails.getUserRole().setSchool(school);
+
+        return getSchool(userDetails);
+    }
+
+    public SchoolProfileDto getSchool(UserDetailsImpl userDetails) {
+        forbidAccessForNullUserRole(userDetails);
+        School schoolFromUser = userDetails.getUserRole().getSchool();
+
+        School school = schoolRepository.findById(schoolFromUser.getId()).orElseThrow();
+
+        var userRoles = school.getUserRoles();
+        List<Timetable> timetables = school.getTimetables();
+        List<TimetableDto> timetablesDto = timetables.stream()
+                .map((t) -> TimetableDto.builder()
+                        .id(t.getId())
+                        .lessonNumber(t.getLessonNumber())
+                        .endTime(t.getEndTime())
+                        .startTime(t.getStartTime())
+                        .build()
+                ).toList();
+
+        return SchoolProfileDto.builder()
+                .id(school.getId())
+                .name(school.getName())
+                .address(school.getAddress())
+                .phone(school.getPhone())
+                .email(school.getEmail())
+                .timetable(timetablesDto)
+                .totalStudents(userRoles.stream().filter((userRole) -> userRole.getRole() == Role.STUDENT).toList().size())
+                .totalTeachers(userRoles.stream().filter((userRole) -> userRole.getRole() == Role.TEACHER).toList().size())
+                .build();
     }
 }
