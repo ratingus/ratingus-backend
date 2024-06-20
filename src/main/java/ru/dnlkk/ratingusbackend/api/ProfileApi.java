@@ -42,16 +42,16 @@ public interface ProfileApi {
 
 
     @Operation(
-            summary = "Обновление пользователя",
-            description = "Обновляет пользователя и возвращает его"
+            summary = "Ввод кода приглашения",
+            description = "Подключает пользователю учебную организацию по коду приглашения"
     )
     @PostMapping("/user-code")
     ResponseEntity<JWTResponseDto> setUserCode(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody SetUserCodeDto userCodeDto);
 
 
     @Operation(
-            summary = "Обновление пользователя",
-            description = "Обновляет пользователя и возвращает его"
+            summary = "Смена школы",
+            description = "Меняет школу, в которой находится пользователь"
     )
     @PostMapping("/change-school")
     ResponseEntity<JWTResponseDto> changeSchool(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ChangeSchoolDto schoolDto);

@@ -34,11 +34,6 @@ public class ManagerPanelController extends ExceptionHandlerController implement
         return ResponseEntity.ok(managerPanelService.createApplication(userDetails, applicationDto, userDetails.getUser())); //todo
     }
 
-    @Override
-    public ResponseEntity<Void> deleteApplication(UserDetailsImpl userDetails, int id) {
-        managerPanelService.deleteApplication(userDetails, id);
-        return ResponseEntity.ok().build();
-    }
 
     @Override
     public ResponseEntity<Void> rejectApplication(UserDetailsImpl userDetails, int id) {

@@ -199,7 +199,7 @@ public interface AdminPanelApi {
 
     @Operation(
             summary = "Получить школу",
-            description = "Получает школу, в которой сейчас находится (только для локального админа)"
+            description = "Возвращает профиль школы для админ панели"
     )
     @GetMapping("/school")
     ResponseEntity<SchoolProfileDto> getSchool(
@@ -207,7 +207,7 @@ public interface AdminPanelApi {
 
     @Operation(
             summary = "Обновить школу",
-            description = "Обновляет школу, в которой сейчас находится (только для локального админа)"
+            description = "Обновляет данные о школе (Название, адрес, телефон и почту)"
     )
     @PatchMapping("/school")
     ResponseEntity<SchoolProfileDto> updateSchool(

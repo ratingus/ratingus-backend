@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.api;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,18 +41,6 @@ public interface ManagerPanelApi {
 
 
     @Operation(
-            summary = "Удаление заявки",
-            description = "Удаляет заявку на создание школы и ничего не возвращает"
-    )
-    @DeleteMapping("/application/{id}")
-    ResponseEntity<Void> deleteApplication(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-
-            @Schema(description = "Id удаляемой заявки")
-            @PathVariable("id") int id
-    );
-
-    @Operation(
             summary = "Отклонение заявки",
             description = "Отклоняет заявку на создание школы и ничего не возвращает"
     )
@@ -71,20 +60,14 @@ public interface ManagerPanelApi {
             @PathVariable(name = "id") int applicationId,
             @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
-  
-    @Operation(
-            summary = "Получение всех пользователей",
-            description = "Возвращает список всех польхователей, которые есть в базе данных"
-    )
+
+    @Hidden
     @GetMapping("/users")
     ResponseEntity<List<UserForManagerDto>> getAllUsers(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     );
-  
-    @Operation(
-            summary = "Получение всех школ",
-            description = "Возвращает список всех школ, которые есть в базе данных"
-    )
+
+    @Hidden
     @GetMapping("/school")
     ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(
             @AuthenticationPrincipal UserDetailsImpl userDetails
