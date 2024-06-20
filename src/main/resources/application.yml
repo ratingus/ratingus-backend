@@ -6,6 +6,23 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: ${DATABASE_DRIVER}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        show_sql: false
+        format_sql: true
+  security:
+    user:
+      name: admin
+      password: admin
 
 server:
   port: 5000
+
+jwt:
+  secret: ${TOKEN_KEY}
+  expiration: 2592000000

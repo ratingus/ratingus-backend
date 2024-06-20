@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.dnlkk.ratingusbackend.api.dtos.application.ApplicationStatusType;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "school")
-public class School {
+public class School implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,7 @@ public class School {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "addres")
+    @Column(name = "address")
     private String address;
 
     @Column(name = "phone")
@@ -32,9 +34,8 @@ public class School {
     @Column(name = "email")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "timetable_id", referencedColumnName = "id")
-    private Timetable timetable;
+    @OneToMany(mappedBy = "school")
+    private List<Timetable> timetables;
 
     @OneToMany(mappedBy = "school")
     private List<UserRole> userRoles;
@@ -46,5 +47,5 @@ public class School {
     private List<UserCode> userCodes;
 
     @OneToMany(mappedBy = "school")
-    private List<Study> studies;
+    private List<Subject> subjects;
 }

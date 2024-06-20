@@ -21,7 +21,7 @@ services:
   ratingus-backend:
 #    build:
 #      context: .
-    image: ghcr.io/burunyuu23/ratingus-backend:latest
+    image: ghcr.io/ratingus/ratingus-backend:latest
     restart: unless-stopped
     container_name: ratingus-backend
     ports:

@@ -1,20 +1,21 @@
 package ru.dnlkk.ratingusbackend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "announcement")
-public class Announcement {
+public class Announcement implements IdGettable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +28,20 @@ public class Announcement {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "creator_id", referencedColumnName = "id")
+    private UserRole creator;
+
+    @Column(name = "create_date")
+    @CreationTimestamp
+    private Timestamp createDate;
+
+    @Column(name = "views")
+    private int views;
 
     @ManyToMany
     @JoinTable(
-            name = "classes_announcements",
+            name = "class_announcement",
             joinColumns = @JoinColumn(name = "announcement_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id"))
     private List<Class> classes;
-
 }

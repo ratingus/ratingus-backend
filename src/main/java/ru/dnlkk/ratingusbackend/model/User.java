@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.dnlkk.ratingusbackend.model.helper_classes.IdGettable;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -39,28 +41,14 @@ public class User {
     private Timestamp birthDate;
 
     @OneToMany(mappedBy = "user")
-    private List<Announcement> announcements;
-
-    @OneToMany(mappedBy = "student")
-    private List<StudentLesson> studentsLessons;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserCode> usersCodes;
-
-    @ManyToMany
-    @JoinTable(
-            name = "classes_students",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "class_id"))
-    private List<Class> classes;
-
-    @OneToMany(mappedBy = "user")
     private List<UserRole> usersRoles;
 
-    @ManyToMany
-    @JoinTable(
-            name = "study_teachers",
-            joinColumns = @JoinColumn(name = "teacher_id"),
-            inverseJoinColumns = @JoinColumn(name = "study_id"))
-    private List<Study> studies;
+    @OneToMany(mappedBy = "creator")
+    private List<Application> applications;
+
+    @Column(name = "is_admin")
+    private Boolean isAdmin;
+
+    @OneToMany(mappedBy = "creator")
+    private List<UserCode> usersCodes;
 }

@@ -1,0 +1,3 @@
+insert into application (name, address, phone, email, creator_id) values ('Школа №31415', 'пр. Ленина 56', '+79123456789', 'gimnaziya5@mail.ru', '1');
+insert into application (name, address, phone, email, creator_id) values ('ВУЗ №2031', 'ул. Пушкина 10', '+79876543210', 'licei10@mail.ru', '1');
+insert into application (name, address, phone, email, creator_id) values ('Муз. школа №1116', 'пр. Строителей 33', '+79998887766', 'school3@mail.ru', '1');
