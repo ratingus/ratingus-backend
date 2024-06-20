@@ -14,11 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class AuthController implements AuthApi {
     private final AuthService authService;
-    @Override
-    public ResponseEntity<String> logout() {
-        System.out.println("logout");
-        return ResponseEntity.ok("Пользователь вышел из системы");
-    }
 
     @Override
     public ResponseEntity login(HttpServletResponse response, JWTRequest jwtRequest) {

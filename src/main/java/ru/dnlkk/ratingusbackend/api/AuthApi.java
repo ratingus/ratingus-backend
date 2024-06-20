@@ -15,13 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @Tag(name = "Контроллер авторизации", description = "Авторизация, регистрация")
 @RequestMapping("/auth")
 public interface AuthApi {
-    @Operation(
-            summary = "Удаление токена",
-            description = "Удаляет JWT-токен из системы и ничего не возвращает"
-    )
-    @GetMapping("/logout")
-    ResponseEntity<String> logout();
-
 
     @Operation(
             summary = "Вход",

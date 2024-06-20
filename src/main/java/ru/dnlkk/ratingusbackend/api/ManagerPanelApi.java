@@ -40,18 +40,6 @@ public interface ManagerPanelApi {
 
 
     @Operation(
-            summary = "Удаление заявки",
-            description = "Удаляет заявку на создание школы и ничего не возвращает"
-    )
-    @DeleteMapping("/application/{id}")
-    ResponseEntity<Void> deleteApplication(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-
-            @Schema(description = "Id удаляемой заявки")
-            @PathVariable("id") int id
-    );
-
-    @Operation(
             summary = "Отклонение заявки",
             description = "Отклоняет заявку на создание школы и ничего не возвращает"
     )
@@ -71,22 +59,14 @@ public interface ManagerPanelApi {
             @PathVariable(name = "id") int applicationId,
             @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
-  
-    @Operation(
-            summary = "Получение всех пользователей",
-            description = "Возвращает список всех польхователей, которые есть в базе данных"
-    )
-    @GetMapping("/users")
-    ResponseEntity<List<UserForManagerDto>> getAllUsers(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    );
-  
-    @Operation(
-            summary = "Получение всех школ",
-            description = "Возвращает список всех школ, которые есть в базе данных"
-    )
-    @GetMapping("/school")
-    ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    );
+
+//    @GetMapping("/users")
+//    ResponseEntity<List<UserForManagerDto>> getAllUsers(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails
+//    );
+//
+//    @GetMapping("/school")
+//    ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails
+//    );
 }
