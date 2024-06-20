@@ -61,7 +61,7 @@ public class AnnouncementService {
             if (c.getSchool().getId() != schoolId) {
                 throw new ForbiddenException("Нет доступа к этому классу");
             }
-            List<Announcement> announcements = announcementRepository.findByClasses_Id(classId, PageRequest.of(offset, limit));
+            List<Announcement> announcements = announcementRepository.findAllByClassesInOrClassesIsNull(List.of(classId), PageRequest.of(offset, limit));
             incrementViews(announcements);
             return AnnouncementMapper.INSTANCE.toDtoList(sortAnnouncementsByDateDesc(announcements));
         }

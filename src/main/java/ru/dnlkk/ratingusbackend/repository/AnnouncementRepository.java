@@ -12,6 +12,7 @@ import java.util.List;
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
 
     List<Announcement> findByClasses_Id(int classId, PageRequest pageRequest);
+    List<Announcement> findAllByClassesInOrClassesIsNull(List<Integer> classId, PageRequest pageRequest);
     List<Announcement> getAnnouncementsByClassesIn(List<Class> classes, PageRequest pageRequest);
 
     List<Announcement> findByCreatorSchoolId(int schoolId, PageRequest of);
