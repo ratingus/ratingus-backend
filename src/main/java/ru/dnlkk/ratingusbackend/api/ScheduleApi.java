@@ -16,7 +16,7 @@ import ru.dnlkk.ratingusbackend.model.UserDetailsImpl;
 public interface ScheduleApi {
     @Operation(
             summary = "Объединить предмет с учителем",
-            description = "Объединяет предмет с учителем"
+            description = "Создает связь предмета с учителем"
     )
     @PostMapping("/merge")
     ResponseEntity mergeSubjectWithTeacher(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody MergeSubjectWithTeacherRequestDTO request);

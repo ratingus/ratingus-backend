@@ -43,7 +43,7 @@ public interface ProfileApi {
 
     @Operation(
             summary = "Ввод кода приглашения",
-            description = "Добавляет пользователю информацию из кода и помещает его в школу"
+            description = "Подключает пользователю учебную организацию по коду приглашения"
     )
     @PostMapping("/user-code")
     ResponseEntity<JWTResponseDto> setUserCode(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody SetUserCodeDto userCodeDto);

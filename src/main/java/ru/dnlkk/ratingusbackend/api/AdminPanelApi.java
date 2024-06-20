@@ -199,7 +199,7 @@ public interface AdminPanelApi {
 
     @Operation(
             summary = "Получить школу",
-            description = "Переходит в школу, в которой сейчас находится пользователь"
+            description = "Возвращает профиль школы для админ панели"
     )
     @GetMapping("/school")
     ResponseEntity<SchoolProfileDto> getSchool(

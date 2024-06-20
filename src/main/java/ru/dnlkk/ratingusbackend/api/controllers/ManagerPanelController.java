@@ -48,14 +48,14 @@ public class ManagerPanelController extends ExceptionHandlerController implement
         return ResponseEntity.noContent().build();
     }
 
-//    @Override
-//    public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
-//        return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
-//    }
-//
-//    @Override
-//    public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
-//        return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
-//    }
+    @Override
+    public ResponseEntity<List<UserForManagerDto>> getAllUsers(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(managerPanelService.getAllUsers(userDetails));
+    }
+
+    @Override
+    public ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(managerPanelService.getAllSchools(userDetails));
+    }
 
 }

@@ -1,5 +1,6 @@
 package ru.dnlkk.ratingusbackend.api;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,13 +61,15 @@ public interface ManagerPanelApi {
             @RequestBody UserCodeWithClassDto userCodeWithClassDto
     );
 
-//    @GetMapping("/users")
-//    ResponseEntity<List<UserForManagerDto>> getAllUsers(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails
-//    );
-//
-//    @GetMapping("/school")
-//    ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails
-//    );
+    @Hidden
+    @GetMapping("/users")
+    ResponseEntity<List<UserForManagerDto>> getAllUsers(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
+
+    @Hidden
+    @GetMapping("/school")
+    ResponseEntity<List<SchoolWasCreatedDto>> getAllSchools(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 }
